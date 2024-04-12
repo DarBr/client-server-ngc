@@ -1,25 +1,24 @@
 import { Component, OnInit } from '@angular/core';
 import { TransaktionService } from '../../transaktion.service'; // Pfad anpassen, falls nötig
+import { CommonModule } from '@angular/common';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-transaktion-liste',
   templateUrl: './transaktion-liste.component.html',
-  styleUrls: ['./transaktion-liste.component.css']
+  styleUrls: ['./transaktion-liste.component.css'],
+  standalone: true,
+  imports: [CommonModule]
 })
 export class TransaktionListeComponent implements OnInit {
   transaktionen: any[] = []; // Hier wird das Array initialisiert
 
-  constructor(private transaktionService: TransaktionService) { }
+  constructor(private http: HttpClient) { }
 
   ngOnInit() {
-    this.transaktionService.getTransaktionenList().subscribe(
-      data => {
-        this.transaktionen = data;
-      },
-      error => {
-        console.error('Es gab ein Problem beim Abrufen der Transaktionen:', error);
-      }
-    );
+    this.http.get<any[]>('http://localhost:8080/transaktionen').subscribe((data) => {
+      this.transaktionen = data; // Speichern Sie die Daten in der nutzer-Eigenschaft
+    });
   }
 }
 
