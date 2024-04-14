@@ -15,7 +15,9 @@
   <nav>
     <ul>
       <li routerLinkActive="active-link" [routerLinkActiveOptions]="{exact: true}"><a routerLink="/">Home</a></li>
-      <li routerLinkActive="active-link" [routerLinkActiveOptions]="{exact: true}"><a routerLink="/nutzer-liste">Nutzer-Liste</a></li>
+      <li routerLinkActive="active-link" [routerLinkActiveOptions]="{exact: true}">
+        <a routerLink="/nutzer-liste" (click)="callApi()">Nutzer-Liste</a>
+      </li>
       <li routerLinkActive="active-link" [routerLinkActiveOptions]="{exact: true}"><a routerLink="/transaktion-liste">Transaktion-Liste</a></li>
     </ul>
   </nav>
