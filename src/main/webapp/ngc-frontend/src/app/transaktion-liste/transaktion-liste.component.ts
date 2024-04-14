@@ -12,12 +12,14 @@ import { HttpClient } from '@angular/common/http';
 })
 export class TransaktionListeComponent implements OnInit {
   transaktionen: any[] = []; // Hier wird das Array initialisiert
+  isLoading = true;
 
   constructor(private http: HttpClient) { }
 
   ngOnInit() {
     this.http.get<any[]>('http://localhost:8080/transaktionen').subscribe((data) => {
       this.transaktionen = data; // Speichern Sie die Daten in der nutzer-Eigenschaft
+      this.isLoading = false;
     });
   }
 }

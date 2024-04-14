@@ -1,6 +1,7 @@
-<p>nutzer-liste works!</p>
-
-<table>
+<p>transaktion-liste works!</p>
+<div *ngIf="isLoading">Loading...</div>
+<div *ngIf="!isLoading">
+  <table>
     <tr>
       <th>TransaktionsID</th>
       <th>ISIN</th>
@@ -21,3 +22,5 @@
       
     </tr>
 </table>
+</div>
+

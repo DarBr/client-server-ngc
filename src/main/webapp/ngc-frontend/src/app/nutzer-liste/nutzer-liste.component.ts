@@ -12,12 +12,14 @@ import { CommonModule } from '@angular/common';
 })
 export class NutzerListeComponent implements OnInit {
   nutzer: any[] = []; // Erstellen Sie eine Eigenschaft, um die Nutzer zu speichern
+  isLoading = true;
 
   constructor(private http: HttpClient) { }
 
   ngOnInit() {
     this.http.get<any[]>('http://localhost:8080/nutzer').subscribe((data) => {
       this.nutzer = data; // Speichern Sie die Daten in der nutzer-Eigenschaft
+      this.isLoading = false;
     });
   }
 }
