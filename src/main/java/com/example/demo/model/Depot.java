@@ -2,16 +2,18 @@ package com.example.demo.model;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 
 @Entity
 public class Depot {
 
     @Id
+    @GeneratedValue
     @Column(name = "DepotAktienID")
     private int DepotAktienID;
     @Column(name = "DepotID")
-    private int DepotID;
+    private int depotID;
     @Column(name = "ISIN")
     private String ISIN;
     @Column(name = "Anzahl")
@@ -22,7 +24,7 @@ public class Depot {
     }
 
     public Depot(int DepotID, String ISIN, int Anzahl) {
-        this.DepotID = DepotID;
+        this.depotID = DepotID;
         this.ISIN = ISIN;
         this.Anzahl = Anzahl;
     }
@@ -36,11 +38,11 @@ public class Depot {
     }
 
     public int getDepotID() {
-        return DepotID;
+        return depotID;
     }
 
     public void setDepotID(int DepotID) {
-        this.DepotID = DepotID;
+        this.depotID = DepotID;
     }
 
     public String getISIN() {
@@ -66,7 +68,7 @@ public class Depot {
 
     public void displayDepot() {
         System.out.println("DepotAktienID: " + DepotAktienID);
-        System.out.println("DepotID: " + DepotID);
+        System.out.println("DepotID: " + depotID);
         System.out.println("ISIN: " + ISIN);
         System.out.println("Anzahl: " + Anzahl);
     }

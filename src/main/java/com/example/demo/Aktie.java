@@ -46,8 +46,9 @@ public class Aktie {
         this.einstandspreis = einstandspreis;
     }
 
-    public double getAktienpreis(String symbol) throws IOException {
+    public double getAktienpreis() throws IOException {
         String apiKey = "co5rfg9r01qv77g7nk90co5rfg9r01qv77g7nk9g";
+        String symbol = this.name;
         // Finnhub API-Endpunkt-URL für den aktuellen Aktienpreis
         String apiUrl = "https://finnhub.io/api/v1/quote?symbol=" + symbol + "&token=" + apiKey;
 
@@ -85,7 +86,7 @@ public class Aktie {
     public static void main(String[] args) throws IOException {
         // Existing code...
         Aktie aktie = new Aktie("AMZN");
-        double price = aktie.getAktienpreis("AAPL");
+        double price = aktie.getAktienpreis();
         System.err.println("Preis der Aktie " + aktie.getName() + ": " + price);
 
         // Rest of the code...
