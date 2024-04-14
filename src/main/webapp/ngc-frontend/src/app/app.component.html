@@ -1,6 +1,30 @@
-<div>
-  <h1>Liste der Nutzer</h1>
-  <app-nutzer-liste></app-nutzer-liste>
-  <h1>Liste der Transaktionen</h1>
-  <app-transaktion-liste></app-transaktion-liste>
-</div>
+<header>
+  <div class="first-lane">
+    <div class="first-lane-left">
+      <img src="assets/ngc-logo.jpg" alt="Next-Gen-Capital-Logo">
+    </div>
+    <div class="headline">
+      <h1>NGC&nbsp;</h1> 
+      <h1 id="headline-small"> | Next-Gen-Capital</h1>
+    </div>
+    <div class="first-lane-right">
+      <p>Username</p>
+      <img src="assets/user-icon.png" alt="user-icon">
+    </div>
+  </div>
+  <nav>
+    <ul>
+      <li routerLinkActive="active-link" [routerLinkActiveOptions]="{exact: true}"><a routerLink="/">Home</a></li>
+      <li routerLinkActive="active-link" [routerLinkActiveOptions]="{exact: true}"><a routerLink="/nutzer-liste">Nutzer-Liste</a></li>
+      <li routerLinkActive="active-link" [routerLinkActiveOptions]="{exact: true}"><a routerLink="/transaktion-liste">Transaktion-Liste</a></li>
+    </ul>
+  </nav>
+</header>
+<main>
+  <h1>Content:</h1>
+  <router-outlet></router-outlet>
+</main>
+<footer>
+  <p>Next-Gen-Capital</p>
+  <p>&copy; 2024</p>
+</footer>
