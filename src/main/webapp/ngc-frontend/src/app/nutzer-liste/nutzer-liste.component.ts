@@ -1,8 +1,9 @@
 import { CommonModule } from '@angular/common'; // Für allgemeine Direktiven wie ngIf, ngFor
 import { HttpClient } from '@angular/common/http';
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
-import { RouterModule, Router, NavigationEnd } from '@angular/router'; // Fürs Routing
-import { filter } from 'rxjs/operators';
+import { Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { DataService } from '../app.component';
+
 
 @Component({
   selector: 'app-nutzer-liste',
