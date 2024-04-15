@@ -14,12 +14,18 @@
   </div>
   <nav>
     <ul>
-      <li routerLinkActive="active-link" [routerLinkActiveOptions]="{exact: true}"><a routerLink="/login">Login</a></li>
-      <li routerLinkActive="active-link" [routerLinkActiveOptions]="{exact: true}"><a routerLink="/">Home</a></li>
-      <li routerLinkActive="active-link" [routerLinkActiveOptions]="{exact: true}">
-        <a routerLink="/nutzer-liste" (click)="callApi()">Nutzer-Liste</a>
+      <li>
+        <a routerLink="/login" routerLinkActive="active-link" [routerLinkActiveOptions]="{exact: true}">Login</a>
       </li>
-      <li routerLinkActive="active-link" [routerLinkActiveOptions]="{exact: true}"><a routerLink="/transaktion-liste">Transaktion-Liste</a></li>
+      <li>
+        <a routerLink="/" routerLinkActive="active-link" [routerLinkActiveOptions]="{exact: true}">Home</a>
+      </li>
+      <li>
+        <a routerLink="/nutzer-liste" routerLinkActive="active-link" [routerLinkActiveOptions]="{exact: true}">Nutzer-Liste</a>
+      </li>
+      <li>
+        <a routerLink="/transaktion-liste" routerLinkActive="active-link" [routerLinkActiveOptions]="{exact: true}">Transaktion-Liste</a>
+      </li>
     </ul>
   </nav>
 </header>
@@ -31,5 +37,3 @@
   <p>Next-Gen-Capital</p>
   <p>&copy; 2024</p>
 </footer>
-
-//Test

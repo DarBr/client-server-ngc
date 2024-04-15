@@ -1,7 +1,6 @@
 import { CommonModule } from '@angular/common'; // Für allgemeine Direktiven wie ngIf, ngFor
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { DataService } from '../app.component';
 
 
 @Component({
