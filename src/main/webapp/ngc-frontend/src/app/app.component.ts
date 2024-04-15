@@ -10,7 +10,7 @@ import { CommonModule } from '@angular/common';
   standalone: true,
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css'],
-  imports: [RouterOutlet, RouterLink, RouterLinkActive, NutzerListeComponent, TransaktionListeComponent, HttpClientModule, CommonModule]
+  imports: [RouterOutlet, RouterLink, RouterLinkActive, TransaktionListeComponent, HttpClientModule, CommonModule]
 })
 export class AppComponent {
   title = 'ngc-frontend';
