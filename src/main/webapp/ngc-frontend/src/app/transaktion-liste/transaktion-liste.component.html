@@ -1,26 +1,26 @@
 <p>transaktion-liste works!</p>
 <div *ngIf="isLoading">Loading...</div>
 <div *ngIf="!isLoading">
-  <table>
-    <tr>
-      <th>TransaktionsID</th>
-      <th>ISIN</th>
-      <th>Betrag</th>
-      <th>Zeitstempel</th>
-      <th>Anzahl</th>
-      <th>Typ</th>
-      <th>DepotID</th>
-    </tr>
-    <tr *ngFor="let item of transaktionen">
-      <td>{{ item.transaktionsID }}</td>
-      <td>{{ item.isin }}</td>
-      <td>{{ item.betrag }}</td>
-      <td>{{ item.zeitstempel }}</td>
-      <td>{{ item.anzahl }}</td>
-      <td>{{ item.typ }}</td>
-      <td>{{ item.depotID }}</td>
-      
-    </tr>
-</table>
+  <table class="table-transaktionen">
+    <thead>
+      <tr>
+        <th>ISIN</th>
+        <th>Betrag</th>
+        <th>Zeitstempel</th>
+        <th>Anzahl</th>
+        <th>Typ</th>
+        <th>DepotID</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let item of transaktionen">
+        <td>{{ item.isin }}</td>
+        <td>{{ item.betrag | currency:'EUR' }}</td>
+        <td>{{ item.zeitstempel | date:'medium' }}</td>
+        <td>{{ item.anzahl }}</td>
+        <td>{{ item.typ }}</td>
+        <td>{{ item.depotID }}</td>
+      </tr>
+    </tbody>
+  </table>
 </div>
-
