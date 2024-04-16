@@ -27,6 +27,7 @@ public class NutzerController {
         return nutzerService.getAllNutzer();
     }
 
+
     @GetMapping("/{id}")
     public Nutzer findeNutzerById(@PathVariable int id) {
         return nutzerService.getNutzerById(id);

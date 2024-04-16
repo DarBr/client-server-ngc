@@ -36,6 +36,7 @@ public class KontoController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
+    
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> loescheKonto(@PathVariable int id) {
