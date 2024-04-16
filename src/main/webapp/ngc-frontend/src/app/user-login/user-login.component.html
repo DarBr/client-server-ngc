@@ -7,6 +7,8 @@
         <input type="password" name="password" [(ngModel)]="password" placeholder="Password" required>
         <button type="submit" [disabled]="!username || !password">Login</button>
     </form>
-    <p *ngIf="(!username || !password) && formSubmitted" class="error-message">Bitte füllen Sie beide Felder aus.</p>
+    <p *ngIf="(!username || !password) && formSubmitted && !userSaved" class="error-message">Bitte füllen Sie beide Felder aus.</p>
     <p class="error-message" *ngIf="errorMessage">{{ errorMessage }}</p>
+    <p class="sucess-message" *ngIf="successMessage">{{ successMessage }}</p>
+
 </div>

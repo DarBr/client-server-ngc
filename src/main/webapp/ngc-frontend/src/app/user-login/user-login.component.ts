@@ -15,20 +15,17 @@ export class LoginComponent {
   username: string = '';
   password: string = '';
   errorMessage: string = '';
-  formSubmitted = false;
+  formSubmitted: boolean = false;
+  successMessage: string = '';
+  userSaved: boolean = false;
 
   constructor(private http: HttpClient) { }
 
-
-
-
-
-
-
-
-
   onSubmit() {
     this.formSubmitted = true;
+    this.errorMessage = '';
+    this.successMessage = '';
+    this.userSaved = false;
     const url = 'http://localhost:8080/nutzer/add';
     const params = {
       username: this.username,
@@ -39,8 +36,12 @@ export class LoginComponent {
     this.http.post(url, params).subscribe(response => {
       if (response === null) {
         this.errorMessage = 'Der Benutzername ist bereits vergeben.';
+        
       } else {
-        // Fahren Sie mit der Verarbeitung der Antwort fort
+        this.successMessage = 'Benutzer wurde erfolgreich angelegt.';
+        this.userSaved = true;
+        this.username = '';
+        this.password = '';
       }
     });
 
