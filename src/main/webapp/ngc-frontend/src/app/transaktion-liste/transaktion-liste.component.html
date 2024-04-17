@@ -4,10 +4,10 @@
   <table class="table-transaktionen">
     <thead>
       <tr>
-        <th>ISIN</th>
-        <th>Betrag</th>
-        <th>Zeitstempel</th>
-        <th>Anzahl</th>
+        <th (click)="sortTable('isin')">ISIN</th>
+        <th (click)="sortTable('betrag')">Betrag</th>
+        <th (click)="sortTable('zeitstempel')">Zeitstempel</th>
+        <th (click)="sortTable('anzahl')">Anzahl</th>
         <th>Typ</th>
         <th>DepotID</th>
       </tr>

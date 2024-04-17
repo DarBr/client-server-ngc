@@ -13,7 +13,8 @@ import { HttpClient } from '@angular/common/http';
 export class TransaktionListeComponent implements OnInit {
   transaktionen: any[] = []; // Hier wird das Array initialisiert
   isLoading = true;
-
+  sortColumn: string = '';
+  sortAscending: boolean = true;
   constructor(private http: HttpClient) { }
 
   ngOnInit() {
@@ -22,6 +23,29 @@ export class TransaktionListeComponent implements OnInit {
       this.isLoading = false;
     });
   }
+
+  sortTable(column: string): void {
+    if (this.sortColumn === column) {
+      this.sortAscending = !this.sortAscending;
+    } else {
+      this.sortAscending = true;
+    }
+  
+    this.sortColumn = column;
+  
+    this.transaktionen.sort((a, b) => {
+      let comparison = 0;
+      if (a[column] > b[column]) {
+        comparison = 1;
+      } else if (a[column] < b[column]) {
+        comparison = -1;
+      }
+      return this.sortAscending ? comparison : comparison * -1;
+    });
+  }
+
+
+
 }
 
 

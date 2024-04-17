@@ -25,9 +25,19 @@ export class AktieKaufenComponent {
   kaufen() {
     this.errorMessage = '';
     const url = `http://localhost:8080/depot/kaufen?isin=${this.isin}&anzahl=${this.anzahl}&depotID=${this.depotId}`;
-  
-    this.http.post(url, {}).subscribe;
-    //Error Message oder Success Message einfügen
-  }
 
+    this.http.post(url, {}).subscribe(response => {
+      if (response === null) {
+        this.errorMessage = 'Die Aktie konnte nicht gekauft werden.';
+      } else {
+        this.successMessage = 'Aktie wurde erfolgreich gekauft.';
+        this.stockSaved = true;
+        this.isin = '';
+        this.anzahl = '';
+      }
+    }
+      //Error Message oder Success Message einfügen
+    );
+
+  }
 }
