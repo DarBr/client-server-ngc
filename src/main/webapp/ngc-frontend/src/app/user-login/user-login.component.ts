@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Observable } from 'rxjs/internal/Observable';
+import { AuthService } from '../AuthService';
 
 @Component({
   selector: 'app-user-login',
@@ -17,15 +18,13 @@ export class LoginComponent {
   errorMessage: string = '';
   formSubmitted: boolean = false;
   successMessage: string = '';
-  userSaved: boolean = false;
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private authService: AuthService) { }
 
-  onSubmit() {
+  onRegister() {
     this.formSubmitted = true;
     this.errorMessage = '';
     this.successMessage = '';
-    this.userSaved = false;
     const url = 'http://localhost:8080/nutzer/add';
     const params = {
       username: this.username,
@@ -39,11 +38,28 @@ export class LoginComponent {
         
       } else {
         this.successMessage = 'Benutzer wurde erfolgreich angelegt.';
-        this.userSaved = true;
         this.username = '';
         this.password = '';
       }
     });
 
   }
+
+  onLogin() {
+    this.formSubmitted = true;
+    const url = 'http://localhost:8080/nutzer/login';
+    const params = new HttpParams()
+      .set('username', this.username)
+      .set('password', this.password);
+
+
+    this.http.get(url, {params}).subscribe(response => {
+      if (typeof response === 'number') {
+        this.successMessage = 'Erfolgreich eingeloggt.';
+        this.authService.login();
+      } else {
+        this.errorMessage = response.toString();
+      }
+    });
+  }  
 }

@@ -2,12 +2,13 @@
 
 <div class="login-container">
     <h2>Login</h2>
-    <form class="login-form" (submit)="onSubmit()">
+    <form class="login-form">
         <input type="text" name="username" [(ngModel)]="username" placeholder="Username" required>
         <input type="password" name="password" [(ngModel)]="password" placeholder="Password" required>
-        <button type="submit" [disabled]="!username || !password">Login</button>
+        <button type="submit" (click)="onRegister()" [disabled]="!username || !password">Registrieren</button>
+        <button type="submit" (click)="onLogin()" [disabled]="!username || !password">Login</button>
     </form>
-    <p *ngIf="(!username || !password) && formSubmitted && !userSaved" class="error-message">Bitte füllen Sie beide Felder aus.</p>
+    <p *ngIf="(!username || !password) && formSubmitted" class="error-message">Bitte füllen Sie beide Felder aus.</p>
     <p class="error-message" *ngIf="errorMessage">{{ errorMessage }}</p>
     <p class="sucess-message" *ngIf="successMessage">{{ successMessage }}</p>
 

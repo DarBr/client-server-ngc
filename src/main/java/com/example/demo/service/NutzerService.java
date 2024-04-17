@@ -48,6 +48,10 @@ public class NutzerService {
         return nutzerRepository.findById(id).orElse(null);
     }
 
+    public Nutzer getNutzerByUsername(String username) {
+        return nutzerRepository.findByUsername(username).orElse(null);
+    }
+
     public void deleteNutzer(int id) {
         nutzerRepository.deleteById(id);
     }
