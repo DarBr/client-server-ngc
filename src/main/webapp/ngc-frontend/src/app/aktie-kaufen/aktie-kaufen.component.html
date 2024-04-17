@@ -1,0 +1,11 @@
+<div class="login-container">
+    <h2>Aktie kaufen</h2>
+    <form class="login-form" (submit)="kaufen()">
+        <input type="text" name="isin" [(ngModel)]="isin" placeholder="ISIN" required>
+        <input type="number" name="anzahl" [(ngModel)]="anzahl" placeholder="Anzahl" required>
+        <button type="submit" [disabled]="!isin || !anzahl">Kaufen</button>
+    </form>
+    <p *ngIf="(!isin || !anzahl) && formSubmitted && !stockSaved" class="error-message">Bitte füllen Sie beide Felder aus.</p>
+    <p class="error-message" *ngIf="errorMessage">{{ errorMessage }}</p>
+    <p class="success-message" *ngIf="successMessage">{{ successMessage }}</p>
+</div>
