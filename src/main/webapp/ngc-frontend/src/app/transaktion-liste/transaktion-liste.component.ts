@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { TransaktionService } from '../../transaktion.service'; // Pfad anpassen, falls nötig
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 
@@ -15,24 +14,31 @@ export class TransaktionListeComponent implements OnInit {
   isLoading = true;
   sortColumn: string = '';
   sortAscending: boolean = true;
+
   constructor(private http: HttpClient) { }
 
   ngOnInit() {
+    this.loadTransactions(); // Lade die Transaktionen beim Initialisieren der Komponente
+  }
+
+  // Lade die Transaktionen
+  loadTransactions() {
     this.http.get<any[]>('http://localhost:8080/transaktionen').subscribe((data) => {
       this.transaktionen = data; // Speichern Sie die Daten in der nutzer-Eigenschaft
       this.isLoading = false;
     });
   }
 
+  // Sortiere die Tabelle
   sortTable(column: string): void {
     if (this.sortColumn === column) {
       this.sortAscending = !this.sortAscending;
     } else {
       this.sortAscending = true;
     }
-  
+
     this.sortColumn = column;
-  
+
     this.transaktionen.sort((a, b) => {
       let comparison = 0;
       if (a[column] > b[column]) {
@@ -44,8 +50,5 @@ export class TransaktionListeComponent implements OnInit {
     });
   }
 
-
-
+  
 }
-
-

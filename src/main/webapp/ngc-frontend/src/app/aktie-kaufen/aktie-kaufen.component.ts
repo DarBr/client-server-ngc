@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Observable } from 'rxjs';
 
@@ -12,6 +12,9 @@ import { Observable } from 'rxjs';
   imports: [CommonModule, FormsModule]
 })
 export class AktieKaufenComponent {
+  // Deklariere ein Ereignis
+  @Output() transactionCompleted = new EventEmitter<void>();
+
   isin: string = '';
   anzahl: string = '';
   errorMessage: string = '';
@@ -34,10 +37,9 @@ export class AktieKaufenComponent {
         this.stockSaved = true;
         this.isin = '';
         this.anzahl = '';
+        // Löse das Ereignis aus, um die Transaktionsliste zu aktualisieren
+        this.transactionCompleted.emit();
       }
-    }
-      //Error Message oder Success Message einfügen
-    );
-
+    });
   }
 }
