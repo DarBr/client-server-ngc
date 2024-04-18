@@ -54,26 +54,32 @@ public class DepotService {
         Depot existingDepot = depotRepository.findByDepotIDAndISIN(depotID, isin);
 
         Aktie aktie = new Aktie(isin);
-        double preis = aktie.getAktienpreis() * anzahl;
-
-        // Erstelle eine neue Transaktion für den Kauf
-
-        Transaktion transaktion = new Transaktion(isin, preis, anzahl, "Kauf", depotID);
-        // Speichere die Transaktion in der Datenbank
-        transaktionRepository.save(transaktion);
+        double einzelpreis = aktie.getAktienpreis();
+        double gesamtpreis = einzelpreis * anzahl;
 
         if (existingDepot != null) {
             // Das Depot für diese ISIN existiert bereits, erhöhe die Anzahl
             int currentAnzahl = existingDepot.getAnzahl();
             int neueAnzahl = currentAnzahl + anzahl;
             existingDepot.setAnzahl(neueAnzahl);
+
+            // Berechne den neuen Einstandspreis für die Aktie
+            double neuerEinstandspreis = (existingDepot.getEinstandspreis() * currentAnzahl + einzelpreis * anzahl)
+                    / neueAnzahl;
+            existingDepot.setEinstandspreis(neuerEinstandspreis);
             depotRepository.save(existingDepot);
 
         } else {
             // Das Depot für diese ISIN existiert nicht, erstelle einen neuen Eintrag
-            Depot newDepot = new Depot(depotID, isin, anzahl);
+            Depot newDepot = new Depot(depotID, isin, anzahl, einzelpreis);
             depotRepository.save(newDepot);
         }
+
+        // Erstelle eine neue Transaktion für den Kauf
+
+        Transaktion transaktion = new Transaktion(isin, gesamtpreis, anzahl, "Kauf", depotID);
+        // Speichere die Transaktion in der Datenbank
+        transaktionRepository.save(transaktion);
 
         return true;
     }
@@ -81,13 +87,16 @@ public class DepotService {
     public boolean aktieVerkaufen(int depotID, String isin, int anzahl) throws IOException {
         Depot existingDepot = depotRepository.findByDepotIDAndISIN(depotID, isin);
         Aktie aktie = new Aktie(isin);
-        double preis = aktie.getAktienpreis() * anzahl;
+        double einzelpreis = aktie.getAktienpreis();
+        double gesamtpreis = einzelpreis * anzahl;
+
         // Erstelle eine neue Transaktion für den Verkauf
-        Transaktion transaktion = new Transaktion(isin, preis, anzahl, "Verkauf", depotID);
+        Transaktion transaktion = new Transaktion(isin, gesamtpreis, anzahl, "Verkauf", depotID);
         // Speichere die Transaktion in der Datenbank
         transaktionRepository.save(transaktion);
         if (existingDepot != null) {
-            // Das Depot für diese ISIN existiert, überprüfe ob ausreichend Aktien vorhanden sind
+            // Das Depot für diese ISIN existiert, überprüfe ob ausreichend Aktien vorhanden
+            // sind
             int currentAnzahl = existingDepot.getAnzahl();
             if (currentAnzahl >= anzahl) {
                 // Es sind ausreichend Aktien vorhanden, verringere die Anzahl
@@ -109,5 +118,5 @@ public class DepotService {
             return false;
         }
     }
-    
+
 }
