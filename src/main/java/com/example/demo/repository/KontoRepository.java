@@ -11,6 +11,7 @@ import com.example.demo.model.Konto;
 public interface KontoRepository extends JpaRepository<Konto, Integer> {
     
     
+    
 
     // Weitere Methoden zur Datenbankabfrage für Nutzer
 

@@ -8,4 +8,5 @@
     <p *ngIf="(!isin || !anzahl) && formSubmitted && !stockSaved" class="error-message">Bitte füllen Sie beide Felder aus.</p>
     <p class="error-message" *ngIf="errorMessage">{{ errorMessage }}</p>
     <p class="success-message" *ngIf="successMessage">{{ successMessage }}</p>
+    <p *ngIf="currentPrice > 0">Gesamtpreis: {{ currentPrice * anzahl | currency }}</p>
 </div>

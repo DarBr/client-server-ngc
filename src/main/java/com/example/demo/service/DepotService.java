@@ -2,8 +2,12 @@ package com.example.demo.service;
 
 import com.example.demo.Aktie;
 import com.example.demo.model.Depot;
+import com.example.demo.model.Konto;
+import com.example.demo.model.Nutzer;
 import com.example.demo.model.Transaktion;
 import com.example.demo.repository.DepotRepository;
+import com.example.demo.repository.KontoRepository;
+import com.example.demo.repository.NutzerRepository;
 import com.example.demo.repository.TransaktionRepository;
 
 import jakarta.transaction.Transactional;
@@ -20,6 +24,10 @@ public class DepotService {
     private DepotRepository depotRepository;
     @Autowired
     private TransaktionRepository transaktionRepository;
+    @Autowired
+    private NutzerRepository nutzerRepository;
+    @Autowired
+    private KontoRepository kontoRepository;
 
     public Depot saveDepot(Depot depot) {
         return depotRepository.save(depot);
@@ -45,9 +53,11 @@ public class DepotService {
     public boolean aktieKaufen(int depotID, String isin, int anzahl) throws IOException {
         Depot existingDepot = depotRepository.findByDepotIDAndISIN(depotID, isin);
 
-        // Erstelle eine neue Transaktion für den Kauf
         Aktie aktie = new Aktie(isin);
         double preis = aktie.getAktienpreis() * anzahl;
+
+        // Erstelle eine neue Transaktion für den Kauf
+
         Transaktion transaktion = new Transaktion(isin, preis, anzahl, "Kauf", depotID);
         // Speichere die Transaktion in der Datenbank
         transaktionRepository.save(transaktion);
@@ -58,6 +68,7 @@ public class DepotService {
             int neueAnzahl = currentAnzahl + anzahl;
             existingDepot.setAnzahl(neueAnzahl);
             depotRepository.save(existingDepot);
+
         } else {
             // Das Depot für diese ISIN existiert nicht, erstelle einen neuen Eintrag
             Depot newDepot = new Depot(depotID, isin, anzahl);
