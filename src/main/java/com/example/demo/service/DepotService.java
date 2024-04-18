@@ -77,4 +77,37 @@ public class DepotService {
 
         return true;
     }
+
+    public boolean aktieVerkaufen(int depotID, String isin, int anzahl) throws IOException {
+        Depot existingDepot = depotRepository.findByDepotIDAndISIN(depotID, isin);
+        Aktie aktie = new Aktie(isin);
+        double preis = aktie.getAktienpreis() * anzahl;
+        // Erstelle eine neue Transaktion für den Verkauf
+        Transaktion transaktion = new Transaktion(isin, preis, anzahl, "Verkauf", depotID);
+        // Speichere die Transaktion in der Datenbank
+        transaktionRepository.save(transaktion);
+        if (existingDepot != null) {
+            // Das Depot für diese ISIN existiert, überprüfe ob ausreichend Aktien vorhanden sind
+            int currentAnzahl = existingDepot.getAnzahl();
+            if (currentAnzahl >= anzahl) {
+                // Es sind ausreichend Aktien vorhanden, verringere die Anzahl
+                int neueAnzahl = currentAnzahl - anzahl;
+                existingDepot.setAnzahl(neueAnzahl);
+                depotRepository.save(existingDepot);
+                // Überprüfe, ob alle Aktien verkauft wurden
+                if (neueAnzahl == 0) {
+                    // Löschen Sie den Depot-Eintrag aus der Datenbank
+                    depotRepository.delete(existingDepot);
+                }
+                return true;
+            } else {
+                // Es sind nicht genügend Aktien vorhanden, Verkauf nicht möglich
+                return false;
+            }
+        } else {
+            // Das Depot für diese ISIN existiert nicht, Verkauf nicht möglich
+            return false;
+        }
+    }
+    
 }
