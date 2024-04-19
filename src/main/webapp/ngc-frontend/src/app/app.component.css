@@ -101,6 +101,7 @@ nav ul li a {
 main {
     margin-top: 16vh; /* Abstand nach oben */
     margin-left: 3.5vh;
+    margin-bottom: 10vh; /* Abstand nach unten */
 }
 
 /*FOOTER*/
