@@ -1,1 +1,34 @@
 <p>home works!</p>
+
+<h2>Depotübersicht</h2>
+<p>In diesem Bereich finden Sie eine Auflistung Ihrer aktuellen Depotpositionen.</p>
+<p>Sortieren Sie Ihre Transaktionen ganz nach Ihren Bedürfnissen, indem Sie einfach auf die Spaltenüberschriften
+  klicken.</p>
+
+<div *ngIf="isLoading">Loading...</div>
+<div *ngIf="!isLoading">
+  <table class="table-transaktionen">
+    <thead>
+      <tr>
+        <th (click)="sortTable('isin')">ISIN</th>
+        <th (click)="sortTable('anzahl')">Anzahl</th>
+        <th (click)="sortTable('einstandspreis')">Einstandspreis</th>
+        <th>Gesamtinvestitionen</th>
+        <th>Aktueller Wert</th>
+        <th>Wertänderung - Total</th>
+        <th>Wertänderung - Prozentual</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let item of depots">
+        <td>{{ item.isin }}</td>
+        <td>{{ item.anzahl }}</td>
+        <td>{{ item.einstandspreis }}</td>
+        <td>{{ item.einstandspreis * item.anzahl }}</td>
+        <td>{{ (item.currentPrice) }}</td>
+        <td>{{ calculateChangeTotal(item) }}</td>
+        <td>{{ calculateChangeProzent(item) }}%</td>
+      </tr>
+    </tbody>
+  </table>
+</div>

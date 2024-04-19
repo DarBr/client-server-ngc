@@ -2,8 +2,6 @@ package com.example.demo.service;
 
 import com.example.demo.Aktie;
 import com.example.demo.model.Depot;
-import com.example.demo.model.Konto;
-import com.example.demo.model.Nutzer;
 import com.example.demo.model.Transaktion;
 import com.example.demo.repository.DepotRepository;
 import com.example.demo.repository.KontoRepository;
@@ -64,8 +62,8 @@ public class DepotService {
             existingDepot.setAnzahl(neueAnzahl);
 
             // Berechne den neuen Einstandspreis für die Aktie
-            double neuerEinstandspreis = (existingDepot.getEinstandspreis() * currentAnzahl + einzelpreis * anzahl)
-                    / neueAnzahl;
+            double neuerEinstandspreis = Math.round(((existingDepot.getEinstandspreis() * currentAnzahl + einzelpreis * anzahl)
+                    / neueAnzahl) * 100.0) / 100.0;
             existingDepot.setEinstandspreis(neuerEinstandspreis);
             depotRepository.save(existingDepot);
 
