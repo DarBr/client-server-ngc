@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { Observable, forkJoin, map, tap } from 'rxjs';
+import Chart from 'chart.js/auto';
 
 
 @Component({
@@ -78,6 +79,9 @@ export class HomeComponent implements OnInit {
     const prozent = Math.round((currentValue / originalInvestment) * 10000) / 100;
     return Math.round((prozent - 100) * 100) / 100;
   }
+
+  
+  
 
 
   sortTable(column: string): void {
