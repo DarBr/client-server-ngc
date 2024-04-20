@@ -80,6 +80,18 @@ export class HomeComponent implements OnInit {
     return Math.round((prozent - 100) * 100) / 100;
   }
 
+  totalChangeTotal(): number {
+    return Math.round(this.depots.reduce((total, depot) => total + depot.changeTotal, 0) * 100) / 100;
+  }
+  
+  totalChangeProzent(): number {
+    const totalChange = this.depots.reduce((total, depot) => total + depot.changeTotal, 0);
+    const originalInvestment = this.depots.reduce((total, depot) => total + depot.einstandspreis * depot.anzahl, 0);
+    const currentValue = originalInvestment + totalChange;
+    const prozent = Math.round((currentValue / originalInvestment) * 10000) / 100;
+    return Math.round((prozent - 100) * 100) / 100;
+  }
+
   
   
 
