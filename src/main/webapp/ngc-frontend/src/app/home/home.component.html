@@ -13,10 +13,9 @@
         <th (click)="sortTable('isin')">ISIN</th>
         <th (click)="sortTable('anzahl')">Anzahl</th>
         <th (click)="sortTable('einstandspreis')">Einstandspreis</th>
-        <th>Gesamtinvestitionen</th>
-        <th>Aktueller Wert</th>
-        <th>Wertänderung - Total</th>
-        <th>Wertänderung - Prozentual</th>
+        <th (click)="sortTable('currentPrice')">Aktueller Wert</th>
+        <th (click)="sortTable('changeTotal')">Wertänderung - Total</th>
+        <th (click)="sortTable('changeProzent')">Wertänderung - Prozentual</th>
       </tr>
     </thead>
     <tbody>
@@ -24,10 +23,17 @@
         <td>{{ item.isin }}</td>
         <td>{{ item.anzahl }}</td>
         <td>{{ item.einstandspreis }}</td>
-        <td>{{ item.einstandspreis * item.anzahl }}</td>
-        <td>{{ (item.currentPrice) }}</td>
-        <td>{{ calculateChangeTotal(item) }}</td>
-        <td>{{ calculateChangeProzent(item) }}%</td>
+        <td>{{ item.currentPrice }}</td>
+        <td>{{ item.changeTotal}}</td>
+        <td class="change-cell">
+          <span class="change-icon" [ngClass]="{'up': item.changeProzent > 0, 'down': item.changeProzent < 0}">
+            <i class="fas fa-caret-up" *ngIf="item.changeProzent > 0"></i>
+            <i class="fas fa-caret-down" *ngIf="item.changeProzent < 0"></i>
+          </span>
+          <span class="change-text" [ngClass]="{'positive': item.changeProzent> 0, 'negative': item.changeProzent < 0}">
+            {{ item.changeProzent }}%
+          </span>
+        </td>
       </tr>
     </tbody>
   </table>

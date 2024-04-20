@@ -64,5 +64,36 @@
       font-weight: bold;
       text-align: left;
     }
+
+    
+    
+    
   }
   
+
+  .change-cell {
+    display: flex;
+    align-items: center;
+  }
+  
+  .change-icon {
+    margin-right: 5px;
+    font-size: 14px;
+  }
+  
+  .change-icon i {
+    color: inherit;
+  }
+  
+  .change-text {
+    font-size: 14px;
+    color: inherit; /* Füge diese Zeile hinzu */
+  }
+  
+  .positive {
+    color: green;
+  }
+  
+  .negative {
+    color: red;
+  }

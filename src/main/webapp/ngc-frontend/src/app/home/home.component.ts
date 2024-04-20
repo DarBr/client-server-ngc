@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
-import { Observable, map } from 'rxjs';
+import { Observable, forkJoin, map, tap } from 'rxjs';
 
 
 @Component({
@@ -11,6 +11,7 @@ import { Observable, map } from 'rxjs';
   templateUrl: './home.component.html',
   styleUrl: './home.component.css'
 })
+
 export class HomeComponent implements OnInit {
   depots: any[] = [];
   isLoading = true;
@@ -24,14 +25,25 @@ export class HomeComponent implements OnInit {
   }
 
   loadDepot() {
+    this.isLoading = true; // Setze isLoading auf true, um anzuzeigen, dass das Laden begonnen hat
     this.http.get<any[]>('http://localhost:8080/depot').subscribe((data) => {
-      this.depots = data;
-      this.isLoading = false;
-
-      this.depots.forEach((depot) => {
-        this.getAktienpreis(depot.isin).subscribe((price) => {
-          depot.currentPrice = price;
-        });
+      const depots = data;
+  
+      const priceObservables = depots.map(depot =>
+        this.getAktienpreis(depot.isin).pipe(
+          map((stockPrice) => {
+            depot.currentPrice = stockPrice;
+            depot.changeTotal = this.calculateChangeTotal(depot); // Berechne die Wertänderung - Total
+            depot.changeProzent = this.calculateChangeProzent(depot); // Berechne die Wertänderung - Prozentual
+  
+            return depot;
+          })
+        )
+      );
+  
+      forkJoin(priceObservables).subscribe((updatedDepots) => {
+        this.depots = updatedDepots; // Weise das aktualisierte Array zu, um die Änderungserkennung auszulösen
+        this.isLoading = false; // Setze isLoading auf false, um anzuzeigen, dass das Laden abgeschlossen ist
       });
     });
   }
