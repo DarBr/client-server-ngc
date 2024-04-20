@@ -32,6 +32,10 @@ public class KontoService {
     }
 
     public void einzahlen(int kontoID, double betrag) {
+        if (betrag < 0) {
+            throw new IllegalArgumentException("Betrag darf nicht negativ sein");
+        }
+
         Konto konto = kontoRepository.findById(kontoID).orElse(null);
         if (konto != null) {
             Zahlung zahlung = new Zahlung(betrag, "Einzahlung", kontoID);
@@ -43,13 +47,20 @@ public class KontoService {
     }
 
     public void auszahlen(int kontoID, double betrag) {
+        if (betrag < 0) {
+            throw new IllegalArgumentException("Betrag darf nicht negativ sein");
+        }
         Konto konto = kontoRepository.findById(kontoID).orElse(null);
         if (konto != null) {
-            Zahlung zahlung = new Zahlung(betrag, "Auszahlung", kontoID);
-            zahlungsRepository.save(zahlung);
+            if (konto.getKontostand() >= betrag) {
+                Zahlung zahlung = new Zahlung(betrag, "Auszahlung", kontoID);
+                zahlungsRepository.save(zahlung);
 
-            konto.setKontostand(konto.getKontostand() - betrag);
-            kontoRepository.save(konto);
+                konto.setKontostand(konto.getKontostand() - betrag);
+                kontoRepository.save(konto);
+            } else {
+                throw new IllegalArgumentException("Kontostand reicht nicht");
+            }
         }
     }
 }

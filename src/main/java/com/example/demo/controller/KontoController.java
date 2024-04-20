@@ -51,9 +51,14 @@ public class KontoController {
     }
 
     @PutMapping("/auszahlen")
-    public ResponseEntity<Konto> auszahlen(@RequestParam int kontoID, @RequestParam double betrag) {
+public ResponseEntity<?> auszahlen(@RequestParam int kontoID, @RequestParam double betrag) {
+    try {
         kontoService.auszahlen(kontoID, betrag);
         Konto konto = kontoService.getKontoById(kontoID);
         return new ResponseEntity<>(konto, HttpStatus.OK);
+    } catch (IllegalArgumentException e) {
+        return ResponseEntity.badRequest().body(e.getMessage());
     }
+}
+
 }
