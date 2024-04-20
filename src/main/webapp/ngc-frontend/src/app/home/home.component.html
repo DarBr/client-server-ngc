@@ -16,6 +16,7 @@
         <th (click)="sortTable('currentPrice')">Aktueller Wert</th>
         <th (click)="sortTable('changeTotal')">Wertänderung - Total</th>
         <th (click)="sortTable('changeProzent')">Wertänderung - Prozentual</th>
+        <th>Handeln</th>
       </tr>
     </thead>
     <tbody>
@@ -25,14 +26,14 @@
         <td>{{ item.einstandspreis }}</td>
         <td>{{ item.currentPrice }}</td>
         <td>{{ item.changeTotal}}</td>
-        <td class="change-cell">
-          <span class="change-icon" [ngClass]="{'up': item.changeProzent > 0, 'down': item.changeProzent < 0}">
-            <i class="fas fa-caret-up" *ngIf="item.changeProzent > 0"></i>
-            <i class="fas fa-caret-down" *ngIf="item.changeProzent < 0"></i>
-          </span>
+        
+        <td>
           <span class="change-text" [ngClass]="{'positive': item.changeProzent> 0, 'negative': item.changeProzent < 0}">
             {{ item.changeProzent }}%
           </span>
+        </td>
+        <td>
+          <button class="sell-button" (click)="openSellPopup(item)">Aktie verkaufen</button>
         </td>
       </tr>
     </tbody>

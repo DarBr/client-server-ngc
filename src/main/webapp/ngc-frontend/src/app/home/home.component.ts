@@ -103,4 +103,17 @@ export class HomeComponent implements OnInit {
       return this.sortAscending ? comparison : comparison * -1;
     });
   }
+
+  openSellPopup(item: any) {
+    const sellQuantity = prompt(`Wie viele Aktien von ${item.isin} möchten Sie verkaufen?`);
+    if (sellQuantity !== null) {
+      const quantity = parseInt(sellQuantity);
+      if (!isNaN(quantity) && quantity > 0 && quantity <= item.anzahl) {
+        // Hier können Sie die Logik für den Verkauf implementieren, z.B. eine HTTP-Anfrage an den Server senden
+        console.log(`Verkaufen von ${quantity} Aktien von ${item.isin}`);
+      } else {
+        alert('Bitte geben Sie eine gültige Anzahl ein.');
+      }
+    }
+  }
 }
