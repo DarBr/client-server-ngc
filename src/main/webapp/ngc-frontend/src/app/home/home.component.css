@@ -154,6 +154,7 @@ tfoot td:last-child {
 .broker-container h2 {
   margin-bottom: 10px;
   color: #244467;
+  font-weight: bolder;
 }
 
 .broker-container p {
