@@ -19,7 +19,7 @@ export class AktieKaufenComponent {
   anzahl: number = 0;
   errorMessage: string = '';
   successMessage: string = '';
-  depotId: number = 123;
+  depotId: number = 702;
   formSubmitted: boolean = false;
   stockSaved: boolean = false;
   currentPrice: number = 0;

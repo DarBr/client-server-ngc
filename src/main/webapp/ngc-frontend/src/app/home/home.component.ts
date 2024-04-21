@@ -18,16 +18,18 @@ export class HomeComponent implements OnInit {
   isLoading = true;
   sortColumn: string = '';
   sortAscending: boolean = true;
+  kontostand: number = 10;
 
   constructor(private http: HttpClient) { }
 
   ngOnInit() {
     this.loadDepot();
+    this.loadKontostand();
   }
 
   loadDepot() {
     this.isLoading = true; // Setze isLoading auf true, um anzuzeigen, dass das Laden begonnen hat
-    this.http.get<any[]>('http://localhost:8080/depot').subscribe((data) => {
+    this.http.get<any[]>('http://localhost:8080/depot/702').subscribe((data) => {
       const depots = data;
   
       const priceObservables = depots.map(depot =>
@@ -127,5 +129,11 @@ export class HomeComponent implements OnInit {
         alert('Bitte geben Sie eine gültige Anzahl ein.');
       }
     }
+  }
+
+  loadKontostand(){
+    this.http.get<any>('http://localhost:8080/konto/702').subscribe((data) => {
+      this.kontostand = data.kontostand;
+    });
   }
 }

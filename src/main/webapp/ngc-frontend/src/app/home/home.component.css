@@ -140,3 +140,41 @@ tfoot td {
 tfoot td:last-child {
   border: none; /* Entfernt die rechte Grenze für die letzte Zelle */
 }
+
+/* Neuer CSS-Stil für den Aktienbroker-Look */
+.broker-container {
+  background-color: #f8f8f8;
+  padding: 20px;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+  margin-right: 20px;
+}
+
+.broker-container h2 {
+  margin-bottom: 10px;
+  color: #244467;
+}
+
+.broker-container p {
+  margin-bottom: 15px;
+  color: #333;
+}
+
+.broker-container button {
+  background-color: #244467;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 20px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-right: 10px;
+  
+}
+
+.broker-container button:hover {
+  background-color: #1a356c;
+}
+
+/* End Neuer CSS-Stil */
