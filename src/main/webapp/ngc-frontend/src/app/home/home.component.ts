@@ -1,8 +1,22 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { Observable, forkJoin, map, tap } from 'rxjs';
-import Chart from 'chart.js/auto';
+import { 
+  Chart, 
+  ChartConfiguration, 
+  ChartData, 
+  ChartTypeRegistry, 
+  PieController, 
+  ArcElement, 
+  Tooltip, 
+  Legend 
+} from 'chart.js';
+
+// Register the components for the pie chart
+Chart.register(PieController, ArcElement, Tooltip, Legend);
+
+
 
 
 @Component({
@@ -13,18 +27,25 @@ import Chart from 'chart.js/auto';
   styleUrl: './home.component.css'
 })
 
-export class HomeComponent implements OnInit {
+export class HomeComponent implements OnInit, AfterViewInit {
   depots: any[] = [];
   isLoading = true;
   sortColumn: string = '';
   sortAscending: boolean = true;
   kontostand: number = 10;
+  portfolioDistributionChart: Chart<'pie', number[], string> | null = null;
 
   constructor(private http: HttpClient) { }
 
   ngOnInit() {
     this.loadDepot();
     this.loadKontostand();
+  }
+
+  ngAfterViewInit() {
+    // This ensures that the view is fully initialized before we try to access the chart element
+    // Since ngAfterViewInit is called after ngOnInit, we will call createPortfolioDistributionChart inside it
+    this.createPortfolioDistributionChart();
   }
 
   loadDepot() {
@@ -193,5 +214,79 @@ export class HomeComponent implements OnInit {
         }
       );
   }
+
+
+  createPortfolioDistributionChart() {
+    if (!this.isLoading && this.depots.length) {
+      const labels = this.depots.map(depot => depot.isin);
+      const data = this.depots.map(depot => (depot.currentPrice || 0) * (depot.anzahl || 0));
+      const backgroundColors = this.generateBackgroundColors(data.length);
+      const borderColors = this.generateBorderColors(data.length);
+  
+      const chartData: ChartData<'pie', number[], string> = {
+        labels: labels,
+        datasets: [{
+          label: 'Portfolio Distribution',
+          data: data,
+          backgroundColor: backgroundColors,
+          borderColor: borderColors,
+          borderWidth: 1
+        }]
+      };
+  
+      const config: ChartConfiguration<'pie', number[], string> = {
+        type: 'pie',
+        data: chartData,
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+        },
+      };
+  
+      if (this.portfolioDistributionChart) {
+        this.portfolioDistributionChart.destroy();
+      }
+  
+      this.portfolioDistributionChart = new Chart<'pie', number[], string>(
+        document.getElementById('portfolioDistributionChart') as HTMLCanvasElement,
+        config
+      );
+    }
+  }
+
+  // Helper method to generate background colors
+  generateBackgroundColors(count: number): string[] {
+    const palette = [
+      'rgba(52, 152, 219, 0.8)', // Soft Blue
+      'rgba(231, 76, 60, 0.8)', // Soft Red
+      'rgba(46, 204, 113, 0.8)', // Mint Green
+      'rgba(155, 89, 182, 0.8)', // Lavender
+      'rgba(241, 196, 15, 0.8)', // Mustard Yellow
+      'rgba(230, 126, 34, 0.8)', // Peach
+      'rgba(236, 240, 241, 0.8)', // Light Gray
+      'rgba(149, 165, 166, 0.8)', // Slate
+      'rgba(26, 188, 156, 0.8)', // Sea Green
+      'rgba(52, 73, 94, 0.8)' // Dark Slate
+    ];
+    return Array.from({ length: count }, (_, i) => palette[i % palette.length]);
+  }
+
+  // Helper method to generate border colors
+  generateBorderColors(count: number): string[] {
+    const palette = [
+      'rgba(52, 152, 219, 0.8)', // Soft Blue
+      'rgba(231, 76, 60, 0.8)', // Soft Red
+      'rgba(46, 204, 113, 0.8)', // Mint Green
+      'rgba(155, 89, 182, 0.8)', // Lavender
+      'rgba(241, 196, 15, 0.8)', // Mustard Yellow
+      'rgba(230, 126, 34, 0.8)', // Peach
+      'rgba(236, 240, 241, 0.8)', // Light Gray
+      'rgba(149, 165, 166, 0.8)', // Slate
+      'rgba(26, 188, 156, 0.8)', // Sea Green
+      'rgba(52, 73, 94, 0.8)' // Dark Slate
+    ];
+    return Array.from({ length: count }, (_, i) => palette[i % palette.length]);
+  }
 }
+
 
