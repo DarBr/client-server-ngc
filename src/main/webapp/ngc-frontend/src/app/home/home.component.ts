@@ -31,19 +31,19 @@ export class HomeComponent implements OnInit {
     this.isLoading = true; // Setze isLoading auf true, um anzuzeigen, dass das Laden begonnen hat
     this.http.get<any[]>('http://localhost:8080/depot/702').subscribe((data) => {
       const depots = data;
-  
+
       const priceObservables = depots.map(depot =>
         this.getAktienpreis(depot.isin).pipe(
           map((stockPrice) => {
             depot.currentPrice = stockPrice;
             depot.changeTotal = this.calculateChangeTotal(depot); // Berechne die Wertänderung - Total
             depot.changeProzent = this.calculateChangeProzent(depot); // Berechne die Wertänderung - Prozentual
-  
+
             return depot;
           })
         )
       );
-  
+
       forkJoin(priceObservables).subscribe((updatedDepots) => {
         this.depots = updatedDepots; // Weise das aktualisierte Array zu, um die Änderungserkennung auszulösen
         this.isLoading = false; // Setze isLoading auf false, um anzuzeigen, dass das Laden abgeschlossen ist
@@ -85,7 +85,7 @@ export class HomeComponent implements OnInit {
   totalChangeTotal(): number {
     return Math.round(this.depots.reduce((total, depot) => total + depot.changeTotal, 0) * 100) / 100;
   }
-  
+
   totalChangeProzent(): number {
     const totalChange = this.depots.reduce((total, depot) => total + depot.changeTotal, 0);
     const originalInvestment = this.depots.reduce((total, depot) => total + depot.einstandspreis * depot.anzahl, 0);
@@ -94,8 +94,8 @@ export class HomeComponent implements OnInit {
     return Math.round((prozent - 100) * 100) / 100;
   }
 
-  
-  
+
+
 
 
   sortTable(column: string): void {
@@ -131,9 +131,67 @@ export class HomeComponent implements OnInit {
     }
   }
 
-  loadKontostand(){
+  loadKontostand() {
     this.http.get<any>('http://localhost:8080/konto/702').subscribe((data) => {
       this.kontostand = data.kontostand;
     });
   }
+
+  openDepositPopup() {
+    const einzahlungsbetrag = prompt("Bitte geben Sie den einzuzahlenden Betrag ein:");
+    if (einzahlungsbetrag !== null) {
+      const betrag = parseFloat(einzahlungsbetrag);
+      if (!isNaN(betrag) && betrag > 0) {
+        this.einzahlen(betrag);
+      } else {
+        alert("Bitte geben Sie einen gültigen Betrag ein.");
+      }
+    }
+  }
+
+  openWithdrawalPopup() {
+    const auszahlungsbetrag = prompt("Bitte geben Sie den auszuzahlenden Betrag ein:");
+    if (auszahlungsbetrag !== null) {
+      const betrag = parseFloat(auszahlungsbetrag);
+      if (!isNaN(betrag) && betrag > 0) {
+        this.auszahlen(betrag);
+      } else {
+        alert("Bitte geben Sie einen gültigen Betrag ein.");
+      }
+    }
+  }
+
+  einzahlen(betrag: number) {
+    // Hier kannst du die Logik für die Einzahlung implementieren, z.B. eine HTTP-Anfrage an den Server senden
+    const kontoID = 702; // Setze die Depot-ID
+    this.http.put(`http://localhost:8080/konto/einzahlen?kontoID=${kontoID}&betrag=${betrag}`, {}).subscribe((response) => {
+      console.log("Einzahlung erfolgreich:", response);
+    }, (error) => {
+      console.error("Fehler bei der Einzahlung:", error);
+    });
+  }
+
+
+  auszahlen(betrag: number) {
+    const kontoID = 702; // Setze die Depot-ID
+    this.http.put(`http://localhost:8080/konto/auszahlen?kontoID=${kontoID}&betrag=${betrag}`, {}).subscribe((response) => {
+      console.log("Einzahlung erfolgreich:", response);
+    }, (error) => {
+      console.error("Fehler bei der Einzahlung:", error);
+    });
+
+  }
+
+  einzahlenTest(){
+    this.http.put('//localhost:8080/konto/einzahlen?kontoID=702&betrag=100', {})
+      .subscribe(
+        response => {
+          console.log('Einzahlung erfolgreich', response);
+        },
+        error => {
+          console.error('Fehler bei der Einzahlung', error);
+        }
+      );
+  }
 }
+

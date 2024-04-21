@@ -54,8 +54,7 @@ export class AktieKaufenComponent {
         this.stockSaved = true;
         this.isin = '';
         this.anzahl = 0;
-        // Löse das Ereignis aus, um die Transaktionsliste zu aktualisieren
-        this.transactionCompleted.emit();
+        
       }
     });
   }

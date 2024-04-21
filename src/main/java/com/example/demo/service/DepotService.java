@@ -58,7 +58,7 @@ public class DepotService {
     
         Aktie aktie = new Aktie(isin);
         double einzelpreis = aktie.getAktienpreis();
-        double gesamtpreis = einzelpreis * anzahl;
+        double gesamtpreis = Math.round((einzelpreis * anzahl) * 100.0) / 100.0;
     
         // Überprüfe, ob das Konto ausreichend Geld hat
         Optional<Konto> optionalNutzerkonto = kontoRepository.findById(kontoID);

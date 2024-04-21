@@ -1,3 +1,5 @@
+package com.example.demo;
+
 @Bean
 public WebMvcConfigurer corsConfigurer() {
     return new WebMvcConfigurer() {
