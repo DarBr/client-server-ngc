@@ -10,6 +10,7 @@ import {
   PieController, 
   ArcElement, 
   Tooltip, 
+  TooltipItem,
   Legend 
 } from 'chart.js';
 
@@ -240,6 +241,19 @@ export class HomeComponent implements OnInit, AfterViewInit {
         options: {
           responsive: true,
           maintainAspectRatio: false,
+          plugins: {
+            tooltip: {
+              callbacks: {
+                label: function(context: TooltipItem<'pie'>) {
+                  const label = context.label || '';
+                  const value = context.parsed || 0;
+                  const total = context.dataset.data.reduce((acc, val) => acc + val, 0);
+                  const percentage = ((value / total) * 100).toFixed(2) + '%';
+                  return `${label}: ${value} (${percentage})`;
+                }
+              }
+            }
+          }
         },
       };
   
