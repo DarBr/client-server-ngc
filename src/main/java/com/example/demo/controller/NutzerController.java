@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-
+import com.example.demo.config.JwtUtil;
 import com.example.demo.model.Nutzer;
 import com.example.demo.service.NutzerService;
 
@@ -17,6 +17,9 @@ public class NutzerController {
 
     @Autowired
     private NutzerService nutzerService;
+
+    @Autowired
+    private JwtUtil jwtUtil;
     
     // Nutzer hinzufügen
     @PostMapping("/add")
@@ -45,11 +48,21 @@ public class NutzerController {
     //Nutzer login überprüfen
     @GetMapping("/login")
     public ResponseEntity<?> login(@RequestParam String username, @RequestParam String password) {
-        Nutzer existingUser = nutzerService.getNutzerByUsername(username);
+        Nutzer nutzer = nutzerService.getNutzerByUsername(username);
+
+        if (nutzer != null && nutzer.getPassword().equals(password)) {
+            String token = jwtUtil.generateToken(nutzer);
+            System.out.println("Token: " + token);
+            return ResponseEntity.ok(token);
+        } else {
+            return ResponseEntity.ok("Login fehlgeschlagen");
+        }
+        /* 
         if (existingUser != null && (password.equals(existingUser.getPassword()))){
             return ResponseEntity.ok(existingUser.getId());
         } else {
             return ResponseEntity.status(401).body("Falscher Benutzername oder Passwort");
         }
+        */
     }
 }

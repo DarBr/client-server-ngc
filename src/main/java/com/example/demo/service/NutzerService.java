@@ -2,7 +2,9 @@ package com.example.demo.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestParam;
 
+import com.example.demo.config.JwtUtil;
 import com.example.demo.model.Konto;
 import com.example.demo.model.Nutzer;
 import com.example.demo.repository.KontoRepository;
@@ -17,6 +19,8 @@ public class NutzerService {
     private NutzerRepository nutzerRepository;
     @Autowired
     private KontoRepository kontoRepository;
+    @Autowired
+    private JwtUtil jwtUtil;
 
     public Nutzer saveNutzer(Nutzer nutzer) {
 
@@ -39,7 +43,19 @@ public class NutzerService {
         }
 
     }
+/*
+    public String loginNutzer(@RequestParam String username, @RequestParam String password) {
+        Nutzer nutzer = getNutzerByUsername(username);
 
+        if (nutzer != null && nutzer.getPassword().equals(password)) {
+            String token = jwtUtil.generateToken(nutzer);
+            return token;
+        } else {
+            String rueckgabe = "Login fehlgeschlagen";
+            return rueckgabe;
+        }
+    }
+*/
     public List<Nutzer> getAllNutzer() {
         return nutzerRepository.findAll();
     }
