@@ -1,8 +1,11 @@
 import { Component } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Observable } from 'rxjs/internal/Observable';
+import { AuthService } from '../AuthService';
+import { Router } from '@angular/router';
+import { AppComponent } from '../app.component';
 
 @Component({
   selector: 'app-user-login',
@@ -12,20 +15,30 @@ import { Observable } from 'rxjs/internal/Observable';
   imports: [CommonModule, FormsModule]
 })
 export class LoginComponent {
+  isLoggedIn: boolean = false;
   username: string = '';
   password: string = '';
   errorMessage: string = '';
   formSubmitted: boolean = false;
   successMessage: string = '';
-  userSaved: boolean = false;
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private authService: AuthService, private router: Router, private appComponent: AppComponent) { }
 
-  onSubmit() {
+  async ngOnInit() {
+    this.appComponent.ngOnInit();
+    const token = this.authService.getToken();
+    if(token !== null && token !== '') {
+      const validation = await this.authService.validateToken(token);
+      if (validation === true) {
+        this.isLoggedIn = true;
+      }
+    }
+  }
+
+  onRegister() {
     this.formSubmitted = true;
     this.errorMessage = '';
     this.successMessage = '';
-    this.userSaved = false;
     const url = 'http://localhost:8080/nutzer/add';
     const params = {
       username: this.username,
@@ -39,11 +52,41 @@ export class LoginComponent {
         
       } else {
         this.successMessage = 'Benutzer wurde erfolgreich angelegt.';
-        this.userSaved = true;
         this.username = '';
         this.password = '';
       }
     });
 
+  }
+
+  onLogin() {
+    this.formSubmitted = true;
+    const url = 'http://localhost:8080/nutzer/login';
+    const params = new HttpParams()
+      .set('username', this.username)
+      .set('password', this.password);
+
+
+    this.http.get(url, {params, responseType: 'text'}).subscribe(response => {
+      if (response ==="Login fehlgeschlagen") {
+        this.errorMessage = response.toString();
+        console.log(response);
+      } else {
+        const token = response.toString();
+        this.authService.saveToken(token);
+        this.successMessage = 'Erfolgreich eingeloggt.';
+        this.username = '';
+        this.password = '';
+        this.router.navigate(['/']);
+        this.appComponent.ngOnInit();        
+      }
+    });
+  }
+  
+  onLogout() {
+    this.authService.deleteToken();
+    this.isLoggedIn = false;
+    this.appComponent.ngOnInit(); 
+    this.router.navigate(['/login']);
   }
 }

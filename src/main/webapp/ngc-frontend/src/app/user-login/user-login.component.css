@@ -1,23 +1,23 @@
 .login-container {
     margin: 0 auto;
-    width: 300px;
-    padding: 20px;
+    width: 35vh;
+    padding: 2vh;
     border: 1px solid #ccc;
     border-radius: 5px;
     background-color: #f9f9f9;
 }
 
 .login-container h2 {
-    margin-bottom: 20px;
-    font-size: 24px;
+    margin-bottom: 2vh;
+    font-size: 3vh;
     text-align: center;
 }
 
 .login-form input[type="text"],
 .login-form input[type="password"] {
     width: 100%;
-    padding: 10px;
-    margin-bottom: 15px;
+    padding: 1.5vh;
+    margin-bottom: 1.5vh;
     border: 1px solid #ccc;
     border-radius: 3px;
     box-sizing: border-box;
@@ -25,7 +25,41 @@
 
 .login-form button {
     width: 100%;
-    padding: 10px;
+    padding: 1vh;
+    background-color: #244467;
+    color: #fff;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    margin-bottom: 1.5vh;
+}
+
+.login-form button:hover {
+    background-color: #1a356c;
+}
+
+.logout-container {
+    margin: 0 auto;
+    width: 35vh;
+    padding: 2vh;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+}
+
+.logout-container h1 {
+    margin-bottom: 2vh;
+    font-size: 3vh;
+    text-align: center;
+}
+
+.logout-container p {
+    text-align: center;
+}
+
+.logout-container button {
+    width: 100%;
+    padding: 1vh;
     background-color: #244467;
     color: #fff;
     border: none;
@@ -33,6 +67,6 @@
     cursor: pointer;
 }
 
-.login-form button:hover {
+.logout-container button:hover {
     background-color: #1a356c;
 }

@@ -5,6 +5,7 @@ import { TransaktionListeComponent } from './transaktion-liste/transaktion-liste
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { AuthService } from './AuthService';
 
 
 @Component({
@@ -16,7 +17,19 @@ import { FormsModule } from '@angular/forms';
 })
 export class AppComponent {
   title = 'ngc-frontend';
-  
+  username: string | null = null;
+
+  constructor(private authService: AuthService) {}
+
+  async ngOnInit() {
+    const token = this.authService.getToken();
+    if (token !== null && token !== '') {
+      this.username = await this.authService.getUsernameFromToken(token);
+    }else {
+      this.username = 'Login';
+    }
+  }
+
 }
 
 
