@@ -178,4 +178,22 @@ tfoot td:last-child {
   background-color: #1a356c;
 }
 
+.portfolio-value {
+  position: absolute;
+  top: 0px;
+  right: 10px;
+  padding: 0px;
+  border-radius: 5px;
+  z-index: 999; /* Stellen Sie sicher, dass der Gesamtpreis über dem Diagramm liegt */
+}
+
+.portfolio-value p {
+  margin: 0;
+  color: #333;
+  font-size: 24px;
+  font-weight: bolder;
+}
+
+
+
 /* End Neuer CSS-Stil */

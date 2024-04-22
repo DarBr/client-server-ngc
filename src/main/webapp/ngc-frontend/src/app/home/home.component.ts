@@ -41,6 +41,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   ngOnInit() {
     this.loadDepot();
     this.loadKontostand();
+    this.calculatePortfolioValue();
   }
 
   ngAfterViewInit() {
@@ -116,6 +117,17 @@ export class HomeComponent implements OnInit, AfterViewInit {
     return Math.round((prozent - 100) * 100) / 100;
   }
 
+  calculatePortfolioValue(): number {
+    let totalValue = 0;
+    this.depots.forEach(depot => {
+      // Wenn der Aktienkurs und die Anzahl der Aktien vorhanden sind, berechne den Wert des Depots
+      if (depot.currentPrice && depot.anzahl) {
+        totalValue += depot.currentPrice * depot.anzahl;
+      }
+    });
+    return Math.round(totalValue * 100) / 100; // Runden Sie den Gesamtwert auf zwei Dezimalstellen
+  }
+  
 
 
 
@@ -155,7 +167,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   loadKontostand() {
     this.http.get<any>('http://localhost:8080/konto/702').subscribe((data) => {
-      this.kontostand = data.kontostand;
+      this.kontostand = Math.round(data.kontostand * 100) / 100;
     });
   }
 
