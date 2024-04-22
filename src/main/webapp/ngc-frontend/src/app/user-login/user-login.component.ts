@@ -25,6 +25,7 @@ export class LoginComponent {
   constructor(private http: HttpClient, private authService: AuthService, private router: Router, private appComponent: AppComponent) { }
 
   async ngOnInit() {
+    this.appComponent.ngOnInit();
     const token = this.authService.getToken();
     if(token !== null && token !== '') {
       const validation = await this.authService.validateToken(token);

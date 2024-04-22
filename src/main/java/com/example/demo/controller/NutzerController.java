@@ -52,7 +52,6 @@ public class NutzerController {
 
         if (nutzer != null && nutzer.getPassword().equals(password)) {
             String token = jwtUtil.generateToken(nutzer);
-            System.out.println("Token: " + token);
             return ResponseEntity.ok(token);
         } else {
             return ResponseEntity.ok("Login fehlgeschlagen");
