@@ -49,4 +49,13 @@ public class JwtUtil {
 
         return false;
     }
+
+    public String getUsernameFromToken(String token) {
+        return Jwts.parser()
+                   .setSigningKey(secretKey)
+                   .parseClaimsJws(token)
+                   .getBody()
+                   .getSubject();
+    }
+    
 }

@@ -53,12 +53,16 @@ export class LoginComponent {
       .set('password', this.password);
 
 
-    this.http.get(url, {params}).subscribe(response => {
-      if (typeof response === 'number') {
-        this.successMessage = 'Erfolgreich eingeloggt.';
-        this.authService.login();
-      } else {
+    this.http.get(url, {params, responseType: 'text'}).subscribe(response => {
+      if (response ==="Login fehlgeschlagen") {
         this.errorMessage = response.toString();
+        console.log(response);
+      } else {
+        const token = response.toString();
+        this.authService.saveToken(token);
+        this.successMessage = 'Erfolgreich eingeloggt.';
+        this.username = '';
+        this.password = '';
       }
     });
   }  

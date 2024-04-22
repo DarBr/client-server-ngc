@@ -4,11 +4,15 @@ import { CustomReuseStrategy } from './CustomReuseStrategy'; // Stelle sicher, d
 
 import { routes } from './app.routes';
 import { provideClientHydration } from '@angular/platform-browser';
+import { HTTP_INTERCEPTORS, provideHttpClient } from '@angular/common/http';
+import { JwtInterceptor } from './JwtInterceptor';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideRouter(routes),
     provideClientHydration(),
-    { provide: RouteReuseStrategy, useClass: CustomReuseStrategy }
+    provideHttpClient(),
+    { provide: RouteReuseStrategy, useClass: CustomReuseStrategy },
+    { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true }
   ]
 };

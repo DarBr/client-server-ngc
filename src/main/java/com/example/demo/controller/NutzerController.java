@@ -57,12 +57,27 @@ public class NutzerController {
         } else {
             return ResponseEntity.ok("Login fehlgeschlagen");
         }
-        /* 
-        if (existingUser != null && (password.equals(existingUser.getPassword()))){
-            return ResponseEntity.ok(existingUser.getId());
+    }
+
+    //Nutzer login überprüfen
+    @GetMapping("/validateToken")
+    public ResponseEntity<?> validateToken(@RequestParam String tokenuebergeben) {
+        boolean tokenValid = jwtUtil.validateToken(tokenuebergeben);
+        if (tokenValid) {
+            return ResponseEntity.ok(tokenValid);
         } else {
-            return ResponseEntity.status(401).body("Falscher Benutzername oder Passwort");
+            return ResponseEntity.ok(tokenValid);
         }
-        */
+    }
+
+    //Username from Token
+    @GetMapping("/usernamefromtoken")
+    public ResponseEntity<?> usernameFromToken(@RequestParam String token) {
+        String username = jwtUtil.getUsernameFromToken(token);
+        if (username != null) {
+            return ResponseEntity.ok(username);
+        } else {
+            return ResponseEntity.ok("Kein Username gefunden");
+        }
     }
 }
