@@ -4,6 +4,8 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Observable } from 'rxjs/internal/Observable';
 import { AuthService } from '../AuthService';
+import { Router } from '@angular/router';
+import { AppComponent } from '../app.component';
 
 @Component({
   selector: 'app-user-login',
@@ -13,13 +15,24 @@ import { AuthService } from '../AuthService';
   imports: [CommonModule, FormsModule]
 })
 export class LoginComponent {
+  isLoggedIn: boolean = false;
   username: string = '';
   password: string = '';
   errorMessage: string = '';
   formSubmitted: boolean = false;
   successMessage: string = '';
 
-  constructor(private http: HttpClient, private authService: AuthService) { }
+  constructor(private http: HttpClient, private authService: AuthService, private router: Router, private appComponent: AppComponent) { }
+
+  async ngOnInit() {
+    const token = this.authService.getToken();
+    if(token !== null && token !== '') {
+      const validation = await this.authService.validateToken(token);
+      if (validation === true) {
+        this.isLoggedIn = true;
+      }
+    }
+  }
 
   onRegister() {
     this.formSubmitted = true;
@@ -63,7 +76,16 @@ export class LoginComponent {
         this.successMessage = 'Erfolgreich eingeloggt.';
         this.username = '';
         this.password = '';
+        this.router.navigate(['/']);
+        this.appComponent.ngOnInit();        
       }
     });
-  }  
+  }
+  
+  onLogout() {
+    this.authService.deleteToken();
+    this.isLoggedIn = false;
+    this.appComponent.ngOnInit(); 
+    this.router.navigate(['/login']);
+  }
 }

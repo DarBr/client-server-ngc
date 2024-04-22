@@ -29,7 +29,7 @@ export class AuthService {
     const params = {
         token: storedtoken
     };
-    const response = await this.http.get(url, {params}).toPromise();
+    const response = await this.http.get(url, {params, responseType: 'text'}).toPromise();
     if (response === "Kein Username gefunden") {
         return null;
     } else {
@@ -45,9 +45,10 @@ export class AuthService {
     };
     const response = await this.http.get(url, {params}).toPromise();
     if (response === true) {
-        return true;
+      return true;
     } else {
-        return false;
+      this.deleteToken();
+      return false;  
     }
   }
   

@@ -1,6 +1,4 @@
-<p>user-login works!</p>
-
-<div class="login-container">
+<div class="login-container" *ngIf="!isLoggedIn">
     <h2>Login</h2>
     <form class="login-form">
         <input type="text" name="username" [(ngModel)]="username" placeholder="Username" required>
@@ -12,4 +10,9 @@
     <p class="error-message" *ngIf="errorMessage">{{ errorMessage }}</p>
     <p class="sucess-message" *ngIf="successMessage">{{ successMessage }}</p>
 
+</div>
+<div class="logout-container" *ngIf="isLoggedIn">
+    <h1>Logout</h1>
+    <p>Sie sind bereits eingeloggt.</p>
+    <button type="submit" (click)="onLogout()">Logout</button>
 </div>

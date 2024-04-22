@@ -54,14 +54,23 @@ header {
     justify-content: flex-end;
 }
 
-.first-lane-right img{
+.first-lane-right a{
     height: 75%;
+    margin: 0;
+    text-decoration: none;
+    font-size: 2vh;
+    display: flex;
+    align-items: center;
+}
+
+.first-lane-right img {
+    height: 100%;
     margin-right: 4.5vh;
 }
-.first-lane-right p{
+
+.first-lane-right a p{
     color: #000000;
     margin: 0;
-    font-size: 2vh;
 }
 
 nav {

@@ -8,15 +8,12 @@
       <h1 id="headline-small"> | Next-Gen-Capital</h1>
     </div>
     <div class="first-lane-right">
-      <p></p>
-      <img src="assets/user-icon.png" alt="user-icon">
+      <a routerLink="/login" routerLinkActive="active-link" [routerLinkActiveOptions]="{exact: true}"><p>{{username}}</p></a>
+      <a routerLink="/login" routerLinkActive="active-link" [routerLinkActiveOptions]="{exact: true}"><img src="assets/user-icon.png" alt="user-icon"></a>
     </div>
   </div>
   <nav>
     <ul>
-      <li>
-        <a routerLink="/login" routerLinkActive="active-link" [routerLinkActiveOptions]="{exact: true}">Login</a>
-      </li>
       <li>
         <a routerLink="/" routerLinkActive="active-link" [routerLinkActiveOptions]="{exact: true}">Home</a>
       </li>

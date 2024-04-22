@@ -36,3 +36,36 @@
 .login-form button:hover {
     background-color: #1a356c;
 }
+
+.logout-container {
+    margin: 0 auto;
+    width: 300px;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+}
+
+.logout-container h1 {
+    margin-bottom: 20px;
+    font-size: 24px;
+    text-align: center;
+}
+
+.logout-container p {
+    text-align: center;
+}
+
+.logout-container button {
+    width: 100%;
+    padding: 10px;
+    background-color: #244467;
+    color: #fff;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+.logout-container button:hover {
+    background-color: #1a356c;
+}
