@@ -1,24 +1,25 @@
-<h2>Transaktionsverlauf: Behalten Sie Ihre Finanzgeschäfte im Blick</h2>
-<p>In diesem Bereich finden Sie eine detaillierte Aufzeichnung Ihrer getätigten Geschäfte.</p>
-<p>Sortieren Sie Ihre Transaktionen ganz nach Ihren Bedürfnissen, indem Sie einfach auf die Spaltenüberschriften
-    klicken.</p>
+<div class="broker-container">
+    <h2>Zahlungsverlauf: Behalten Sie Ihre Finanzgeschäfte im Blick</h2>
+    <p>In diesem Bereich finden Sie eine detaillierte Aufzeichnung Ihrer getätigten Ein- und Auszahlungen.</p>
 
-<div *ngIf="isLoading">Loading...</div>
-<div *ngIf="!isLoading">
-    <table class="table-transaktionen">
-        <thead>
-            <tr>
-                <th (click)="sortTable('zeitpunkt')">Zeitpunkt</th>
-                <th (click)="sortTable('betrag')">Betrag</th>
-                <th (click)="sortTable('typ')">Typ</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr *ngFor="let item of zahlungen">
-                <td>{{ item.zeitpunkt | date:'medium' }}</td>
-                <td>{{ item.betrag}}</td>
-                <td>{{ item.typ}}</td>
-            </tr>
-        </tbody>
-    </table>
+
+    <div *ngIf="isLoading">Loading...</div>
+    <div *ngIf="!isLoading">
+        <table class="table-transaktionen">
+            <thead>
+                <tr>
+                    <th (click)="sortTable('zeitpunkt')">Zeitpunkt</th>
+                    <th (click)="sortTable('betrag')">Betrag</th>
+                    <th (click)="sortTable('typ')">Typ</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let item of zahlungen">
+                    <td>{{ item.zeitpunkt | date:'medium' }}</td>
+                    <td>{{ item.betrag}}</td>
+                    <td>{{ item.typ}}</td>
+                </tr>
+            </tbody>
+        </table>
+
 </div>

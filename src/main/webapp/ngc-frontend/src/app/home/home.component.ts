@@ -230,9 +230,10 @@ export class HomeComponent implements OnInit {
   createPortfolioDistributionChart() {
     if (!this.isLoading && this.depots.length) {
       const labels = this.depots.map(depot => depot.isin);
-      const data = this.depots.map(depot => (depot.currentPrice || 0) * (depot.anzahl || 0));
+      const data = this.depots.map(depot => Math.round((depot.currentPrice || 0) * (depot.anzahl || 0) * 100) / 100);
       const backgroundColors = this.generateBackgroundColors(data.length);
       const borderColors = this.generateBorderColors(data.length);
+      console.log(data)
   
       const chartData: ChartData<'pie', number[], string> = {
         labels: labels,
