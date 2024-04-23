@@ -28,7 +28,7 @@ Chart.register(PieController, ArcElement, Tooltip, Legend);
   styleUrl: './home.component.css'
 })
 
-export class HomeComponent implements OnInit, AfterViewInit {
+export class HomeComponent implements OnInit {
   depots: any[] = [];
   isLoading = true;
   sortColumn: string = '';
@@ -39,18 +39,15 @@ export class HomeComponent implements OnInit, AfterViewInit {
   constructor(private http: HttpClient) { }
 
   ngOnInit() {
-    this.loadDepot();
-    this.loadKontostand();
-    this.calculatePortfolioValue();
+    this.loadDepot(()=>{
+      this.loadKontostand();
+      this.calculatePortfolioValue();
+      this.createPortfolioDistributionChart();
+    });
+    
   }
 
-  ngAfterViewInit() {
-    // This ensures that the view is fully initialized before we try to access the chart element
-    // Since ngAfterViewInit is called after ngOnInit, we will call createPortfolioDistributionChart inside it
-    this.createPortfolioDistributionChart();
-  }
-
-  loadDepot() {
+  loadDepot(callback: () => void){
     this.isLoading = true; // Setze isLoading auf true, um anzuzeigen, dass das Laden begonnen hat
     this.http.get<any[]>('http://localhost:8080/depot/702').subscribe((data) => {
       const depots = data;
@@ -70,6 +67,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
       forkJoin(priceObservables).subscribe((updatedDepots) => {
         this.depots = updatedDepots; // Weise das aktualisierte Array zu, um die Änderungserkennung auszulösen
         this.isLoading = false; // Setze isLoading auf false, um anzuzeigen, dass das Laden abgeschlossen ist
+        callback();
       });
     });
   }
