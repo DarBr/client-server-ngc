@@ -36,12 +36,13 @@ public class KontoController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
-    
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> loescheKonto(@PathVariable int id) {
         kontoService.deleteKonto(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
+
     @CrossOrigin(origins = "http://localhost:4200")
     @PutMapping("/einzahlen")
     public ResponseEntity<Konto> einzahlen(@RequestParam int kontoID, @RequestParam double betrag) {
@@ -49,16 +50,17 @@ public class KontoController {
         Konto konto = kontoService.getKontoById(kontoID);
         return new ResponseEntity<>(konto, HttpStatus.OK);
     }
+
     @CrossOrigin(origins = "http://localhost:4200")
     @PutMapping("/auszahlen")
-public ResponseEntity<?> auszahlen(@RequestParam int kontoID, @RequestParam double betrag) {
-    try {
-        kontoService.auszahlen(kontoID, betrag);
-        Konto konto = kontoService.getKontoById(kontoID);
-        return new ResponseEntity<>(konto, HttpStatus.OK);
-    } catch (IllegalArgumentException e) {
-        return ResponseEntity.badRequest().body(e.getMessage());
+    public ResponseEntity<?> auszahlen(@RequestParam int kontoID, @RequestParam double betrag) {
+        try {
+            kontoService.auszahlen(kontoID, betrag);
+            Konto konto = kontoService.getKontoById(kontoID);
+            return new ResponseEntity<>(konto, HttpStatus.OK);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
-}
 
 }
