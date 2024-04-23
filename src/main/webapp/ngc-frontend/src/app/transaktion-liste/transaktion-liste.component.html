@@ -14,8 +14,8 @@
         <th (click)="sortTable('betrag')">Betrag</th>
         <th (click)="sortTable('zeitstempel')">Zeitstempel</th>
         <th (click)="sortTable('anzahl')">Anzahl</th>
-        <th>Typ</th>
-        <th>DepotID</th>
+        <th (click)="sortTable('typ')">Typ</th>
+       
       </tr>
     </thead>
     <tbody>
@@ -25,7 +25,7 @@
         <td>{{ item.zeitstempel | date:'medium' }}</td>
         <td>{{ item.anzahl }}</td>
         <td>{{ item.typ }}</td>
-        <td>{{ item.depotID }}</td>
+       
       </tr>
     </tbody>
   </table>

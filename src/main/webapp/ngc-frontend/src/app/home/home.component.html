@@ -53,7 +53,7 @@
 
 <div class="broker-container">
   <h2>Analyse</h2>
-  <div class="chart-container" style="position: relative">
+  <div class="chart-container">
     <canvas id="portfolioDistributionChart"></canvas>
     <!-- Gesamtpreis -->
 
@@ -62,13 +62,13 @@
 
 <div class="broker-container">
   <h2>Gesamtwert des Portfolios</h2>
-  <p style="font-size: larger; font-weight: bold;">{{calculatePortfolioValue()}}$</p>
+  <p style="font-size: larger; font-weight: bold;">{{calculatePortfolioValue() | number}}$</p>
 </div>
 
 
 <div class="broker-container">
   <h2>Mein Verrechnungskonto</h2>
-  <p>Ihr aktueller Kontostand beträgt: ${{ kontostand }}</p>
+  <p>Ihr aktueller Kontostand beträgt: {{ kontostand }}$</p>
   <p></p>
   <button (click)=" openDepositPopup()">Geld einzahlen</button>
   <button (click)=" openWithdrawalPopup()">Geld auszahlen</button>

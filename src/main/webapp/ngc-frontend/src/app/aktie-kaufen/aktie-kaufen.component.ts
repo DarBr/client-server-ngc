@@ -49,11 +49,13 @@ export class AktieKaufenComponent {
     this.http.post(url, {}).subscribe(response => {
       if (response === null) {
         this.errorMessage = 'Die Aktie konnte nicht gekauft werden.';
+        console.log("Fehler beim Kauf der Aktie");
       } else {
         this.successMessage = 'Aktie wurde erfolgreich gekauft.';
         this.stockSaved = true;
         this.isin = '';
         this.anzahl = 0;
+        console.log("Gekauft");
         
       }
     });
