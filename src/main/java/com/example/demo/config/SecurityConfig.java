@@ -13,18 +13,17 @@ import org.springframework.security.web.authentication.www.BasicAuthenticationFi
 @EnableWebSecurity
 public class SecurityConfig {
         
-        
-        @Autowired
-        private JwtAuthenticationFilter jwtAuthenticationFilter;        
+    @Autowired
+    private JwtAuthenticationFilter jwtAuthenticationFilter;        
 
-        @Bean
-        public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-                http
-                        .authorizeHttpRequests(requests -> requests
-                                .requestMatchers("/nutzer/**", "/nutzer/login", "/konto/**", "/depot/**", "/transaktionen/**", "/zahlungen/**").permitAll() // Erlaubt Anfragen auf /pfad1/ und /pfad2/
-                                .anyRequest().authenticated())
-                        .addFilterBefore(jwtAuthenticationFilter, BasicAuthenticationFilter.class);
-                return http.build();
-        }
-
+    @Bean
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        http
+            .authorizeHttpRequests(requests -> requests
+                .requestMatchers("/nutzer/**", "/nutzer/login", "/konto/**", "/konto/speichern", "/konto/einzahlen", "/depot/**", "/depot/kaufen", "/transaktionen/**", "/zahlungen/**")
+                .permitAll()
+                .anyRequest().authenticated())
+            .addFilterBefore(jwtAuthenticationFilter, BasicAuthenticationFilter.class);
+        return http.build();
+    }
 }
