@@ -59,4 +59,17 @@ public class DepotController {
         }
     }
 
+    @PostMapping("/verkaufen")
+    public ResponseEntity<String> verkaufeAktie(@RequestParam int depotID, @RequestParam String isin,
+            @RequestParam int anzahl) throws IOException {
+        boolean success = depotService.aktieVerkaufen(depotID, isin, anzahl);
+
+        if (success) {
+            return new ResponseEntity<>("Aktie erfolgreich verkauft!", HttpStatus.CREATED);
+        } else {
+            return new ResponseEntity<>("Verkauf fehlgeschlagen - Depot nicht gefunden oder ungültige ISIN.",
+                    HttpStatus.NOT_FOUND);
+        }
+    }
+
 }

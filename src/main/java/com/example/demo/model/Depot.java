@@ -18,15 +18,18 @@ public class Depot {
     private String ISIN;
     @Column(name = "Anzahl")
     private int Anzahl;
+    @Column(name = "einstandspreis")
+    private double Einstandspreis;
 
     public Depot() {
 
     }
 
-    public Depot(int DepotID, String ISIN, int Anzahl) {
+    public Depot(int DepotID, String ISIN, int Anzahl, double einstandspreis) {
         this.depotID = DepotID;
         this.ISIN = ISIN;
         this.Anzahl = Anzahl;
+        this.Einstandspreis = einstandspreis;
     }
 
     public int getDepotAktienID() {
@@ -65,6 +68,15 @@ public class Depot {
         this.ISIN = ISIN;
         this.Anzahl = Anzahl;
     }
+
+    public double getEinstandspreis() {
+        return Einstandspreis;
+    }
+
+    public void setEinstandspreis(double einstandspreis) {
+        Einstandspreis = einstandspreis;
+    }
+
 
     public void displayDepot() {
         System.out.println("DepotAktienID: " + DepotAktienID);

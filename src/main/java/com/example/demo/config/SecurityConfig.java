@@ -21,13 +21,8 @@ public class SecurityConfig {
         public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
                 http
                         .authorizeHttpRequests(requests -> requests
-                                .requestMatchers("/nutzer/**", "/nutzer/login").permitAll() // Erlaubt Anfragen auf /pfad1/ und /pfad2/
+                                .requestMatchers("/nutzer/**", "/nutzer/login", "/konto/**", "/depot/**", "/transaktionen/**", "/zahlungen/**").permitAll() // Erlaubt Anfragen auf /pfad1/ und /pfad2/
                                 .anyRequest().authenticated())
-                        .formLogin(login -> login
-                                .loginPage("/login") // Definiert die Login-Seite
-                                .permitAll())
-                        .logout(logout -> logout
-                                .permitAll())
                         .addFilterBefore(jwtAuthenticationFilter, BasicAuthenticationFilter.class);
                 return http.build();
         }

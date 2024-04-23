@@ -1,16 +1,16 @@
 import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
+import { CommonModule } from '@angular/common';
 
 @Component({
-  selector: 'app-transaktion-liste',
-  templateUrl: './transaktion-liste.component.html',
-  styleUrls: ['./transaktion-liste.component.css'],
+  selector: 'app-zahlung-liste',
   standalone: true,
-  imports: [CommonModule]
+  imports: [CommonModule],
+  templateUrl: './zahlung-liste.component.html',
+  styleUrl: './zahlung-liste.component.css'
 })
-export class TransaktionListeComponent implements OnInit {
-  transaktionen: any[] = []; // Hier wird das Array initialisiert
+export class ZahlungListeComponent implements OnInit {
+  zahlungen: any[] = []; // Hier wird das Array initialisiert
   isLoading = true;
   sortColumn: string = '';
   sortAscending: boolean = true;
@@ -23,8 +23,8 @@ export class TransaktionListeComponent implements OnInit {
 
   // Lade die Transaktionen
   loadTransactions() {
-    this.http.get<any[]>('http://localhost:8080/transaktionen').subscribe((data) => {
-      this.transaktionen = data; // Speichern Sie die Daten in der nutzer-Eigenschaft
+    this.http.get<any[]>('http://localhost:8080/zahlungen').subscribe((data) => {
+      this.zahlungen = data; // Speichern Sie die Daten in der nutzer-Eigenschaft
       this.isLoading = false;
     });
   }
@@ -39,7 +39,7 @@ export class TransaktionListeComponent implements OnInit {
 
     this.sortColumn = column;
 
-    this.transaktionen.sort((a, b) => {
+    this.zahlungen.sort((a, b) => {
       let comparison = 0;
       if (a[column] > b[column]) {
         comparison = 1;

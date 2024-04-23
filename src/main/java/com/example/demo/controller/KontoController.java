@@ -37,10 +37,25 @@ public class KontoController {
         }
     }
     
-
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> loescheKonto(@PathVariable int id) {
         kontoService.deleteKonto(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+    @PutMapping("/einzahlen")
+    public ResponseEntity<Konto> einzahlen(@RequestParam int kontoID, @RequestParam double betrag) {
+        kontoService.einzahlen(kontoID, betrag);
+        Konto konto = kontoService.getKontoById(kontoID);
+        return new ResponseEntity<>(konto, HttpStatus.OK);
+    }
+    @PutMapping("/auszahlen")
+    public ResponseEntity<?> auszahlen(@RequestParam int kontoID, @RequestParam double betrag) {
+        try {
+            kontoService.auszahlen(kontoID, betrag);
+            Konto konto = kontoService.getKontoById(kontoID);
+            return new ResponseEntity<>(konto, HttpStatus.OK);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 }

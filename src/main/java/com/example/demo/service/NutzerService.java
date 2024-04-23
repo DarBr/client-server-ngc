@@ -76,4 +76,8 @@ public class NutzerService {
         Optional<Nutzer> nutzer = nutzerRepository.findByUsername(username);
         return nutzer.isPresent();
     }
+
+    public Nutzer getNutzerByDepotId(int depotId) {
+        return nutzerRepository.findByDepotID(depotId);
+    }
 }

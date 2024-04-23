@@ -12,6 +12,7 @@ import com.example.demo.model.Nutzer;
 @Repository
 public interface NutzerRepository extends JpaRepository<Nutzer, Integer> {
     Optional<Nutzer> findByUsername(String username);
+    Nutzer findByDepotID(int depotID);
     
 
     // Weitere Methoden zur Datenbankabfrage für Nutzer

@@ -8,14 +8,14 @@ export class JwtInterceptor implements HttpInterceptor {
         // holen Sie den Token aus dem Local Storage
         let token = localStorage.getItem('token');
 
-        if (token) {
-            // wenn der Token existiert, fügen Sie ihn in den Authorization-Header ein
-            request = request.clone({
-                setHeaders: { 
-                    Authorization: `Bearer ${token}`
-                }
-            });
-        }
+        if (token && request.url.startsWith('http://localhost:8080')) {
+        // wenn der Token existiert und die URL übereinstimmt, fügen Sie ihn in den Authorization-Header ein
+        request = request.clone({
+            setHeaders: { 
+                Authorization: `Bearer ${token}`
+            }
+        });
+    }
 
         // leiten Sie die Anfrage weiter
         return next.handle(request);

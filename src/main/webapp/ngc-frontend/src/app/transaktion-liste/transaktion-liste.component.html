@@ -1,13 +1,17 @@
-<p>transaktion-liste works!</p>
+<h2>Transaktionsverlauf: Behalten Sie Ihre Finanzgeschäfte im Blick</h2>
+<p>In diesem Bereich finden Sie eine detaillierte Aufzeichnung Ihrer getätigten Geschäfte.</p>
+<p>Sortieren Sie Ihre Transaktionen ganz nach Ihren Bedürfnissen, indem Sie einfach auf die Spaltenüberschriften
+  klicken.</p>
+
 <div *ngIf="isLoading">Loading...</div>
 <div *ngIf="!isLoading">
   <table class="table-transaktionen">
     <thead>
       <tr>
-        <th>ISIN</th>
-        <th>Betrag</th>
-        <th>Zeitstempel</th>
-        <th>Anzahl</th>
+        <th (click)="sortTable('isin')">ISIN</th>
+        <th (click)="sortTable('betrag')">Betrag</th>
+        <th (click)="sortTable('zeitstempel')">Zeitstempel</th>
+        <th (click)="sortTable('anzahl')">Anzahl</th>
         <th>Typ</th>
         <th>DepotID</th>
       </tr>
