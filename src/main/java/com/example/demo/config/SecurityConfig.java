@@ -1,5 +1,6 @@
 package com.example.demo.config;
 
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -23,7 +24,8 @@ public class SecurityConfig {
                 .requestMatchers("/nutzer/**", "/nutzer/login", "/konto/**", "/konto/speichern", "/konto/einzahlen", "/depot/**", "/depot/kaufen", "/transaktionen/**", "/zahlungen/**")
                 .permitAll()
                 .anyRequest().authenticated())
-            .addFilterBefore(jwtAuthenticationFilter, BasicAuthenticationFilter.class);
+            .addFilterBefore(jwtAuthenticationFilter, BasicAuthenticationFilter.class)
+            .csrf().disable(); // CSRF-Schutz deaktivieren
         return http.build();
     }
 }
