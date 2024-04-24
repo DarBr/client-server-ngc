@@ -79,4 +79,37 @@ public class NutzerController {
             return ResponseEntity.ok("Kein Username gefunden");
         }
     }
+
+    //UserID from Token
+    @GetMapping("/useridfromtoken")
+    public ResponseEntity<?> userIDFromToken(@RequestParam String token) {
+        String username = jwtUtil.getUsernameFromToken(token);
+        if (username != null) {
+            return ResponseEntity.ok(nutzerService.getuserIDByUsername(username));
+        } else {
+            return ResponseEntity.ok(0);
+        }
+    }
+
+    //KontoID from Token
+    @GetMapping("/kontoidfromtoken")
+    public ResponseEntity<?> kontoIDFromToken(@RequestParam String token) {
+        String username = jwtUtil.getUsernameFromToken(token);
+        if (username != null) {
+            return ResponseEntity.ok(nutzerService.getkontoIDByUsername(username));
+        } else {
+            return ResponseEntity.ok(0);
+        }
+    }
+
+    //DepotID from Token
+    @GetMapping("/depotidfromtoken")
+    public ResponseEntity<?> depotIDFromToken(@RequestParam String token) {
+        String username = jwtUtil.getUsernameFromToken(token);
+        if (username != null) {
+            return ResponseEntity.ok(nutzerService.getdepotIDByUsername(username));
+        } else {
+            return ResponseEntity.ok(0);
+        }
+    }
 }

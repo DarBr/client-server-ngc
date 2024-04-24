@@ -30,6 +30,11 @@ public class ZahlungController {
         return zahlungService.findZahlungById(id).orElse(null);
     }
 
+    @GetMapping("/zahlungenByKontoID/{id}")
+    public List<Zahlung> findeZahlungByKontoId(@PathVariable int id) {
+        return zahlungService.findZahlungByKontoId(id);
+    }
+
     @DeleteMapping("/{id}")
     public void loescheZahlung(@PathVariable int id) {
         zahlungService.deleteZahlungById(id);

@@ -1,7 +1,7 @@
 import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { HttpClient } from '@angular/common/http';
-import { Observable, forkJoin, map, tap } from 'rxjs';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { Observable, catchError, forkJoin, map, tap, throwError } from 'rxjs';
 import { 
   Chart, 
   ChartConfiguration, 
@@ -13,6 +13,7 @@ import {
   TooltipItem,
   Legend 
 } from 'chart.js';
+import { AuthService } from '../AuthService';
 
 // Register the components for the pie chart
 Chart.register(PieController, ArcElement, Tooltip, Legend);
@@ -29,29 +30,60 @@ Chart.register(PieController, ArcElement, Tooltip, Legend);
 })
 
 export class HomeComponent implements OnInit {
+  userID: number = 0;
+  depotID: number = 0;
   depots: any[] = [];
+  keineDepots = false;
   isLoading = true;
   sortColumn: string = '';
   sortAscending: boolean = true;
   kontostand: number = 10;
   portfolioDistributionChart: Chart<'pie', number[], string> | null = null;
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private authService: AuthService) { }
 
   ngOnInit() {
-    this.loadDepot(()=>{
-      this.loadKontostand();
-      this.calculatePortfolioValue();
-      this.createPortfolioDistributionChart();
-    });
-    
+    this.loadUserIDs(() => {
+      this.loadDepot(()=> {
+        this.calculatePortfolioValue();
+        this.createPortfolioDistributionChart();
+      });
+    });    
   }
+
+  loadUserIDs(callback: () => void){
+    const token = this.authService.getToken();
+    if(token !== null && token !== '') {
+      forkJoin([
+        this.authService.getUserIDFromToken(token),
+        this.authService.getDepotIDFromToken(token)
+      ]).subscribe(([userID, depotID]) => {
+        if (userID !== 0 && userID !== null) {
+          this.userID = userID;
+        }
+        if (depotID !== 0 && depotID !== null) {
+          this.depotID = depotID;
+        }
+        callback();
+      });
+    }
+  };
 
   loadDepot(callback: () => void){
     this.isLoading = true; // Setze isLoading auf true, um anzuzeigen, dass das Laden begonnen hat
-    this.http.get<any[]>('http://localhost:8080/depot/702').subscribe((data) => {
+    this.http.get<any[]>(`http://localhost:8080/depot/${this.depotID}`).pipe(
+      catchError((error: HttpErrorResponse) => {
+        this.isLoading = false;
+  
+        if (error.status === 404) {
+          this.keineDepots = true;
+        }
+        callback();
+        return throwError('Noch keine Aktien im Depot vorhanden.');
+      })
+    ).subscribe((data) => {
       const depots = data;
-
+      
       const priceObservables = depots.map(depot =>
         this.getAktienpreis(depot.isin).pipe(
           map((stockPrice) => {
@@ -67,6 +99,9 @@ export class HomeComponent implements OnInit {
       forkJoin(priceObservables).subscribe((updatedDepots) => {
         this.depots = updatedDepots; // Weise das aktualisierte Array zu, um die Änderungserkennung auszulösen
         this.isLoading = false; // Setze isLoading auf false, um anzuzeigen, dass das Laden abgeschlossen ist
+        if (this.depots.length === 0) {
+          this.keineDepots = true;
+        }
         callback();
       });
     });
@@ -163,72 +198,9 @@ export class HomeComponent implements OnInit {
     }
   }
 
-  loadKontostand() {
-    this.http.get<any>('http://localhost:8080/konto/702').subscribe((data) => {
-      this.kontostand = Math.round(data.kontostand * 100) / 100;
-    });
-  }
-
-  openDepositPopup() {
-    const einzahlungsbetrag = prompt("Bitte geben Sie den einzuzahlenden Betrag ein:");
-    if (einzahlungsbetrag !== null) {
-      const betrag = parseFloat(einzahlungsbetrag);
-      if (!isNaN(betrag) && betrag > 0) {
-        this.einzahlen(betrag);
-      } else {
-        alert("Bitte geben Sie einen gültigen Betrag ein.");
-      }
-    }
-  }
-
-  openWithdrawalPopup() {
-    const auszahlungsbetrag = prompt("Bitte geben Sie den auszuzahlenden Betrag ein:");
-    if (auszahlungsbetrag !== null) {
-      const betrag = parseFloat(auszahlungsbetrag);
-      if (!isNaN(betrag) && betrag > 0) {
-        this.auszahlen(betrag);
-      } else {
-        alert("Bitte geben Sie einen gültigen Betrag ein.");
-      }
-    }
-  }
-
-  einzahlen(betrag: number) {
-    // Hier kannst du die Logik für die Einzahlung implementieren, z.B. eine HTTP-Anfrage an den Server senden
-    const kontoID = 702; // Setze die Depot-ID
-    this.http.put(`http://localhost:8080/konto/einzahlen?kontoID=${kontoID}&betrag=${betrag}`, {}).subscribe((response) => {
-      console.log("Einzahlung erfolgreich:", response);
-    }, (error) => {
-      console.error("Fehler bei der Einzahlung:", error);
-    });
-  }
-
-
-  auszahlen(betrag: number) {
-    const kontoID = 702; // Setze die Depot-ID
-    this.http.put(`http://localhost:8080/konto/auszahlen?kontoID=${kontoID}&betrag=${betrag}`, {}).subscribe((response) => {
-      console.log("Einzahlung erfolgreich:", response);
-    }, (error) => {
-      console.error("Fehler bei der Einzahlung:", error);
-    });
-
-  }
-
-  einzahlenTest(){
-    this.http.put('//localhost:8080/konto/einzahlen?kontoID=702&betrag=100', {})
-      .subscribe(
-        response => {
-          console.log('Einzahlung erfolgreich', response);
-        },
-        error => {
-          console.error('Fehler bei der Einzahlung', error);
-        }
-      );
-  }
-
-
+  
   createPortfolioDistributionChart() {
-    if (!this.isLoading && this.depots.length) {
+    if (!this.isLoading && this.depots.length && !this.keineDepots) {
       const labels = this.depots.map(depot => depot.isin);
       const data = this.depots.map(depot => Math.round((depot.currentPrice || 0) * (depot.anzahl || 0) * 100) / 100);
       const backgroundColors = this.generateBackgroundColors(data.length);

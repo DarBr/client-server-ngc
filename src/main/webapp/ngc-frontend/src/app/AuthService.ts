@@ -37,6 +37,44 @@ export class AuthService {
     }
   }
 
+  public async getUserIDFromToken(storedtoken: string): Promise<number | null> {
+    const url = 'http://localhost:8080/nutzer/useridfromtoken';
+    const params = {
+        token: storedtoken
+    };
+    const response = await this.http.get(url, {params}).toPromise();
+    if (response === 0) {
+        return null;
+    } else {
+        return response as number;
+    }
+  }
+
+  public async getDepotIDFromToken(storedtoken: string): Promise<number | null> {
+    const url = 'http://localhost:8080/nutzer/depotidfromtoken';
+    const params = {
+        token: storedtoken
+    };
+    const response = await this.http.get(url, {params}).toPromise();
+    if (response === 0) {
+        return null;
+    } else {
+        return response as number;
+    }
+  }
+
+  public async getKontoIDFromToken(storedtoken: string): Promise<number | null> {
+    const url = 'http://localhost:8080/nutzer/kontoidfromtoken';
+    const params = {
+        token: storedtoken
+    };
+    const response = await this.http.get(url, {params}).toPromise();
+    if (response === 0) {
+        return null;
+    } else {
+        return response as number;
+    }
+  }
   
   public async validateToken(storedtoken: string): Promise<boolean | null> {
     const url = 'http://localhost:8080/nutzer/validateToken';

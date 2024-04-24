@@ -6,7 +6,7 @@ export class CustomReuseStrategy implements RouteReuseStrategy {
   // Entscheidet, ob eine Route wiederverwendbar ist
   shouldDetach(route: ActivatedRouteSnapshot): boolean {
     // Exclude the 'login' and 'register' routes
-    if (route.routeConfig!.path === 'login') {
+    if (route.routeConfig!.path === 'login' || route.routeConfig!.path === '') {
       return false;
     }
     return true; // Du kannst hier eine Bedingung hinzufügen, um bestimmte Routen auszuschließen

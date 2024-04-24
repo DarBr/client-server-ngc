@@ -43,19 +43,7 @@ public class NutzerService {
         }
 
     }
-/*
-    public String loginNutzer(@RequestParam String username, @RequestParam String password) {
-        Nutzer nutzer = getNutzerByUsername(username);
 
-        if (nutzer != null && nutzer.getPassword().equals(password)) {
-            String token = jwtUtil.generateToken(nutzer);
-            return token;
-        } else {
-            String rueckgabe = "Login fehlgeschlagen";
-            return rueckgabe;
-        }
-    }
-*/
     public List<Nutzer> getAllNutzer() {
         return nutzerRepository.findAll();
     }
@@ -79,5 +67,32 @@ public class NutzerService {
 
     public Nutzer getNutzerByDepotId(int depotId) {
         return nutzerRepository.findByDepotID(depotId);
+    }
+
+    public int getuserIDByUsername(String username) {
+        Nutzer nutzer = nutzerRepository.findByUsername(username).orElse(null);
+        if (nutzer != null) {
+            return nutzer.getId();
+        } else {
+            return 0;
+        }
+    }
+
+    public int getkontoIDByUsername(String username) {
+        Nutzer nutzer = nutzerRepository.findByUsername(username).orElse(null);
+        if (nutzer != null) {
+            return nutzer.getKontoID();
+        } else {
+            return 0;
+        }
+    }
+
+    public int getdepotIDByUsername(String username) {
+        Nutzer nutzer = nutzerRepository.findByUsername(username).orElse(null);
+        if (nutzer != null) {
+            return nutzer.getDepotID();
+        } else {
+            return 0;
+        }
     }
 }

@@ -5,6 +5,7 @@ import com.example.demo.repository.ZahlungRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -30,5 +31,14 @@ public class ZahlungService {
         zahlungRepository.deleteById(id);
     }
 
-    // Weitere Methoden nach Bedarf, z.B. zum Aktualisieren von Zahlungen
+    public List<Zahlung> findZahlungByKontoId(int id) {
+        List<Zahlung> zahlungen = zahlungRepository.findAll();
+        List<Zahlung> result = new ArrayList<Zahlung>();
+        for (Zahlung zahlung : zahlungen) {
+            if (zahlung.getKontoID() == id) {
+                result.add(zahlung);
+            }
+        }
+        return result;
+    }
 }

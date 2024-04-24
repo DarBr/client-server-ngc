@@ -5,7 +5,7 @@ import { NutzerListeComponent } from './nutzer-liste/nutzer-liste.component';
 import { LoginComponent } from './user-login/user-login.component';
 import { AuthGuard } from './AuthGuard';
 import { AktieKaufenComponent } from './aktie-kaufen/aktie-kaufen.component';
-import { ZahlungListeComponent } from './zahlung-liste/zahlung-liste.component';
+import { VerrechnungskontoComponent } from './verrechnungskonto/verrechnungskonto.component';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent, canActivate: [AuthGuard]},
@@ -13,5 +13,5 @@ export const routes: Routes = [
   { path: 'transaktion-liste', component: TransaktionListeComponent, canActivate: [AuthGuard]},
   { path: 'login', component: LoginComponent},
   { path: 'kaufen', component: AktieKaufenComponent, canActivate: [AuthGuard]},
-  { path: 'zahlung-liste', component: ZahlungListeComponent, canActivate: [AuthGuard]}
+  { path: 'verrechnungskonto', component: VerrechnungskontoComponent, canActivate: [AuthGuard]}
 ];

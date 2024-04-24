@@ -6,6 +6,7 @@ import { Observable } from 'rxjs/internal/Observable';
 import { AuthService } from '../AuthService';
 import { Router } from '@angular/router';
 import { AppComponent } from '../app.component';
+import { HomeComponent } from '../home/home.component';
 
 @Component({
   selector: 'app-user-login',
@@ -78,7 +79,7 @@ export class LoginComponent {
         this.username = '';
         this.password = '';
         this.router.navigate(['/']);
-        this.appComponent.ngOnInit();        
+        this.appComponent.ngOnInit();     
       }
     });
   }

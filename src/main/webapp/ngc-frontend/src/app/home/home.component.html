@@ -3,7 +3,7 @@
   <p>In diesem Bereich finden Sie eine Auflistung Ihrer aktuellen Depotpositionen.</p>
 
   <div *ngIf="isLoading">Loading...</div>
-  <div *ngIf="!isLoading">
+  <div *ngIf="!isLoading&&!keineDepots">
     <table class="table-transaktionen">
       <thead>
         <tr>
@@ -47,16 +47,22 @@
 
     </table>
   </div>
+  <div *ngIf="!isLoading&&keineDepots">
+    <p>Sie haben noch keine Aktien im Depot.</p>
+  </div>
 </div>
 
 
 
 <div class="broker-container">
   <h2>Analyse</h2>
-  <div class="chart-container">
+  <div class="chart-container" *ngIf="!keineDepots">
     <canvas id="portfolioDistributionChart"></canvas>
     <!-- Gesamtpreis -->
 
+  </div>
+  <div *ngIf="keineDepots">
+    <p>Da Sie keine Aktien im Depot haben ist keine Analyse möglich.</p>
   </div>
 </div>
 
@@ -66,11 +72,4 @@
 </div>
 
 
-<div class="broker-container">
-  <h2>Mein Verrechnungskonto</h2>
-  <p>Ihr aktueller Kontostand beträgt: {{ kontostand }}$</p>
-  <p></p>
-  <button (click)=" openDepositPopup()">Geld einzahlen</button>
-  <button (click)=" openWithdrawalPopup()">Geld auszahlen</button>
-</div>
 
