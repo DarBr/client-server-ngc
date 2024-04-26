@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
+import { AuthService } from '../AuthService';
+import { forkJoin } from 'rxjs';
 
 @Component({
   selector: 'app-transaktion-liste',
@@ -10,22 +12,51 @@ import { HttpClient } from '@angular/common/http';
   imports: [CommonModule]
 })
 export class TransaktionListeComponent implements OnInit {
+  userID: number = 0;
+  depotID: number = 0;
   transaktionen: any[] = []; // Hier wird das Array initialisiert
   isLoading = true;
+  keineTransaktionen = false;
   sortColumn: string = '';
   sortAscending: boolean = true;
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private authService: AuthService) { }
 
   ngOnInit() {
-    this.loadTransactions(); // Lade die Transaktionen beim Initialisieren der Komponente
+    this.loadUserIDs(() => {
+      this.loadTransactions();
+    });
   }
+
+  loadUserIDs(callback: () => void){
+    const token = this.authService.getToken();
+    if(token !== null && token !== '') {
+      forkJoin([
+        this.authService.getUserIDFromToken(token),
+        this.authService.getDepotIDFromToken(token)
+      ]).subscribe(([userID, depotID]) => {
+        if (userID !== 0 && userID !== null) {
+          this.userID = userID;
+        }
+        if (depotID !== 0 && depotID !== null) {
+          this.depotID = depotID;
+        }
+        callback();
+      });
+    }
+  };
 
   // Lade die Transaktionen
   loadTransactions() {
-    this.http.get<any[]>('http://localhost:8080/transaktionen').subscribe((data) => {
+    this.http.get<any[]>(`http://localhost:8080/transaktionen/transaktionenByKontoID/${this.depotID}`).subscribe((data) => {
       this.transaktionen = data; // Speichern Sie die Daten in der nutzer-Eigenschaft
       this.isLoading = false;
+      if (this.transaktionen.length === 0) {
+        this.keineTransaktionen = true;
+      }
+      if(this.transaktionen.length > 0) {
+        this.keineTransaktionen = false;
+      };
     });
   }
 

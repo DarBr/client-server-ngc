@@ -6,6 +6,7 @@ import com.example.demo.repository.TransaktionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -33,6 +34,17 @@ public class TransaktionService {
 
     public void deleteTransaktionById(int id) {
         transaktionRepository.deleteById(id);
+    }
+
+    public List<Transaktion> findTransaktionenByKontoId(int id) {
+        List<Transaktion> transaktions = transaktionRepository.findAll();
+        List<Transaktion> result = new ArrayList<Transaktion>();
+        for (Transaktion transaktion : transaktions) {
+            if (transaktion.getDepotID() == id) {
+                result.add(transaktion);
+            }
+        }
+        return result;
     }
 }
 

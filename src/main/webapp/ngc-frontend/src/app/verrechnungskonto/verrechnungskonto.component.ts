@@ -36,16 +36,13 @@ export class VerrechnungskontoComponent implements OnInit{
     if(token !== null && token !== '') {
       forkJoin([
         this.authService.getUserIDFromToken(token),
-        this.authService.getDepotIDFromToken(token),
         this.authService.getKontoIDFromToken(token)
-      ]).subscribe(([userID, depotID, kontoID]) => {
+      ]).subscribe(([userID, kontoID]) => {
         if (userID !== 0 && userID !== null) {
           this.userID = userID;
-          console.log('ID:'+ this.userID);
         }
         if (kontoID !== 0 && kontoID !== null) {
           this.kontoID = kontoID;
-          console.log('kontoID:'+this.kontoID);
         }
         callback();
       });
@@ -60,6 +57,9 @@ export class VerrechnungskontoComponent implements OnInit{
       this.isLoading = false;
       if (this.zahlungen.length === 0) {
         this.keineZahlungen = true;
+      }
+      if (this.zahlungen.length > 0) {
+        this.keineZahlungen = false;
       }
     });
   }

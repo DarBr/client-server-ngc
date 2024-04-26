@@ -40,4 +40,9 @@ public class TransaktionController {
         transaktionService.deleteTransaktionById(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
+
+    @GetMapping("/transaktionenByKontoID/{id}")
+    public List<Transaktion> findeZahlungByKontoId(@PathVariable int id) {
+        return transaktionService.findTransaktionenByKontoId(id);
+    }
 }

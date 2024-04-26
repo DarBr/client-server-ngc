@@ -17,6 +17,8 @@
 
 .login-form input[type="text"],
 .login-form input[type="number"] {
+    margin: 0 auto;
+    display: block;
     width: calc(100% - 20px);
     padding: 10px;
     margin-bottom: 15px;
@@ -26,6 +28,8 @@
 }
 
 .login-form button {
+    margin: 0 auto;
+    display: block;
     width: calc(100% - 20px);
     padding: 10px;
     background-color: #244467;
