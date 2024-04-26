@@ -6,6 +6,7 @@ import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from './AuthService';
+import { MatDialogModule } from '@angular/material/dialog';
 
 
 @Component({
@@ -13,7 +14,7 @@ import { AuthService } from './AuthService';
   standalone: true,
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css'],
-  imports: [RouterOutlet, RouterLink, RouterLinkActive, NutzerListeComponent, TransaktionListeComponent, HttpClientModule, CommonModule, FormsModule]
+  imports: [RouterOutlet, RouterLink, RouterLinkActive, NutzerListeComponent, TransaktionListeComponent, HttpClientModule, CommonModule, FormsModule, MatDialogModule]
 })
 export class AppComponent {
   title = 'ngc-frontend';

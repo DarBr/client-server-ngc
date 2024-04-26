@@ -14,6 +14,8 @@ import {
   Legend 
 } from 'chart.js';
 import { AuthService } from '../AuthService';
+import { MatDialog } from '@angular/material/dialog';
+import { VerkaufenDialogComponent } from '../verkaufen-dialog/verkaufen-dialog.component';
 
 // Register the components for the pie chart
 Chart.register(PieController, ArcElement, Tooltip, Legend);
@@ -40,7 +42,7 @@ export class HomeComponent implements OnInit {
   kontostand: number = 10;
   portfolioDistributionChart: Chart<'pie', number[], string> | null = null;
 
-  constructor(private http: HttpClient, private authService: AuthService) { }
+  constructor(private http: HttpClient, private authService: AuthService, private dialog:MatDialog) { }
 
   ngOnInit() {
     this.loadUserIDs(() => {
@@ -70,6 +72,7 @@ export class HomeComponent implements OnInit {
   };
 
   loadDepot(callback: () => void){
+    this.depots = [];
     this.isLoading = true; // Setze isLoading auf true, um anzuzeigen, dass das Laden begonnen hat
     this.http.get<any[]>(`http://localhost:8080/depot/${this.depotID}`).pipe(
       catchError((error: HttpErrorResponse) => {
@@ -161,10 +164,6 @@ export class HomeComponent implements OnInit {
     return Math.round(totalValue * 100) / 100; // Runden Sie den Gesamtwert auf zwei Dezimalstellen
   }
   
-
-
-
-
   sortTable(column: string): void {
     if (this.sortColumn === column) {
       this.sortAscending = !this.sortAscending;
@@ -184,33 +183,6 @@ export class HomeComponent implements OnInit {
       return this.sortAscending ? comparison : comparison * -1;
     });
   }
-
-  openSellPopup(item: any) {
-    const sellQuantity = prompt(`Wie viele Aktien von ${item.isin} möchten Sie verkaufen?`);
-    if (sellQuantity !== null) {
-      const quantity = parseInt(sellQuantity);
-      if (!isNaN(quantity) && quantity > 0 && quantity <= item.anzahl) {
-        const url = `http://localhost:8080/depot/verkaufen?depotID=${this.depotID}&isin=${item.isin}&anzahl=${quantity}`;
-        this.http.post(url, {}, {responseType: 'text'}).subscribe(response => {
-          if (response === 'Aktie erfolgreich verkauft!') {
-            console.log('Aktie erfolgreich verkauft!');
-            this.loadDepot(() => {  
-              this.calculatePortfolioValue();
-              this.createPortfolioDistributionChart();
-            });
-          } else {
-            console.log(response);
-          }
-        });
-        
-        // Hier können Sie die Logik für den Verkauf implementieren, z.B. eine HTTP-Anfrage an den Server senden
-        console.log(`Verkaufen von ${quantity} Aktien von ${item.isin}`);
-      } else {
-        alert('Bitte geben Sie eine gültige Anzahl ein.');
-      }
-    }
-  }
-
   
   createPortfolioDistributionChart() {
     if (!this.isLoading && this.depots.length && !this.keineDepots) {
@@ -297,6 +269,29 @@ export class HomeComponent implements OnInit {
     ];
     return Array.from({ length: count }, (_, i) => palette[i % palette.length]);
   }
+
+  openVerkaufenPopup(item: any) {
+    const dialogRef = this.dialog.open(VerkaufenDialogComponent, {
+      data: {
+        isin: item.isin,
+        vorhandeneAnzahl: item.anzahl,
+        depotID: this.depotID
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log(result);
+      if (result != null && result === 'Aktie erfolgreich verkauft!') {
+        this.loadDepot(() => {
+          this.calculatePortfolioValue();
+          this.createPortfolioDistributionChart();
+        });
+      }else{
+        console.log(result);
+      }
+    });
+  }
+
 }
 
 

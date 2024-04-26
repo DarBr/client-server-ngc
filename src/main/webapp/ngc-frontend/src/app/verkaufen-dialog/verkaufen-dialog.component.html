@@ -1,0 +1,19 @@
+<div class="verkaufenPopup">
+    <h2 mat-dialog-title><b>Aktie verkaufen</b></h2>
+    <mat-dialog-content>
+        <p>Sind Sie sicher, dass Sie Aktien von <b>{{this.isin}}</b> verkaufen möchten?</p>
+    </mat-dialog-content>
+    <mat-form-field id="inputAnzahlFormField">
+        <input id="anzahlInput" matInput type="number" placeholder="Geben Sie die Anzahl ein" [(ngModel)]="verkaufAnzahl">
+    </mat-form-field>
+    <mat-dialog-content *ngIf="isLoading">
+        <p>Verarbeitung der Transaktion...</p>
+    </mat-dialog-content>
+    <mat-dialog-content *ngIf="errorMessage!==''">
+        <p class="errorMessage">{{this.errorMessage}}</p>
+    </mat-dialog-content>
+    <mat-dialog-actions>
+        <button mat-button mat-dialog-close>Abbrechen</button>
+        <button mat-button (click)="verkaufen(verkaufAnzahl)">Verkaufen</button>
+    </mat-dialog-actions>
+</div>

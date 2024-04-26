@@ -33,6 +33,12 @@ header {
     font-size: 2vh;
 }
 
+.headline h1 {
+    margin: 0;
+    font-size: 4vh;
+    font-weight: bold;
+}
+
 #headline-small {
     font-weight: normal;
 }
@@ -110,7 +116,7 @@ nav ul li a {
 /*MAIN*/
 main {
     z-index: 0;
-    margin-top: 16vh; /* Abstand nach oben */
+    margin-top: 18vh; /* Abstand nach oben */
     margin-left: 3.5vh;
     margin-bottom: 10vh; /* Abstand nach unten */
 }
@@ -125,7 +131,7 @@ footer {
     bottom: 0;
     left: 0;
     width: 100%;
-    height: 3.5vh;
+    height: 4vh;
     text-align: center;
     padding: 0.5vh;
 }
