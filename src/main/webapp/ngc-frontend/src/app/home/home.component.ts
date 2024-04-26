@@ -190,6 +190,19 @@ export class HomeComponent implements OnInit {
     if (sellQuantity !== null) {
       const quantity = parseInt(sellQuantity);
       if (!isNaN(quantity) && quantity > 0 && quantity <= item.anzahl) {
+        const url = `http://localhost:8080/depot/verkaufen?depotID=${this.depotID}&isin=${item.isin}&anzahl=${quantity}`;
+        this.http.post(url, {}, {responseType: 'text'}).subscribe(response => {
+          if (response === 'Aktie erfolgreich verkauft!') {
+            console.log('Aktie erfolgreich verkauft!');
+            this.loadDepot(() => {  
+              this.calculatePortfolioValue();
+              this.createPortfolioDistributionChart();
+            });
+          } else {
+            console.log(response);
+          }
+        });
+        
         // Hier können Sie die Logik für den Verkauf implementieren, z.B. eine HTTP-Anfrage an den Server senden
         console.log(`Verkaufen von ${quantity} Aktien von ${item.isin}`);
       } else {
