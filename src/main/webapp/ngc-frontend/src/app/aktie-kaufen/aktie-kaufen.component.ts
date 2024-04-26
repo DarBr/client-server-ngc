@@ -25,7 +25,8 @@ export class AktieKaufenComponent {
   stockSaved: boolean = false;
   currentPrice: number = 0;
   private apiKey: string = "co5rfg9r01qv77g7nk90co5rfg9r01qv77g7nk9g";
-  private apiUrl: string = "https://finnhub.io/api/v1/quote?symbol=";
+  private apiUrl: string = "https://finnhub.io/api/v1/search";
+  symbols: string[] = [];
 
   constructor(private http: HttpClient, private authService: AuthService) { }
 
@@ -58,6 +59,25 @@ export class AktieKaufenComponent {
       map(response => response.c)
     );
   }
+
+  searchSymbols(inputValue: string) {
+    const query = inputValue.trim();
+    if (query !== '') {
+      const url: string = `${this.apiUrl}?q=${query}&token=${this.apiKey}`;
+      this.http.get<any>(url).subscribe(response => {
+        this.symbols = (response && response.result) ? response.result.slice(0, 6).map((result: any) => result.symbol) : [];
+        console.log(response);
+      });
+    } else {
+      this.symbols = [];
+    }
+  }
+  
+
+  setSelectedSymbol(symbol: string) {
+    this.isin = symbol;
+    this.symbols = []; // Um die Dropdown-Liste zu schließen, nachdem ein Symbol ausgewählt wurde
+}
 
   kaufen() {
     this.errorMessage = '';
