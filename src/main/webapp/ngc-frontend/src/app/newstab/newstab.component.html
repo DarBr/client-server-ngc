@@ -1,0 +1,26 @@
+<div class="broker-container">
+    <h2>News</h2>
+    <div *ngIf="isLoading">Loading...</div>
+    <div *ngIf="!isLoading">
+        <div class="news-feed">
+            <div *ngFor="let item of news" class="news-item">
+                <div class="news-header">
+                    <img *ngIf="item.image" [src]="item.image" alt="News Image">
+                    <div class="source-date-container">
+                       
+                    </div>
+                </div>
+                <div class="news-content">
+                    <h3 class="headline">{{ item.headline }}</h3>
+                    <p class="summary">{{ item.summary }}</p>
+                    <a class="read-more" href="{{ item.url }}" target="_blank">Read more</a>
+                   
+                    <div class="datetime"> {{ item.datetime | date: 'medium' }} </div>
+                    <div class="source"> {{ item.source }}</div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</div>
