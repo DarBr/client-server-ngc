@@ -1,10 +1,7 @@
 <div class="login-container">
     <h2>Aktie kaufen</h2>
     <form class="login-form" (submit)="kaufen()">
-        <input type="text" name="isin" [(ngModel)]="isin" placeholder="ISIN" required (input)="searchSymbols(isin)">
-        <ul *ngIf="symbols.length > 0">
-            <li *ngFor="let symbol of symbols" (click)="setSelectedSymbol(symbol)">{{ symbol }}</li>
-        </ul>
+        <input type="text" name="isin" [(ngModel)]="isin" placeholder="ISIN" required (blur)="searchSymbols(isin)">
         <input type="number" name="anzahl" [(ngModel)]="anzahl" placeholder="Anzahl" required>
         <button type="submit" [disabled]="!isin || !anzahl">Kaufen</button>
     </form>
@@ -14,6 +11,23 @@
     <p *ngIf="currentPrice > 0">Gesamtpreis: {{ currentPrice * anzahl | currency }}</p>
 </div>
 
+<table class="table-transaktionen">
+    <thead>
+      <tr>
+        <th>Description</th>
+        <th>Symbol</th>
+        <th>Type</th>
+        <th>Handeln</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let symbol of symbols">
+            <td>{{ symbol.description }}</td>
+            <td>{{ symbol.symbol }}</td>
+            <td>{{ symbol.type }}</td>
+            <td><button (click)="kaufen()">Kaufen</button></td>
+          </tr>
+    </tbody>
+  </table>
+  
 
-
-<p>{{symbols}}</p>

@@ -1,200 +1,220 @@
 .table-transaktionen {
-    width: 100%;
-    border-collapse: collapse;
-    margin: 20px 0;
-    font-size: 0.9em;
-    min-width: 400px;
-    border-radius: 5px;
-    overflow: hidden;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+  width: 100%;
+  border-collapse: collapse;
+  margin: 20px 0;
+  font-size: 0.9em;
+  min-width: 400px;
+  border-radius: 5px;
+  overflow: hidden;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+}
+
+.table-transaktionen th,
+.table-transaktionen td {
+  padding: 12px 15px;
+}
+
+.table-transaktionen th {
+  background-color: #009879;
+  color: #ffffff;
+  text-align: left;
+}
+
+.table-transaktionen tr:nth-child(even) {
+  background-color: #f3f3f3;
+}
+
+.table-transaktionen tr:nth-child(odd) {
+  background-color: #ffffff;
+}
+
+.table-transaktionen td:nth-child(2) {
+  font-weight: bold; /* Setze den Text fett */
+}
+
+
+.table-transaktionen tr:hover {
+  background-color: #ddd;
+  cursor: pointer;
+}
+
+
+
+/* Responsive Table */
+@media screen and (max-width: 600px) {
+  .table-transaktionen thead {
+    display: none;
   }
-  
-  .table-transaktionen th,
+
+  .table-transaktionen,
+  .table-transaktionen tbody,
+  .table-transaktionen tr,
   .table-transaktionen td {
-    padding: 12px 15px;
+    display: block;
+    width: 100%;
   }
-  
-  .table-transaktionen th {
-    background-color: #009879;
-    color: #ffffff;
+
+  .table-transaktionen tr {
+    margin-bottom: 15px;
+  }
+
+  .table-transaktionen td {
+    text-align: right;
+    padding-left: 50%;
+    text-align: right;
+    position: relative;
+  }
+
+  .table-transaktionen td::before {
+    content: attr(data-label);
+    position: absolute;
+    left: 0;
+    width: 50%;
+    padding-left: 15px;
+    font-weight: bold;
     text-align: left;
   }
-  
-  .table-transaktionen tr:nth-child(even) {
-    background-color: #f3f3f3;
-  }
-  
-  .table-transaktionen tr:nth-child(odd) {
-    background-color: #ffffff;
-  }
-  
-  .table-transaktionen tr:hover {
-    background-color: #ddd;
-    cursor: pointer;
-  }
-  
-  /* Responsive Table */
-  @media screen and (max-width: 600px) {
-    .table-transaktionen thead {
-      display: none;
-    }
-  
-    .table-transaktionen,
-    .table-transaktionen tbody,
-    .table-transaktionen tr,
-    .table-transaktionen td {
-      display: block;
-      width: 100%;
-    }
-  
-    .table-transaktionen tr {
-      margin-bottom: 15px;
-    }
-  
-    .table-transaktionen td {
-      text-align: right;
-      padding-left: 50%;
-      text-align: right;
-      position: relative;
-    }
-  
-    .table-transaktionen td::before {
-      content: attr(data-label);
-      position: absolute;
-      left: 0;
-      width: 50%;
-      padding-left: 15px;
-      font-weight: bold;
-      text-align: left;
-    }
-  
-  
-  
-  
-  }
-  
-  
-  .change-cell {
-    display: flex;
-    align-items: center;
-  }
-  
-  .change-icon {
-    margin-right: 5px;
-    font-size: 13px;
-  }
-  
-  .change-icon i {
-    color: inherit;
-  }
-  
-  .change-text {
-    font-size: 14px;
-    /* Kleinere Schriftgröße */
-    color: inherit;
-    /* Erbt die Farbe von übergeordneten Elementen */
-    display: flex;
-    /* Verwendet Flexbox */
-    align-items: center;
-    /* Zentriert vertikal */
-  }
-  
-  .positive {
-    color: green;
-  }
-  
-  .negative {
-    color: red;
-  }
-  
-  .sell-button {
-    width: calc(100% - 30px);
-    padding: 8px;
-    background-color: #244467;
-    color: #fff;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-    margin-top: 1px;
-    /* Abstand zum vorherigen Element */
-  }
-  
-  .sell-button:hover {
-    background-color: #1a356c;
-  }
-  
-  
-  tfoot td {
-    font-weight: bold;
-    padding: 12px 15px;
-    font-size: 16px; /* Größere Schriftgröße */
-  }
-  
-  tfoot td {
-    background-color: #009879;
-    color: #ffffff;
-  }
-  
-  
-  tfoot td:last-child {
-    border: none; /* Entfernt die rechte Grenze für die letzte Zelle */
-  }
-  
-  /* Neuer CSS-Stil für den Aktienbroker-Look */
-  .broker-container {
-    background-color: #f8f8f8;
-    padding: 20px;
-    border-radius: 5px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    margin-bottom: 20px;
-    margin-right: 20px;
-  }
-  
-  .broker-container h2 {
-    margin-bottom: 10px;
-    color: #244467;
-    font-weight: bolder;
-  }
-  
-  .broker-container p {
-    margin-bottom: 15px;
-    color: #333;
-  }
-  
-  .broker-container button {
-    background-color: #244467;
-    color: #fff;
-    border: none;
-    border-radius: 5px;
-    padding: 10px 20px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-    margin-right: 10px;
-    
-  }
-  
-  .broker-container button:hover {
-    background-color: #1a356c;
-  }
-  
-  .portfolio-value {
-    position: absolute;
-    top: 0px;
-    right: 10px;
-    padding: 0px;
-    border-radius: 5px;
-    z-index: 999; /* Stellen Sie sicher, dass der Gesamtpreis über dem Diagramm liegt */
-  }
-  
-  .portfolio-value p {
-    margin: 0;
-    color: #333;
-    font-size: 24px;
-    font-weight: bolder;
-  }
-  
-  
-  
-  /* End Neuer CSS-Stil */
-  
+
+
+
+
+}
+
+
+.change-cell {
+  display: flex;
+  align-items: center;
+}
+
+.change-icon {
+  margin-right: 5px;
+  font-size: 13px;
+}
+
+.change-icon i {
+  color: inherit;
+}
+
+.change-text {
+  font-size: 14px;
+  /* Kleinere Schriftgröße */
+  color: inherit;
+  /* Erbt die Farbe von übergeordneten Elementen */
+  display: flex;
+  /* Verwendet Flexbox */
+  align-items: center;
+  /* Zentriert vertikal */
+}
+
+.positive {
+  color: green;
+}
+
+.negative {
+  color: red;
+}
+
+.sell-button {
+  width: calc(100% - 30px);
+  padding: 8px;
+  background-color: #244467;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-top: 1px;
+  /* Abstand zum vorherigen Element */
+}
+
+.sell-button:hover {
+  background-color: #1a356c;
+}
+
+
+tfoot td {
+  font-weight: bold;
+  padding: 12px 15px;
+  font-size: 16px;
+  /* Größere Schriftgröße */
+}
+
+tfoot td {
+  background-color: #009879;
+  color: #ffffff;
+}
+
+
+tfoot td:last-child {
+  border: none;
+  /* Entfernt die rechte Grenze für die letzte Zelle */
+}
+
+/* Neuer CSS-Stil für den Aktienbroker-Look */
+.broker-container {
+  background-color: #f8f8f8;
+  padding: 20px;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+  margin-right: 20px;
+}
+
+.broker-container h2 {
+  margin-bottom: 10px;
+  color: #244467;
+  font-weight: bolder;
+}
+
+.broker-container p {
+  margin-bottom: 15px;
+  color: #333;
+}
+
+.broker-container button {
+  background-color: #244467;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 20px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-right: 10px;
+
+}
+
+.broker-container button:hover {
+  background-color: #1a356c;
+}
+
+.portfolio-value {
+  position: absolute;
+  top: 0px;
+  right: 10px;
+  padding: 0px;
+  border-radius: 5px;
+  z-index: 999;
+  /* Stellen Sie sicher, dass der Gesamtpreis über dem Diagramm liegt */
+}
+
+.portfolio-value p {
+  margin: 0;
+  color: #333;
+  font-size: 24px;
+  font-weight: bolder;
+}
+
+
+img.logo {
+  border-radius: 3px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1); /* Reduziere den Schatten */
+  max-width: 40px; /* Verringere die maximale Breite */
+  max-height: 40px; /* Verringere die maximale Höhe */
+}
+
+
+img.logo:hover {
+  transform: scale(1.1); /* Vergrößert das Logo leicht beim Überfahren */
+}
+
+

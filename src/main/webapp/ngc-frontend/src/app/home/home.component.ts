@@ -39,12 +39,13 @@ export class HomeComponent implements OnInit {
   isLoading = true;
   sortColumn: string = '';
   sortAscending: boolean = true;
-  kontostand: number = 10;
+  kontostand: number = 0;
   portfolioDistributionChart: Chart<'pie', number[], string> | null = null;
 
   constructor(private http: HttpClient, private authService: AuthService, private dialog:MatDialog) { }
 
   ngOnInit() {
+
     this.loadUserIDs(() => {
       this.loadDepot(()=> {
         this.calculatePortfolioValue();
@@ -71,13 +72,14 @@ export class HomeComponent implements OnInit {
     }
   };
 
-  loadDepot(callback: () => void){
+  loadDepot(callback: () => void) {
     this.depots = [];
-    this.isLoading = true; // Setze isLoading auf true, um anzuzeigen, dass das Laden begonnen hat
+    this.isLoading = true;
+
     this.http.get<any[]>(`http://localhost:8080/depot/${this.depotID}`).pipe(
       catchError((error: HttpErrorResponse) => {
         this.isLoading = false;
-  
+
         if (error.status === 404) {
           this.keineDepots = true;
         }
@@ -86,22 +88,26 @@ export class HomeComponent implements OnInit {
       })
     ).subscribe((data) => {
       const depots = data;
-      
-      const priceObservables = depots.map(depot =>
-        this.getAktienpreis(depot.isin).pipe(
-          map((stockPrice) => {
+
+      const observables = depots.map(depot => {
+        return forkJoin([
+          this.getAktienpreis(depot.isin),
+          this.getLogo(depot.isin)
+        ]).pipe(
+          map(([stockPrice, logo]) => {
             depot.currentPrice = stockPrice;
-            depot.changeTotal = this.calculateChangeTotal(depot); // Berechne die Wertänderung - Total
-            depot.changeProzent = this.calculateChangeProzent(depot); // Berechne die Wertänderung - Prozentual
+            depot.changeTotal = this.calculateChangeTotal(depot);
+            depot.changeProzent = this.calculateChangeProzent(depot);
+            depot.logo = logo;
 
             return depot;
           })
-        )
-      );
+        );
+      });
 
-      forkJoin(priceObservables).subscribe((updatedDepots) => {
-        this.depots = updatedDepots; // Weise das aktualisierte Array zu, um die Änderungserkennung auszulösen
-        this.isLoading = false; // Setze isLoading auf false, um anzuzeigen, dass das Laden abgeschlossen ist
+      forkJoin(observables).subscribe((updatedDepots) => {
+        this.depots = updatedDepots;
+        this.isLoading = false;
         if (this.depots.length === 0) {
           this.keineDepots = true;
         }
@@ -121,6 +127,22 @@ export class HomeComponent implements OnInit {
           return Math.round(stockPrice * 100) / 100;
         } else {
           throw new Error('Fehler beim Abrufen des Aktienpreises.');
+        }
+      })
+    );
+  }
+
+  getLogo(isin: string): Observable<string> {
+    const apiKey = "co5rfg9r01qv77g7nk90co5rfg9r01qv77g7nk9g";
+    const url =  `https://finnhub.io/api/v1//stock/profile2?symbol=${isin}&token=${apiKey}`;
+    console.log(url);
+
+    return this.http.get<any>(url).pipe(
+      map(response => {
+        if (response && response.logo) {
+          return response.logo;
+        } else {
+          throw new Error('Kein Logo gefunden.');
         }
       })
     );
@@ -190,7 +212,6 @@ export class HomeComponent implements OnInit {
       const data = this.depots.map(depot => Math.round((depot.currentPrice || 0) * (depot.anzahl || 0) * 100) / 100);
       const backgroundColors = this.generateBackgroundColors(data.length);
       const borderColors = this.generateBorderColors(data.length);
-      console.log(data)
   
       const chartData: ChartData<'pie', number[], string> = {
         labels: labels,

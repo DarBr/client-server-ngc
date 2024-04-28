@@ -26,7 +26,7 @@ export class AktieKaufenComponent {
   currentPrice: number = 0;
   private apiKey: string = "co5rfg9r01qv77g7nk90co5rfg9r01qv77g7nk9g";
   private apiUrl: string = "https://finnhub.io/api/v1/search";
-  symbols: string[] = [];
+  symbols: any[] = [];
 
   constructor(private http: HttpClient, private authService: AuthService) { }
 
@@ -65,13 +65,14 @@ export class AktieKaufenComponent {
     if (query !== '') {
       const url: string = `${this.apiUrl}?q=${query}&token=${this.apiKey}`;
       this.http.get<any>(url).subscribe(response => {
-        this.symbols = (response && response.result) ? response.result.slice(0, 6).map((result: any) => result.symbol) : [];
-        console.log(response);
+        this.symbols = (response && response.result) ? response.result.slice(0, 6) : [];
+        console.log(this.symbols); // Überprüfen Sie die Ausgabe
       });
     } else {
       this.symbols = [];
     }
   }
+  
   
 
   setSelectedSymbol(symbol: string) {

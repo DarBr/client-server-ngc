@@ -7,18 +7,25 @@
     <table class="table-transaktionen">
       <thead>
         <tr>
-          <th (click)="sortTable('isin')">ISIN</th>
+          <th (click)="sortTable('isin')">Aktie</th>
+          <th></th> <!-- Platzhalter für das Logo -->
           <th (click)="sortTable('anzahl')">Anzahl</th>
           <th (click)="sortTable('einstandspreis')">Einstandspreis</th>
           <th (click)="sortTable('currentPrice')">Aktueller Wert</th>
           <th (click)="sortTable('changeTotal')">Wertänderung - Total</th>
           <th (click)="sortTable('changeProzent')">Wertänderung - Prozentual</th>
+
           <th>Handeln</th>
         </tr>
       </thead>
       <tbody>
         <tr *ngFor="let item of depots">
+          <td>
+            <img class="logo" [src]="item.logo" alt="Logo">
+          </td>
+
           <td>{{ item.isin }}</td>
+
           <td>{{ item.anzahl }}</td>
           <td>{{ item.einstandspreis }}$</td>
           <td>{{ item.currentPrice }}$</td>
@@ -31,6 +38,7 @@
               {{ item.changeProzent }}%
             </span>
           </td>
+
           <td>
             <button class="sell-button" (click)="openVerkaufenPopup(item)">Aktie verkaufen</button>
           </td>
@@ -42,11 +50,14 @@
           <td>{{ totalChangeTotal() }}$</td>
           <td>{{ totalChangeProzent() }}%</td>
           <td></td> <!-- Platzhalter für die Handeln-Spalte -->
+          <td></td>
         </tr>
       </tfoot>
 
     </table>
   </div>
+
+
   <div *ngIf="!isLoading&&keineDepots">
     <p>Sie haben noch keine Aktien im Depot.</p>
   </div>
@@ -70,6 +81,3 @@
   <h2>Gesamtwert des Portfolios</h2>
   <p style="font-size: larger; font-weight: bold;">{{calculatePortfolioValue() | number}}$</p>
 </div>
-
-
-
