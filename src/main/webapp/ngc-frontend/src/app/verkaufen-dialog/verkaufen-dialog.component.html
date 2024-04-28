@@ -4,7 +4,8 @@
         <p>Sind Sie sicher, dass Sie Aktien von <b>{{this.isin}}</b> verkaufen möchten?</p>
     </mat-dialog-content>
     <mat-form-field id="inputAnzahlFormField">
-        <input id="anzahlInput" matInput type="number" placeholder="Geben Sie die Anzahl ein" [(ngModel)]="verkaufAnzahl">
+        <input id="anzahlInput" matInput type="number" min="0" step="1" placeholder="Geben Sie die Anzahl ein" [(ngModel)]="verkaufAnzahl" maxlength="5" pattern="[0-9]*">
+
     </mat-form-field>
     <mat-dialog-content *ngIf="isLoading">
         <p>Verarbeitung der Transaktion...</p>
