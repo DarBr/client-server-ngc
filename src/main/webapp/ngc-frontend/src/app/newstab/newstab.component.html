@@ -2,8 +2,14 @@
     <h2>News</h2>
     <p>Die Artikel werden standardmäßig nach dem Erscheinungsdatum sortiert.</p>
     
+    <!-- Suchfeld -->
+    <div class="search-container">
+        <input type="text" placeholder="Aktiensymbol eingeben" [(ngModel)]="stockSymbol">
+        <button (click)="searchNews()">Suchen</button>
+    </div>
+    
     <div *ngIf="isLoading">Loading...</div>
-    <div *ngIf="!isLoading">
+    <div *ngIf="!isLoading && news.length > 0">
         <div class="news-feed">
             <div *ngFor="let item of news" class="news-item">
                 <div class="news-header">
@@ -24,5 +30,8 @@
                 </div>
             </div>
         </div>
+    </div>
+    <div *ngIf="!isLoading && news.length === 0">
+        <p>Bitte geben Sie ein gültiges Aktiensymbol ein, um die entsprechenden Nachrichten anzuzeigen.</p>
     </div>
 </div>
