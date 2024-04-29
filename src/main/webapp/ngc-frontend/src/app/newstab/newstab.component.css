@@ -1,3 +1,7 @@
+@import "@fortawesome/fontawesome-free/css/all.css";
+
+
+
 .news-feed {
     display: flex;
     flex-direction: column;
@@ -152,3 +156,12 @@
 .search-container button:hover {
     background-color: #1a356c;
 }
+
+.loading-spinner {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100px; /* Passende Höhe für den Ladeindikator */
+    font-size: 40px; /* Ändere die Größe des Icons */
+  }
+  

@@ -4,6 +4,7 @@ import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
 
+
 @Component({
   selector: 'app-newstab',
   standalone: true,
@@ -26,10 +27,13 @@ export class NewstabComponent {
     this.getNews(this.stockSymbol);
   }
 
+  
+
   getNews(symbol: string) {
     this.isLoading = true;
     this.initalLoading = false;
-    this.http.get<any[]>(`https://finnhub.io/api/v1/company-news?symbol=${symbol}&from=2023-08-15&to=2024-08-20&token=co5rfg9r01qv77g7nk90co5rfg9r01qv77g7nk9g`).subscribe((data) => {
+    const currentDate = this.getCurrentDate(); // Fix: Call the getCurrentDate() function directly
+    this.http.get<any[]>(`https://finnhub.io/api/v1/company-news?symbol=${symbol}&from=2022-01-01&to=${currentDate}&token=co5rfg9r01qv77g7nk90co5rfg9r01qv77g7nk9g`).subscribe((data) => { // Fix: Use the currentDate variable in the URL
       this.news = data.map(item => ({
         ...item,
         datetime: this.unixTimeToDateTime(item.datetime)
@@ -37,6 +41,14 @@ export class NewstabComponent {
       this.isLoading = false;
       this.initalLoading = false;
     });
+  }
+
+  getCurrentDate(): string {
+    const date = new Date();
+    const year = date.getFullYear();
+    const month = ('0' + (date.getMonth() + 1)).slice(-2); // Monate beginnen bei 0 in JavaScript
+    const day = ('0' + date.getDate()).slice(-2);
+    return `${year}-${month}-${day}`;
   }
 
   unixTimeToDateTime(unixTime: number): string {
