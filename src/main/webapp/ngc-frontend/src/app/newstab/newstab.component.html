@@ -31,7 +31,10 @@
             </div>
         </div>
     </div>
-    <div *ngIf="!isLoading && news.length === 0">
+    <div *ngIf="initalLoading ">
+        <p>Bitte geben Sie ein gültiges Aktiensymbol ein, um mit der Suche nach Nachrichten zu beginnen.</p>
+    </div>
+    <div *ngIf="!isLoading && news.length === 0 && !initalLoading">
         <p>Bitte geben Sie ein gültiges Aktiensymbol ein, um die entsprechenden Nachrichten anzuzeigen.</p>
     </div>
 </div>

@@ -13,15 +13,13 @@ import { FormsModule } from '@angular/forms';
 })
 export class NewstabComponent {
   news: any[] = [];
-  isLoading = true;
-  stockSymbol: string = ''; // Variable für das Aktiensymbol
+  isLoading = false;
+  initalLoading = true;
+  stockSymbol: string = ''; 
 
   constructor(private http: HttpClient) { }
 
-  ngOnInit() {
-    // Standardmäßig News für 'META' abrufen
-    
-  }
+  
 
   searchNews() {
     // News für das eingegebene Aktiensymbol abrufen
@@ -30,12 +28,14 @@ export class NewstabComponent {
 
   getNews(symbol: string) {
     this.isLoading = true;
+    this.initalLoading = false;
     this.http.get<any[]>(`https://finnhub.io/api/v1/company-news?symbol=${symbol}&from=2023-08-15&to=2024-08-20&token=co5rfg9r01qv77g7nk90co5rfg9r01qv77g7nk9g`).subscribe((data) => {
       this.news = data.map(item => ({
         ...item,
         datetime: this.unixTimeToDateTime(item.datetime)
       }));
       this.isLoading = false;
+      this.initalLoading = false;
     });
   }
 
