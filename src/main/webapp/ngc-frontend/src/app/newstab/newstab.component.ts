@@ -18,9 +18,11 @@ export class NewstabComponent {
   constructor(private http: HttpClient) { }
 
   ngOnInit() {
-    this.http.get<any[]>('https://finnhub.io/api/v1//company-news?symbol=AAPL&from=2023-08-15&to=2024-08-20&token=co5rfg9r01qv77g7nk90co5rfg9r01qv77g7nk9g').subscribe((data) => {
-      this.news = data; // Speichern Sie die Daten in der nutzer-Eigenschaft
-     
+    this.http.get<any[]>('https://finnhub.io/api/v1/company-news?symbol=AAPL&from=2023-08-15&to=2024-08-20&token=co5rfg9r01qv77g7nk90co5rfg9r01qv77g7nk9g').subscribe((data) => {
+      this.news = data.map(item => ({
+        ...item,
+        datetime: this.unixTimeToDateTime(item.datetime) // Datum formatieren
+      }));
       this.isLoading = false;
     });
   }
@@ -28,7 +30,7 @@ export class NewstabComponent {
   unixTimeToDateTime(unixTime: number): string {
     // Unix-Zeitstempel in Millisekunden umwandeln
     const date = new Date(unixTime * 1000);
-  
+
     // Datum- und Zeitformat festlegen (hier als Beispiel: Jahr-Monat-Tag Stunden:Minuten:Sekunden)
     const options: Intl.DateTimeFormatOptions = {
       year: 'numeric',
@@ -38,7 +40,7 @@ export class NewstabComponent {
       minute: '2-digit',
       hour12: false, // 24-Stunden-Format
     };
-  
+
     // Datum und Zeit formatieren und zurückgeben
     return date.toLocaleString('de-DE', options);
   }
