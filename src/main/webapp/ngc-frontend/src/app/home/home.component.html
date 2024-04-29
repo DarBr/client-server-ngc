@@ -1,6 +1,7 @@
 <div class="broker-container">
   <h2>Depotübersicht</h2>
   <p>In diesem Bereich finden Sie eine Auflistung Ihrer aktuellen Depotpositionen.</p>
+  
 
   <div *ngIf="isLoading">Loading...</div>
   <div *ngIf="!isLoading&&!keineDepots">
@@ -29,15 +30,22 @@
           <td>{{ item.anzahl }}</td>
           <td>{{ item.einstandspreis }}$</td>
           <td>{{ item.currentPrice }}$</td>
-          <td>{{ item.changeTotal}}$</td>
+          <td>{{ item.changeTotal}}$
+          </td>
 
 
           <td>
-            <span class="change-text"
-              [ngClass]="{'positive': item.changeProzent> 0, 'negative': item.changeProzent < 0}">
-              {{ item.changeProzent }}%
+            <span class="change-cell">
+              <i class="fas" [ngClass]="{'fa-arrow-up': item.changeProzent > 0, 'fa-arrow-down': item.changeProzent < 0}"
+                [ngStyle]="{'color': item.changeProzent > 0 ? 'green' : (item.changeProzent < 0 ? 'red' : 'black'), 'margin-right': '5px'}"></i>
+              <span class="change-text" [ngClass]="{'positive': item.changeProzent > 0, 'negative': item.changeProzent < 0}">
+                {{ item.changeProzent }}%
+              </span>
             </span>
           </td>
+          
+          
+          
 
           <td>
             <button class="sell-button" (click)="openVerkaufenPopup(item)">Aktie verkaufen</button>
