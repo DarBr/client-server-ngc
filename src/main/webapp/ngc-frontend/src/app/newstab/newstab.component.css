@@ -24,20 +24,28 @@
     align-items: center;
 }
 
+.datetime-source-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+}
+
+.datetime,
+.source {
+    position: static; /* Statische Positionierung, damit sie mit dem restlichen Inhalt mitschieben */
+}
+
+
 .datetime {
     color: #666;
-    position: absolute;
-    top: 10px; /* Abstand vom oberen Rand */
-    right: 10px; /* Abstand vom rechten Rand */
-    padding-top: 12px;
+   
+   
 }
 
 .source {
     font-weight: bold;
     color: #007bff;
-    position: absolute;
-    bottom: 10px; /* Abstand vom unteren Rand */
-    right: 10px; /* Abstand vom rechten Rand */
     
 }
 

@@ -1,5 +1,7 @@
 <div class="broker-container">
     <h2>News</h2>
+    <p>Die Artikel werden standardmäßig nach dem Erscheinungsdatum sortiert.</p>
+    
     <div *ngIf="isLoading">Loading...</div>
     <div *ngIf="!isLoading">
         <div class="news-feed">
@@ -15,12 +17,12 @@
                     <p class="summary">{{ item.summary }}</p>
                     <a class="read-more" href="{{ item.url }}" target="_blank">Read more</a>
                    
-                    <div class="datetime"> {{ item.datetime | date: 'medium' }} </div>
-                    <div class="source"> {{ item.source }}</div>
+                    <div class="datetime-source-container">
+                        <div class="datetime"> {{ item.datetime | date: 'medium' }} </div>
+                        <div class="source"> {{ item.source }}</div>
+                    </div>
                 </div>
             </div>
         </div>
-
     </div>
-
 </div>
