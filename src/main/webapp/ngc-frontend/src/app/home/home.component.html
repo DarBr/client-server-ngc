@@ -1,9 +1,11 @@
 <div class="broker-container">
   <h2>Depotübersicht</h2>
   <p>In diesem Bereich finden Sie eine Auflistung Ihrer aktuellen Depotpositionen.</p>
-  
 
-  <div *ngIf="isLoading">Loading...</div>
+
+  <div *ngIf="isLoading" class="loading-spinner">
+    <i class="fa fa-spinner fa-spin"></i>
+  </div>
   <div *ngIf="!isLoading&&!keineDepots">
     <table class="table-transaktionen">
       <thead>
@@ -36,16 +38,18 @@
 
           <td>
             <span class="change-cell">
-              <i class="fas" [ngClass]="{'fa-arrow-up': item.changeProzent > 0, 'fa-arrow-down': item.changeProzent < 0}"
+              <i class="fas"
+                [ngClass]="{'fa-arrow-up': item.changeProzent > 0, 'fa-arrow-down': item.changeProzent < 0}"
                 [ngStyle]="{'color': item.changeProzent > 0 ? 'green' : (item.changeProzent < 0 ? 'red' : 'black'), 'margin-right': '5px'}"></i>
-              <span class="change-text" [ngClass]="{'positive': item.changeProzent > 0, 'negative': item.changeProzent < 0}">
+              <span class="change-text"
+                [ngClass]="{'positive': item.changeProzent > 0, 'negative': item.changeProzent < 0}">
                 {{ item.changeProzent }}%
               </span>
             </span>
           </td>
-          
-          
-          
+
+
+
 
           <td>
             <button class="sell-button" (click)="openVerkaufenPopup(item)">Aktie verkaufen</button>
@@ -75,6 +79,9 @@
 
 <div class="broker-container">
   <h2>Analyse</h2>
+  <div *ngIf="isLoading" class="loading-spinner">
+    <i class="fa fa-spinner fa-spin"></i>
+  </div>
   <div class="chart-container" *ngIf="!keineDepots">
     <canvas id="portfolioDistributionChart"></canvas>
     <!-- Gesamtpreis -->
@@ -87,5 +94,8 @@
 
 <div class="broker-container">
   <h2>Gesamtwert des Portfolios</h2>
+  <div *ngIf="isLoading" class="loading-spinner">
+    <i class="fa fa-spinner fa-spin"></i>
+  </div>
   <p style="font-size: larger; font-weight: bold;">{{calculatePortfolioValue() | number}}$</p>
 </div>

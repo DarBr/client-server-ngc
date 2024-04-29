@@ -219,4 +219,11 @@ img.logo:hover {
   transform: scale(1.1); /* Vergrößert das Logo leicht beim Überfahren */
 }
 
+.loading-spinner {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100px; /* Passende Höhe für den Ladeindikator */
+  font-size: 40px; /* Ändere die Größe des Icons */
+}
 
