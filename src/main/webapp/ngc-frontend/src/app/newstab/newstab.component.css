@@ -1,0 +1,167 @@
+@import "@fortawesome/fontawesome-free/css/all.css";
+
+
+
+.news-feed {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.news-item {
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    display: flex;
+    gap: 20px;
+    position: relative; /* Positionierung relativ für die untergeordneten Elemente */
+}
+
+.news-content {
+    flex: 1;
+}
+
+.news-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.datetime-source-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+}
+
+.datetime,
+.source {
+    position: static; /* Statische Positionierung, damit sie mit dem restlichen Inhalt mitschieben */
+}
+
+
+.datetime {
+    color: #666;
+   
+   
+}
+
+.source {
+    font-weight: bold;
+    color: #007bff;
+    
+}
+
+.headline {
+    margin-top: 0;
+    color: #222;
+    font-weight: bolder;
+    color: #244467;
+}
+
+.summary {
+    margin-bottom: 10px;
+    color: #555;
+}
+
+.read-more {
+    color: #007bff;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.read-more:hover {
+    text-decoration: underline;
+}
+
+.news-item img {
+    max-width: 200px; 
+    max-height: 200px; 
+    border-radius: 8px;
+}
+
+@media screen and (max-width: 600px) {
+    .news-item {
+      flex-direction: column;
+      padding: 15px;
+    }
+    
+    .news-item img {
+      max-width: 100%;
+      max-height: auto;
+      margin-bottom: 10px;
+    }
+}
+
+.broker-container {
+    background-color: #f8f8f8;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+    margin-right: 20px;
+}
+
+.broker-container h2 {
+    margin-bottom: 10px;
+    color: #244467;
+    font-weight: bolder;
+}
+
+.broker-container p {
+    margin-bottom: 15px;
+    color: #333;
+}
+
+.broker-container button {
+    background-color: #244467;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-right: 10px;
+}
+
+.broker-container button:hover {
+    background-color: #1a356c;
+}
+
+.search-container {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.search-container input[type="text"] {
+    flex: 1;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    margin-right: 10px;
+}
+
+.search-container button {
+    background-color: #244467;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.search-container button:hover {
+    background-color: #1a356c;
+}
+
+.loading-spinner {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100px; /* Passende Höhe für den Ladeindikator */
+    font-size: 40px; /* Ändere die Größe des Icons */
+  }
+  
