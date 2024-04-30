@@ -1,10 +1,13 @@
 <div class="broker-container">
-  <h2>Transaktionsverlauf: Behalten Sie Ihre Finanzgeschäfte im Blick</h2>
+  <h2> <i class="fa-solid fa-money-check-dollar"></i> Transaktionsverlauf: Behalten Sie Ihre Finanzgeschäfte im Blick
+  </h2>
   <p>In diesem Bereich finden Sie eine detaillierte Aufzeichnung Ihrer getätigten Geschäfte.</p>
   <p>Sortieren Sie Ihre Transaktionen ganz nach Ihren Bedürfnissen, indem Sie einfach auf die Spaltenüberschriften
     klicken.</p>
 
-  <div *ngIf="isLoading">Loading...</div>
+  <div *ngIf="isLoading" class="loading-spinner">
+    <i class="fa fa-spinner fa-spin"></i>
+  </div>
   <div *ngIf="!isLoading&&!keineTransaktionen">
     <table class="table-transaktionen">
       <thead>
@@ -14,7 +17,7 @@
           <th (click)="sortTable('zeitstempel')">Zeitstempel</th>
           <th (click)="sortTable('anzahl')">Anzahl</th>
           <th (click)="sortTable('typ')">Typ</th>
-        
+
         </tr>
       </thead>
       <tbody>
@@ -24,7 +27,7 @@
           <td>{{ item.zeitstempel | date:'medium' }}</td>
           <td>{{ item.anzahl }}</td>
           <td>{{ item.typ }}</td>
-        
+
         </tr>
       </tbody>
     </table>

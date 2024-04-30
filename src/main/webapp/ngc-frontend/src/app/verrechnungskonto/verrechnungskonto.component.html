@@ -1,14 +1,18 @@
 <div class="broker-container">
-    <h2>Mein Verrechnungskonto</h2>
+    <h2> <i class="fa-solid fa-credit-card"></i> Mein Verrechnungskonto</h2>
     <p>Ihr aktueller Kontostand beträgt: {{ kontostand }}$</p>
     <p></p>
     <button (click)=" openDepositPopup()">Geld einzahlen</button>
     <button (click)=" openWithdrawalPopup()">Geld auszahlen</button>
 </div>
 <div class="broker-container">
-    <h2>Mein Zahlungsverlauf: Behalten Sie Ihre Finanzgeschäfte im Blick</h2>
+
+    <h2> <i class="fa-solid fa-money-bill-transfer"></i> Mein Zahlungsverlauf: Behalten Sie Ihre Finanzgeschäfte im
+        Blick</h2>
     <p>In diesem Bereich finden Sie eine detaillierte Aufzeichnung Ihrer getätigten Ein- und Auszahlungen.</p>
-    <div *ngIf="isLoading">Loading...</div>
+    <div *ngIf="isLoading" class="loading-spinner">
+        <i class="fa fa-spinner fa-spin"></i>
+    </div>
     <div *ngIf="!isLoading&&!keineZahlungen">
         <table class="table-transaktionen">
             <thead>
