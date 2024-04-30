@@ -65,13 +65,18 @@ export class AktieKaufenComponent {
     if (query !== '') {
       const url: string = `${this.apiUrl}?q=${query}&token=${this.apiKey}`;
       this.http.get<any>(url).subscribe(response => {
-        this.symbols = (response && response.result) ? response.result.slice(0, 6) : [];
-        console.log(this.symbols); // Überprüfen Sie die Ausgabe
+        if (response && response.result) {
+          this.symbols = response.result.filter((symbol: { symbol: string; }) => /^[A-Za-z]+$/.test(symbol.symbol));
+          console.log(this.symbols); // Überprüfen Sie die Ausgabe
+        } else {
+          this.symbols = [];
+        }
       });
     } else {
       this.symbols = [];
     }
   }
+  
   
   
 

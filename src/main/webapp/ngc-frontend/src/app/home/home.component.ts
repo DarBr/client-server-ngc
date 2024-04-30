@@ -135,18 +135,23 @@ export class HomeComponent implements OnInit {
   getLogo(isin: string): Observable<string> {
     const apiKey = "co5rfg9r01qv77g7nk90co5rfg9r01qv77g7nk9g";
     const url =  `https://finnhub.io/api/v1//stock/profile2?symbol=${isin}&token=${apiKey}`;
-    console.log(url);
-
+  
     return this.http.get<any>(url).pipe(
       map(response => {
         if (response && response.logo) {
           return response.logo;
         } else {
-          throw new Error('Kein Logo gefunden.');
+          // Wenn kein Logo gefunden wird, gib das eigene Logo zurück
+          return "assets/ngc-logo.jpg";
         }
+      }),
+      catchError(error => {
+        // Bei einem Fehler den Standard-URL zurückgeben
+        return "assets/ngc-logo.jpg";
       })
     );
   }
+  
 
   calculateChangeTotal(item: any): number {
     // Berechne die Wertänderung als Differenz zwischen dem aktuellen Wert und dem Einstandspreis

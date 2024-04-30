@@ -1,17 +1,24 @@
-<div class="login-container">
-    <h2>Aktie kaufen</h2>
-    <form class="login-form" (submit)="kaufen()">
-        <input type="text" name="isin" [(ngModel)]="isin" placeholder="ISIN" required (blur)="searchSymbols(isin)">
-        <input type="number" name="anzahl" [(ngModel)]="anzahl" placeholder="Anzahl" required>
-        <button type="submit" [disabled]="!isin || !anzahl">Kaufen</button>
-    </form>
-    <p *ngIf="(!isin || !anzahl) && formSubmitted && !stockSaved" class="error-message">Bitte füllen Sie beide Felder aus.</p>
+<div class="broker-container">
+  <h2>Aktie kaufen</h2>
+  <div class="search-container">
+    <input type="text" placeholder="Aktiensymbol eingeben" name="isin" [(ngModel)]="isin" placeholder="ISIN" required
+      (blur)="searchSymbols(isin)">
+    <button>Suchen
+      <i class="fa fa-search" style="margin-left: 5px;"></i> <!-- Font Awesome Lupensymbol -->
+    </button>
+
+  </div>
+</div>
+
+  <div  class="broker-container">
+    <h2>Vorschläge  </h2>
+    <p *ngIf="(!isin || !anzahl) && formSubmitted && !stockSaved" class="error-message">Bitte füllen Sie beide Felder aus.
+    </p>
     <p class="error-message" *ngIf="errorMessage">{{ errorMessage }}</p>
     <p class="success-message" *ngIf="successMessage">{{ successMessage }}</p>
     <p *ngIf="currentPrice > 0">Gesamtpreis: {{ currentPrice * anzahl | currency }}</p>
-</div>
-
-<table class="table-transaktionen">
+  
+  <table class="table-transaktionen">
     <thead>
       <tr>
         <th>Description</th>
@@ -21,13 +28,13 @@
       </tr>
     </thead>
     <tbody>
-        <tr *ngFor="let symbol of symbols">
-            <td>{{ symbol.description }}</td>
-            <td>{{ symbol.symbol }}</td>
-            <td>{{ symbol.type }}</td>
-            <td><button (click)="kaufen()">Kaufen</button></td>
-          </tr>
+      <tr *ngFor="let symbol of symbols">
+        <td>{{ symbol.description }}</td>
+        <td>{{ symbol.symbol }}</td>
+        <td>{{ symbol.type }}</td>
+        <td><button (click)="kaufen()">Kaufen</button></td>
+      </tr>
     </tbody>
   </table>
+  </div>
   
-
