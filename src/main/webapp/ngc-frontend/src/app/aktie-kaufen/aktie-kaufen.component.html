@@ -18,11 +18,15 @@
     <p>Geben Sie in die Suche ein Aktienzeichen ein und klicken Sie auf den Suche-Button, um Vorschläge zu erhalten.</p>
   </div>
 
+  <div *ngIf="!isLoading && symbols.length === 0 && !initalLoading">
+    <p>Zur dieser Eingabe wurden keine verfügbaren Aktien gefunden. Bitte geben Sie ein gültiges Aktiensymbol ein, um die entsprechenden Aktien anzuzeigen.</p>
+  </div>
+
   <div *ngIf="isLoading" class="loading-spinner">
     <i class="fa fa-spinner fa-spin"></i>
   </div>
 
-  <div *ngIf="!initalLoading && !isLoading">
+  <div *ngIf="!initalLoading && !isLoading && symbols.length > 0">
 
     <table class="table-transaktionen">
       <thead>
