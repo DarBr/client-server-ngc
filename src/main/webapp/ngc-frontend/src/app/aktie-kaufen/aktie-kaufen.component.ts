@@ -17,6 +17,8 @@ export class AktieKaufenComponent {
   // Deklariere ein Ereignis
   @Output() transactionCompleted = new EventEmitter<void>();
   depotID: number = 0;
+  isLoading = false;
+  initalLoading = true;
   isin: string = '';
   anzahl: number = 0;
   errorMessage: string = '';
@@ -28,9 +30,11 @@ export class AktieKaufenComponent {
   private apiUrl: string = "https://finnhub.io/api/v1/search";
   symbols: any[] = [];
 
+
   constructor(private http: HttpClient, private authService: AuthService) { }
 
   ngOnInit() {
+    this.initalLoading = true;
     this.loadDepotID(() => {
       this.errorMessage = '';
       this.successMessage = '';
@@ -61,13 +65,16 @@ export class AktieKaufenComponent {
   }
 
   searchSymbols(inputValue: string) {
+    this.isLoading = true;
+    this.initalLoading = false;
     const query = inputValue.trim();
     if (query !== '') {
       const url: string = `${this.apiUrl}?q=${query}&token=${this.apiKey}`;
       this.http.get<any>(url).subscribe(response => {
         if (response && response.result) {
           this.symbols = response.result.filter((symbol: { symbol: string; }) => /^[A-Za-z]+$/.test(symbol.symbol));
-          console.log(this.symbols); // Überprüfen Sie die Ausgabe
+          this.isLoading = false;
+          this.initalLoading = false;
         } else {
           this.symbols = [];
         }

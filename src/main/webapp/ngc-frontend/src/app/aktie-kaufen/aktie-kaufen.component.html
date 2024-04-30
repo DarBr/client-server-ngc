@@ -1,40 +1,50 @@
 <div class="broker-container">
-  <h2>Aktie kaufen</h2>
+  <h2> <i class="fa-solid fa-money-bill"></i> Aktie kaufen</h2>
   <div class="search-container">
-    <input type="text" placeholder="Aktiensymbol eingeben" name="isin" [(ngModel)]="isin" placeholder="ISIN" required
-      (blur)="searchSymbols(isin)">
-    <button>Suchen
+    <input type="text" placeholder="Aktiensymbol eingeben" name="isin" [(ngModel)]="isin" placeholder="ISIN">
+    <button (click)="searchSymbols(isin)">
+      Suchen
       <i class="fa fa-search" style="margin-left: 5px;"></i> <!-- Font Awesome Lupensymbol -->
     </button>
 
   </div>
 </div>
 
-  <div  class="broker-container">
-    <h2>Vorschläge  </h2>
-    <p *ngIf="(!isin || !anzahl) && formSubmitted && !stockSaved" class="error-message">Bitte füllen Sie beide Felder aus.
-    </p>
-    <p class="error-message" *ngIf="errorMessage">{{ errorMessage }}</p>
-    <p class="success-message" *ngIf="successMessage">{{ successMessage }}</p>
-    <p *ngIf="currentPrice > 0">Gesamtpreis: {{ currentPrice * anzahl | currency }}</p>
-  
-  <table class="table-transaktionen">
-    <thead>
-      <tr>
-        <th>Description</th>
-        <th>Symbol</th>
-        <th>Type</th>
-        <th>Handeln</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let symbol of symbols">
-        <td>{{ symbol.description }}</td>
-        <td>{{ symbol.symbol }}</td>
-        <td>{{ symbol.type }}</td>
-        <td><button (click)="kaufen()">Kaufen</button></td>
-      </tr>
-    </tbody>
-  </table>
+<div class="broker-container">
+
+  <h2><i class="fa-solid fa-bookmark"></i> Vorschläge</h2>
+
+  <div *ngIf="initalLoading">
+    <p>Geben Sie in die Suche ein Aktienzeichen ein und klicken Sie auf den Suche-Button, um Vorschläge zu erhalten.</p>
   </div>
-  
+
+  <div *ngIf="isLoading" class="loading-spinner">
+    <i class="fa fa-spinner fa-spin"></i>
+  </div>
+
+  <div *ngIf="!initalLoading && !isLoading">
+
+    <table class="table-transaktionen">
+      <thead>
+
+
+        <tr>
+          <th>Aktie</th>
+          <th>Symbol</th>
+          <th>Typ</th>
+          <th>Handeln</th>
+        </tr>
+      </thead>
+      <tbody>
+
+        <tr *ngFor="let symbol of symbols">
+          <td>{{ symbol.description }}</td>
+          <td>{{ symbol.symbol }}</td>
+          <td>{{ symbol.type }}</td>
+          <td><button (click)="kaufen()">Kaufen</button></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+</div>
