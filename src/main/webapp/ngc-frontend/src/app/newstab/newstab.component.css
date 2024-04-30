@@ -163,5 +163,6 @@
     align-items: center;
     height: 100px; /* Passende Höhe für den Ladeindikator */
     font-size: 40px; /* Ändere die Größe des Icons */
+    color: #244467;
   }
   
