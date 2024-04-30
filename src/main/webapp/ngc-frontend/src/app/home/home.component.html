@@ -1,5 +1,6 @@
 <div class="broker-container">
-  <h2>Depotübersicht</h2>
+  <h2> <i class="fa-solid fa-money-bill-transfer"></i> Depotübersicht </h2>
+
   <p>In diesem Bereich finden Sie eine Auflistung Ihrer aktuellen Depotpositionen.</p>
 
 
@@ -39,7 +40,7 @@
           <td>
             <span class="change-cell">
               <i class="fas"
-                [ngClass]="{'fa-arrow-up': item.changeProzent > 0, 'fa-arrow-down': item.changeProzent < 0}"
+                [ngClass]="{'fa-arrow-trend-up': item.changeProzent > 0, 'fa-arrow-trend-down': item.changeProzent < 0}"
                 [ngStyle]="{'color': item.changeProzent > 0 ? 'green' : (item.changeProzent < 0 ? 'red' : 'black'), 'margin-right': '5px'}"></i>
               <span class="change-text"
                 [ngClass]="{'positive': item.changeProzent > 0, 'negative': item.changeProzent < 0}">
@@ -78,7 +79,7 @@
 
 
 <div class="broker-container">
-  <h2>Analyse</h2>
+  <h2> <i class="fa-solid fa-chart-pie"></i> Analyse</h2>
   <div *ngIf="isLoading" class="loading-spinner">
     <i class="fa fa-spinner fa-spin"></i>
   </div>
@@ -93,7 +94,7 @@
 </div>
 
 <div class="broker-container">
-  <h2>Gesamtwert des Portfolios</h2>
+  <h2> <i class="fa-solid fa-sack-dollar"></i> Gesamtwert des Portfolios </h2>
   <div *ngIf="isLoading" class="loading-spinner">
     <i class="fa fa-spinner fa-spin"></i>
   </div>
