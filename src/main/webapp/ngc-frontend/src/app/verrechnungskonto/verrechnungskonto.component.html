@@ -1,9 +1,14 @@
 <div class="broker-container">
     <h2> <i class="fa-solid fa-credit-card"></i> Mein Verrechnungskonto</h2>
-    <p>Ihr aktueller Kontostand beträgt: {{ kontostand }}$</p>
-    <p></p>
-    <button (click)=" openDepositPopup()">Geld einzahlen</button>
-    <button (click)=" openWithdrawalPopup()">Geld auszahlen</button>
+    <div *ngIf="isLoading" class="loading-spinner">
+        <i class="fa fa-spinner fa-spin"></i>
+    </div>
+    <div *ngIf="!isLoading">
+        <p>Ihr aktueller Kontostand beträgt: {{ kontostand }}$</p>
+        <p></p>
+        <button (click)=" openDepositPopup()">Geld einzahlen</button>
+        <button (click)=" openWithdrawalPopup()">Geld auszahlen</button>
+    </div>
 </div>
 <div class="broker-container">
 
