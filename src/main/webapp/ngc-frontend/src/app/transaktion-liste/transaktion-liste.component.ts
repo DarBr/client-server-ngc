@@ -49,7 +49,7 @@ export class TransaktionListeComponent implements OnInit {
   // Lade die Transaktionen
   loadTransactions() {
     this.http.get<any[]>(`http://localhost:8080/transaktionen/transaktionenByKontoID/${this.depotID}`).subscribe((data) => {
-      this.transaktionen = data; // Speichern Sie die Daten in der nutzer-Eigenschaft
+      this.transaktionen = data.sort((a, b) => new Date(b.zeitstempel).getTime() - new Date(a.zeitstempel).getTime());
       this.isLoading = false;
       if (this.transaktionen.length === 0) {
         this.keineTransaktionen = true;

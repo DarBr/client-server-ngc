@@ -53,7 +53,9 @@ export class VerrechnungskontoComponent implements OnInit{
   // Lade die Transaktionen
   loadTransactions() {
     this.http.get<any[]>(`http://localhost:8080/zahlungen/zahlungenByKontoID/${this.kontoID}`).subscribe((data) => {
-      this.zahlungen = data; // Speichern Sie die Daten in der nutzer-Eigenschaft
+      this.zahlungen = data.sort((a, b) => {
+        return new Date(b.zeitpunkt).getTime() - new Date(a.zeitpunkt).getTime();
+      });
       this.isLoading = false;
       if (this.zahlungen.length === 0) {
         this.keineZahlungen = true;
