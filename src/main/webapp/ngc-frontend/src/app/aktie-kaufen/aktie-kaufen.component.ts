@@ -94,22 +94,6 @@ export class AktieKaufenComponent {
     this.symbols = []; // Um die Dropdown-Liste zu schließen, nachdem ein Symbol ausgewählt wurde
   }
 
-  kaufen() {
-    this.errorMessage = '';
-    const url = `http://localhost:8080/depot/kaufen?isin=${this.isin}&anzahl=${this.anzahl}&depotID=${this.depotID}`;
-
-    this.http.post(url, {}, { responseType: 'text' }).subscribe(response => {
-      console.log(response);
-      if (response === 'Aktie erfolgreich gekauft!') {
-        this.successMessage = response;
-        this.stockSaved = true;
-        this.isin = '';
-        this.anzahl = 0;
-      } else {
-        this.errorMessage = response;
-      }
-    });
-  }
 
 
   openKaufenPopup(item: any) {
@@ -125,8 +109,8 @@ export class AktieKaufenComponent {
       
       if (result != null && result === 'Aktie erfolgreich gekauft!') {
         console.log("Aktienkauf erfolgreich!");
-      }else{
-        console.log(result);
+       }else if (result != null && result.includes('Kauf fehlgeschlagen')) {
+        console.log("Fehler beim Aktienkauf!");
       }
     });
   }

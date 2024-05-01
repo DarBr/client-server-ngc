@@ -31,26 +31,40 @@ export class KaufenDialogComponent {
   }
 
   kaufen(buyQuantity: number) {
-  this.isLoading = true;
-  if (buyQuantity !== null)
-    if (!isNaN(buyQuantity) && buyQuantity > 0) {
+    this.isLoading = true;
+    if (buyQuantity !== null && !isNaN(buyQuantity) && buyQuantity > 0) {
       this.errorMessage = '';
       const url = `http://localhost:8080/depot/kaufen?depotID=${this.depotID}&isin=${this.symbol}&anzahl=${buyQuantity}`;
-      this.http.post(url, {}, {responseType: 'text'}).subscribe(response => {
-        if (response === 'Aktie erfolgreich gekauft!') {
-          this.rueckgabe = response;
+      this.http.post(url, {}, {responseType: 'text'}).subscribe(
+        (response: string) => {
+          if (response === 'Aktie erfolgreich gekauft!') {
+            this.rueckgabe = response;
+            this.isLoading = false;
+            this.dialogRef.close(this.rueckgabe);
+          } else {
+            this.rueckgabe = response;
+            this.isLoading = false;
+            this.errorMessage = "Fehler beim Kauf der Aktie!";
+            this.dialogRef.close(this.rueckgabe);
+          }
+        },
+        (error: any) => {
+          // Hier wird der Fehler abgefangen und entsprechend behandelt
+          if (error.status === 404) {
+            // Wenn der Fehler 404 ist, bedeutet das, dass das Depot nicht gefunden wurde oder die ISIN ungültig ist
+            this.errorMessage = "Kontostand nicht ausreichend.";
+          } else {
+            // Ansonsten handelt es sich um einen unerwarteten Fehler, der angezeigt wird
+            this.errorMessage = "Unerwarteter Fehler beim Kauf der Aktie.";
+          }
           this.isLoading = false;
-          this.dialogRef.close(this.rueckgabe);
-        } else {
-          this.rueckgabe = response;
-          this.isLoading = false;
-          this.dialogRef.close(this.rueckgabe);
         }
-      });
+      );
     } else {
       this.isLoading = false;
       this.errorMessage = 'Bitte geben Sie eine gültige Anzahl ein!';
     }
   }
+  
 }
 
