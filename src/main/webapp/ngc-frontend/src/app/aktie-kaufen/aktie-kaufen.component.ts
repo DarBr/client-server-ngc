@@ -122,9 +122,9 @@ export class AktieKaufenComponent {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      console.log(result);
-      if (result != null && result === 'Aktie erfolgreich verkauft!') {
-        
+      
+      if (result != null && result === 'Aktie erfolgreich gekauft!') {
+        console.log("Aktienkauf erfolgreich!");
       }else{
         console.log(result);
       }
