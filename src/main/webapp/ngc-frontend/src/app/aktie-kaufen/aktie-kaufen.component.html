@@ -13,6 +13,7 @@
 <div class="broker-container">
 
   <h2><i class="fa-solid fa-bookmark"></i> Vorschläge</h2>
+ 
 
   <div *ngIf="initalLoading">
     <p>Geben Sie in die Suche ein Aktienzeichen ein und klicken Sie auf den Suche-Button, um Vorschläge zu erhalten.</p>
@@ -45,7 +46,7 @@
           <td>{{ symbol.description }}</td>
           <td>{{ symbol.symbol }}</td>
           <td>{{ symbol.type }}</td>
-          <td><button (click)="kaufen()">Kaufen</button></td>
+          <td><button (click)="openKaufenPopup(symbol)">Kaufen</button></td>
         </tr>
       </tbody>
     </table>

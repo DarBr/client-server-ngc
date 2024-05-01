@@ -5,6 +5,8 @@ import { FormsModule } from '@angular/forms';
 import { Observable, forkJoin, map } from 'rxjs';
 import { TransaktionListeComponent } from '../transaktion-liste/transaktion-liste.component';
 import { AuthService } from '../AuthService';
+import { MatDialog } from '@angular/material/dialog';
+import { KaufenDialogComponent } from '../kaufen-dialog/kaufen-dialog.component';
 
 @Component({
   selector: 'app-aktie-kaufen',
@@ -31,7 +33,7 @@ export class AktieKaufenComponent {
   symbols: any[] = [];
 
 
-  constructor(private http: HttpClient, private authService: AuthService) { }
+  constructor(private http: HttpClient, private authService: AuthService, private dialog: MatDialog ) { }
 
   ngOnInit() {
     this.initalLoading = true;
@@ -43,9 +45,9 @@ export class AktieKaufenComponent {
     });
   }
 
-  loadDepotID(callback: () => void){
+  loadDepotID(callback: () => void) {
     const token = this.authService.getToken();
-    if(token !== null && token !== '') {
+    if (token !== null && token !== '') {
       forkJoin([
         this.authService.getDepotIDFromToken(token)
       ]).subscribe(([depotID]) => {
@@ -83,20 +85,20 @@ export class AktieKaufenComponent {
       this.symbols = [];
     }
   }
-  
-  
-  
+
+
+
 
   setSelectedSymbol(symbol: string) {
     this.isin = symbol;
     this.symbols = []; // Um die Dropdown-Liste zu schließen, nachdem ein Symbol ausgewählt wurde
-}
+  }
 
   kaufen() {
     this.errorMessage = '';
     const url = `http://localhost:8080/depot/kaufen?isin=${this.isin}&anzahl=${this.anzahl}&depotID=${this.depotID}`;
 
-    this.http.post(url, {}, {responseType: 'text'}).subscribe(response => {
+    this.http.post(url, {}, { responseType: 'text' }).subscribe(response => {
       console.log(response);
       if (response === 'Aktie erfolgreich gekauft!') {
         this.successMessage = response;
@@ -108,4 +110,26 @@ export class AktieKaufenComponent {
       }
     });
   }
+
+
+  openKaufenPopup(item: any) {
+    const dialogRef = this.dialog.open(KaufenDialogComponent, {
+      data: {
+        symbol: item.symbol,
+        vorhandeneAnzahl: item.anzahl,
+        depotID: this.depotID
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log(result);
+      if (result != null && result === 'Aktie erfolgreich verkauft!') {
+        
+      }else{
+        console.log(result);
+      }
+    });
+  }
+
+  
 }
