@@ -3,22 +3,27 @@ import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { AuthService } from '../AuthService';
 import { forkJoin } from 'rxjs';
+import { FormsModule } from '@angular/forms';
+
 
 @Component({
   selector: 'app-transaktion-liste',
   templateUrl: './transaktion-liste.component.html',
   styleUrls: ['./transaktion-liste.component.css'],
   standalone: true,
-  imports: [CommonModule]
+  imports: [CommonModule, FormsModule]
 })
 export class TransaktionListeComponent implements OnInit {
   userID: number = 0;
   depotID: number = 0;
   transaktionen: any[] = []; // Hier wird das Array initialisiert
+  originalTransaktionen: any[] = [];
   isLoading = true;
   keineTransaktionen = false;
   sortColumn: string = '';
   sortAscending: boolean = true;
+  isinFilter = '';
+  typeFilter = '';
 
   constructor(private http: HttpClient, private authService: AuthService) { }
 
@@ -50,6 +55,8 @@ export class TransaktionListeComponent implements OnInit {
   loadTransactions() {
     this.http.get<any[]>(`http://localhost:8080/transaktionen/transaktionenByKontoID/${this.depotID}`).subscribe((data) => {
       this.transaktionen = data.sort((a, b) => new Date(b.zeitstempel).getTime() - new Date(a.zeitstempel).getTime());
+      this.originalTransaktionen = this.transaktionen;
+      this.applyFilters();
       this.isLoading = false;
       if (this.transaktionen.length === 0) {
         this.keineTransaktionen = true;
@@ -59,6 +66,31 @@ export class TransaktionListeComponent implements OnInit {
       };
     });
   }
+  
+  applyFilters() {
+    // Kopiere das Originalarray für die gefilterten Transaktionen
+    let filteredTransaktionen = [...this.originalTransaktionen];
+    
+    // Filter nach ISIN, falls ein Filterwert vorhanden ist
+    if (this.isinFilter) {
+      filteredTransaktionen = filteredTransaktionen.filter(transaction => transaction.isin.includes(this.isinFilter));
+    }
+  
+    // Filter nach Typ, falls ein Filterwert vorhanden ist
+    if (this.typeFilter) {
+      filteredTransaktionen = filteredTransaktionen.filter(transaction => transaction.typ === this.typeFilter);
+    }
+  
+    // Überprüfen, ob Filter angewendet wurden und Transaktionen vorhanden sind
+    this.keineTransaktionen = filteredTransaktionen.length === 0 && (this.isinFilter !== '' || this.typeFilter !== '');
+  
+    // Aktualisiere die angezeigten Transaktionen
+    this.transaktionen = filteredTransaktionen;
+  }
+  
+  
+  
+  
 
   // Sortiere die Tabelle
   sortTable(column: string): void {

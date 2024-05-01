@@ -244,3 +244,40 @@ footer p {
   font-size: 40px; /* Ändere die Größe des Icons */
   color: #244467;
 }
+
+.filter-container {
+  margin-bottom: 20px;
+}
+
+.filter-container label {
+  margin-right: 10px;
+}
+
+.filter-container input[type="text"],
+.filter-container select {
+  width: 200px;
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  margin-right: 10px;
+}
+
+.filter-container select {
+  cursor: pointer;
+}
+
+.filter-container input[type="text"]:focus,
+.filter-container select:focus {
+  outline: none;
+  border-color: #009879;
+}
+
+.filter-container input[type="text"]::placeholder {
+  color: #ccc;
+}
+
+.filter-container select option {
+  color: #000;
+}
+
+

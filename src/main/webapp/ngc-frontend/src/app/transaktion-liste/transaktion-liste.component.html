@@ -5,6 +5,19 @@
   <p>Sortieren Sie Ihre Transaktionen ganz nach Ihren Bedürfnissen, indem Sie einfach auf die Spaltenüberschriften
     klicken.</p>
 
+  <div class="filter-container">
+    <label for="isinFilter">Filtern nach ISIN:</label>
+    <input type="text" id="isinFilter" [(ngModel)]="isinFilter" (input)="applyFilters()">
+
+    <label for="typeFilter">Filtern nach Typ:</label>
+    <select id="typeFilter" [(ngModel)]="typeFilter" (change)="applyFilters()">
+      <option value="">Alle</option>
+      <option value="Kauf">Kauf</option>
+      <option value="Verkauf">Verkauf</option>
+    </select>
+  </div>
+
+
   <div *ngIf="isLoading" class="loading-spinner">
     <i class="fa fa-spinner fa-spin"></i>
   </div>
