@@ -1,5 +1,39 @@
 @import "@fortawesome/fontawesome-free/css/all.css";
 
+.header-with-status {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-right: 20px;
+  position: relative; /* Adjust this padding to align with the page's right margin */
+}
+
+.market-status-wrapper {
+  flex-grow: 1; /* Ensures it takes up any available space to the right */
+  display: flex;
+  justify-content: flex-end; /* Aligns the child element to the right */
+}
+
+.market-status-display {
+  background-color: #e9f5f9; /* Light background for contrast */
+  border-radius: 20px; /* Rounded corners */
+  padding: 5px 10px; /* Small padding around text */
+  margin-left: auto; /* Push the element to the right */
+  font-family: 'Roboto', sans-serif; /* This should match your site's font */
+  font-weight: bold; /* Makes the text bold */
+  font-size: 1rem; /* Adjust the font size as needed */
+  color: #333; /* Adjust the text color as needed */
+  /* Add any additional styling for the text box such as border, shadow, etc. */
+  
+}
+
+.market-status-display p {
+  margin: 0; /* Removes default paragraph margin */
+  white-space: nowrap; /* Ensures the text is in a single line */
+}
+
+
+
 .table-transaktionen {
   width: 100%;
   border-collapse: collapse;

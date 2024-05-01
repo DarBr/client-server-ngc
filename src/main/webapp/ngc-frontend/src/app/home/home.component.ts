@@ -33,6 +33,9 @@ Chart.register(PieController, ArcElement, Tooltip, Legend);
 
 export class HomeComponent implements OnInit {
   userID: number = 0;
+  marketOpenTimeET: string = '09:30'; // NYSE opening time in Eastern Time
+  marketCloseTimeET: string = '16:00';
+  marketStatus: string = '';
   depotID: number = 0;
   depots: any[] = [];
   keineDepots = false;
@@ -50,6 +53,7 @@ export class HomeComponent implements OnInit {
       this.loadDepot(()=> {
         this.calculatePortfolioValue();
         this.createPortfolioDistributionChart();
+        this.checkMarketStatus();
       });
     });    
   }
@@ -113,6 +117,28 @@ export class HomeComponent implements OnInit {
         }
         callback();
       });
+    });
+  }
+
+  checkMarketStatus(): void {
+    this.fetchMarketStatus(); // Fetch market status
+    setInterval(() => {
+      this.fetchMarketStatus(); // Update market status every minute
+    }, 60000); // Refresh every minute (60000 milliseconds)
+  }
+  
+  fetchMarketStatus(): void {
+    const exchangeCode = 'US'; // Use the appropriate exchange code
+    const marketStatusUrl = `https://finnhub.io/api/v1/stock/market-status?exchange=${exchangeCode}&token=cohccfhr01qrf6b2m2p0cohccfhr01qrf6b2m2pg`;
+  
+    this.http.get<any>(marketStatusUrl).subscribe({
+      next: (response) => {
+        this.marketStatus = response.isopen ? 'geöffnet' : 'geschlossen';
+      },
+      error: (error) => {
+        console.error('Error fetching market status:', error);
+        this.marketStatus = 'Status unbekannt';
+      }
     });
   }
 
