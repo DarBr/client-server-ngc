@@ -238,13 +238,19 @@ tfoot td:last-child {
 }
 
 .details-container {
-  padding: 20px;
+  padding: 10px;
 }
+
+.details-container h4 {
+  margin-bottom: 10px;
+  color: #244467;
+  font-weight: bolder;
+} 
 
 .detail-row {
   display: flex;
   justify-content: space-between;
-  margin-bottom: 10px;
+  margin-bottom: 0px;
 }
 
 .detail {
