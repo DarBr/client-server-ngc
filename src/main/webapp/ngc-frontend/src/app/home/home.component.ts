@@ -2,16 +2,16 @@ import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Observable, catchError, forkJoin, map, tap, throwError } from 'rxjs';
-import { 
-  Chart, 
-  ChartConfiguration, 
-  ChartData, 
-  ChartTypeRegistry, 
-  PieController, 
-  ArcElement, 
-  Tooltip, 
+import {
+  Chart,
+  ChartConfiguration,
+  ChartData,
+  ChartTypeRegistry,
+  PieController,
+  ArcElement,
+  Tooltip,
   TooltipItem,
-  Legend 
+  Legend
 } from 'chart.js';
 import { AuthService } from '../AuthService';
 import { MatDialog } from '@angular/material/dialog';
@@ -43,21 +43,21 @@ export class HomeComponent implements OnInit {
   kontostand: number = 0;
   portfolioDistributionChart: Chart<'pie', number[], string> | null = null;
 
-  constructor(private http: HttpClient, private authService: AuthService, private dialog:MatDialog) { }
+  constructor(private http: HttpClient, private authService: AuthService, private dialog: MatDialog) { }
 
   ngOnInit() {
 
     this.loadUserIDs(() => {
-      this.loadDepot(()=> {
+      this.loadDepotData(() => {
         this.calculatePortfolioValue();
         this.createPortfolioDistributionChart();
       });
-    });    
+    });
   }
 
-  loadUserIDs(callback: () => void){
+  loadUserIDs(callback: () => void) {
     const token = this.authService.getToken();
-    if(token !== null && token !== '') {
+    if (token !== null && token !== '') {
       forkJoin([
         this.authService.getUserIDFromToken(token),
         this.authService.getDepotIDFromToken(token)
@@ -73,14 +73,14 @@ export class HomeComponent implements OnInit {
     }
   };
 
-  loadDepot(callback: () => void) {
+  loadDepotData(callback: () => void) {
     this.depots = [];
     this.isLoading = true;
-
+  
     this.http.get<any[]>(`http://localhost:8080/depot/${this.depotID}`).pipe(
       catchError((error: HttpErrorResponse) => {
         this.isLoading = false;
-
+  
         if (error.status === 404) {
           this.keineDepots = true;
         }
@@ -89,23 +89,44 @@ export class HomeComponent implements OnInit {
       })
     ).subscribe((data) => {
       const depots = data;
-
+  
       const observables = depots.map(depot => {
         return forkJoin([
-          this.getAktienpreis(depot.isin),
-          this.getLogo(depot.isin)
+          this.getAktienDetails(depot.isin),
+          this.getLogo(depot.isin),
+          this.getStockProfile(depot.isin) // Hinzugefügt, um Stockprofile zu erhalten
         ]).pipe(
-          map(([stockPrice, logo]) => {
-            depot.currentPrice = stockPrice;
-            depot.changeTotal = this.calculateChangeTotal(depot);
-            depot.changeProzent = this.calculateChangeProzent(depot);
+          map(([aktienDetails, logo, stockProfile]) => {
+            depot.currentPrice = Math.round(aktienDetails.c * 100) / 100;
+            depot.changeTotal = Math.round(this.calculateChangeTotal(depot) * 100) / 100;
+            depot.changeProzent = Math.round(this.calculateChangeProzent(depot) * 100) / 100;
             depot.logo = logo;
+            depot.c = aktienDetails.c;
+            depot.h = aktienDetails.h;
+            depot.l = aktienDetails.l;
+            depot.d = aktienDetails.d;
+            depot.dp = aktienDetails.dp;
 
+            
+            // Aktualisieren der Depotdetails mit Stockprofile-Informationen
+            depot.country = stockProfile.country;
+            depot.currency = stockProfile.currency;
+            depot.estimateCurrency = stockProfile.estimateCurrency;
+            depot.exchange = stockProfile.exchange;
+            depot.finnhubIndustry = stockProfile.finnhubIndustry;
+            depot.ipo = stockProfile.ipo;
+            depot.marketCapitalization = stockProfile.marketCapitalization;
+            depot.name = stockProfile.name;
+            depot.phone = stockProfile.phone;
+            depot.shareOutstanding = stockProfile.shareOutstanding;
+            depot.ticker = stockProfile.ticker;
+            depot.weburl = stockProfile.weburl;
+  
             return depot;
           })
         );
       });
-
+  
       forkJoin(observables).subscribe((updatedDepots) => {
         this.depots = updatedDepots;
         this.isLoading = false;
@@ -116,28 +137,52 @@ export class HomeComponent implements OnInit {
       });
     });
   }
+  
 
-
-  getAktienpreis(isin: string): Observable<number> {
-    const apiKey = 'cohccfhr01qrf6b2m2p0cohccfhr01qrf6b2m2pg';
+  getAktienDetails(isin: string): Observable<any> {
+    const apiKey = "co5rfg9r01qv77g7nk90co5rfg9r01qv77g7nk9g";
     const apiUrl = `https://finnhub.io/api/v1/quote?symbol=${isin}&token=${apiKey}`;
 
-    return this.http.get<any>(apiUrl).pipe(
+    return this.http.get<any>(apiUrl);
+  }
+
+  getStockProfile(symbol: string): Observable<any> {
+    const apiKey = "co5rfg9r01qv77g7nk90co5rfg9r01qv77g7nk9g"; 
+    const url = `https://finnhub.io/api/v1/stock/profile2?symbol=${symbol}&token=${apiKey}`;
+  
+    return this.http.get<any>(url).pipe(
       map(response => {
-        if (response && response.c) {
-          const stockPrice = response.c;
-          return Math.round(stockPrice * 100) / 100;
+        if (response) {
+          // Extrahiere die relevanten Informationen aus der API-Antwort
+          const profile = {
+            country: response.country,
+            currency: response.currency,
+            estimateCurrency: response.estimateCurrency,
+            exchange: response.exchange,
+            finnhubIndustry: response.finnhubIndustry,
+            ipo: response.ipo,
+            logo: response.logo,
+            marketCapitalization: response.marketCapitalization,
+            name: response.name,
+            phone: response.phone,
+            shareOutstanding: response.shareOutstanding,
+            ticker: response.ticker,
+            weburl: response.weburl
+          };
+          return profile;
         } else {
-          throw new Error('Fehler beim Abrufen des Aktienpreises.');
+          throw new Error('Fehler beim Abrufen des Aktienprofils.');
         }
       })
     );
   }
+  
+
 
   getLogo(isin: string): Observable<string> {
     const apiKey = "co5rfg9r01qv77g7nk90co5rfg9r01qv77g7nk9g";
-    const url =  `https://finnhub.io/api/v1//stock/profile2?symbol=${isin}&token=${apiKey}`;
-  
+    const url = `https://finnhub.io/api/v1//stock/profile2?symbol=${isin}&token=${apiKey}`;
+
     return this.http.get<any>(url).pipe(
       map(response => {
         if (response && response.logo) {
@@ -153,7 +198,12 @@ export class HomeComponent implements OnInit {
       })
     );
   }
-  
+
+  toggleDetails(item: any): void {
+    item.showDetails = !item.showDetails;
+  }
+
+
 
   calculateChangeTotal(item: any): number {
     // Berechne die Wertänderung als Differenz zwischen dem aktuellen Wert und dem Einstandspreis
@@ -192,7 +242,7 @@ export class HomeComponent implements OnInit {
     });
     return Math.round(totalValue * 100) / 100; // Runden Sie den Gesamtwert auf zwei Dezimalstellen
   }
-  
+
   sortTable(column: string): void {
     if (this.sortColumn === column) {
       this.sortAscending = !this.sortAscending;
@@ -212,14 +262,14 @@ export class HomeComponent implements OnInit {
       return this.sortAscending ? comparison : comparison * -1;
     });
   }
-  
+
   createPortfolioDistributionChart() {
     if (!this.isLoading && this.depots.length && !this.keineDepots) {
       const labels = this.depots.map(depot => depot.isin);
       const data = this.depots.map(depot => Math.round((depot.currentPrice || 0) * (depot.anzahl || 0) * 100) / 100);
       const backgroundColors = this.generateBackgroundColors(data.length);
       const borderColors = this.generateBorderColors(data.length);
-  
+
       const chartData: ChartData<'pie', number[], string> = {
         labels: labels,
         datasets: [{
@@ -230,7 +280,7 @@ export class HomeComponent implements OnInit {
           borderWidth: 1
         }]
       };
-  
+
       const config: ChartConfiguration<'pie', number[], string> = {
         type: 'pie',
         data: chartData,
@@ -240,7 +290,7 @@ export class HomeComponent implements OnInit {
           plugins: {
             tooltip: {
               callbacks: {
-                label: function(context: TooltipItem<'pie'>) {
+                label: function (context: TooltipItem<'pie'>) {
                   const label = context.label || '';
                   const value = context.parsed || 0;
                   const total = context.dataset.data.reduce((acc, val) => acc + val, 0);
@@ -252,11 +302,11 @@ export class HomeComponent implements OnInit {
           }
         },
       };
-  
+
       if (this.portfolioDistributionChart) {
         this.portfolioDistributionChart.destroy();
       }
-  
+
       this.portfolioDistributionChart = new Chart<'pie', number[], string>(
         document.getElementById('portfolioDistributionChart') as HTMLCanvasElement,
         config
@@ -310,11 +360,11 @@ export class HomeComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
       console.log(result);
       if (result != null && result === 'Aktie erfolgreich verkauft!') {
-        this.loadDepot(() => {
+        this.loadDepotData(() => {
           this.calculatePortfolioValue();
           this.createPortfolioDistributionChart();
         });
-      }else{
+      } else {
         console.log(result);
       }
     });

@@ -181,7 +181,6 @@ tfoot td:last-child {
   cursor: pointer;
   transition: background-color 0.3s ease;
   margin-right: 10px;
-
 }
 
 .broker-container button:hover {
@@ -233,3 +232,30 @@ tfoot td:last-child {
   color: #244467;
 }
 
+/* Neuer CSS-Stil für die Aktiendetails im Aktienbroker-Stil */
+.details-row {
+  background-color: #f3f3f3;
+}
+
+.details-container {
+  padding: 20px;
+}
+
+.detail-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.detail {
+  flex: 1;
+}
+
+.label {
+  font-weight: bold;
+  color: #244467;
+}
+
+.value {
+  color: #333;
+}
