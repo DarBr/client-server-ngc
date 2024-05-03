@@ -1,6 +1,6 @@
 <div class="broker-container">
   <h2> <i class="fa-solid fa-money-bill-transfer"></i> Depotübersicht </h2>
-  <p>In diesem Bereich finden Sie eine Auflistung Ihrer aktuellen Depotpositionen.</p>
+  <p>In diesem Bereich finden Sie eine Auflistung Ihrer aktuellen Depotpositionen. Sortieren Sie die Spalten individuell, indem Sie auf den Spaltennamen klicken.<br> Um Detailinformationen zu einer bestimmten Aktie zu erhalten, klicken Sie einfach auf die entsprechende Aktienposition.</p>
 
   <div *ngIf="isLoading" class="loading-spinner">
     <i class="fa fa-spinner fa-spin"></i>
@@ -44,13 +44,13 @@
               </span>
             </td>
             <td>
-              <button class="sell-button" (click)="openVerkaufenPopup(item)">Aktie verkaufen</button>
+              <button class="sell-button" (click)="openVerkaufenPopup(item); $event.stopPropagation()">Aktie verkaufen</button>
             </td>
           </tr>
           <tr *ngIf="item.showDetails" class="details-row">
             <td colspan="7">
               <div class="details-container">
-                <h4> <i class="fa-solid fa-circle-info"></i> Detailinformation zu {{item.isin}}</h4>
+                <h4> <i class="fa-solid fa-circle-info"></i> {{item.isin}} - Detailinformationen</h4>
                 <div class="detail-row">
                   <div class="detail">
                     <span class="label">Aktueller Preis: </span>

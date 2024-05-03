@@ -101,11 +101,11 @@ export class HomeComponent implements OnInit {
             depot.changeTotal = Math.round(this.calculateChangeTotal(depot) * 100) / 100;
             depot.changeProzent = Math.round(this.calculateChangeProzent(depot) * 100) / 100;
             depot.logo = logo;
-            depot.c = aktienDetails.c;
-            depot.h = aktienDetails.h;
-            depot.l = aktienDetails.l;
-            depot.d = aktienDetails.d;
-            depot.dp = aktienDetails.dp;
+            depot.c = Math.round(aktienDetails.c * 100) / 100;
+            depot.h = Math.round(aktienDetails.h * 100) / 100;
+            depot.l = Math.round(aktienDetails.l * 100) / 100;
+            depot.d = Math.round(aktienDetails.d * 100) / 100;
+            depot.dp = Math.round(aktienDetails.dp * 100) / 100;
 
             
             // Aktualisieren der Depotdetails mit Stockprofile-Informationen
