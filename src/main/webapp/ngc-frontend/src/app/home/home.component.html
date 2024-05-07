@@ -1,9 +1,22 @@
 <div class="broker-container">
+  <h2> <i class="fa-solid fa-sack-dollar"></i> Gesamtwert des Portfolios </h2>
+  <div *ngIf="isLoading" class="loading-spinner">
+    <i class="fa fa-spinner fa-spin"></i>
+  </div>
+  <div *ngIf="!isLoading">
+    <p style="font-size: larger; font-weight: bold;">{{calculatePortfolioValue() | number}}$ | {{depots.length}} Depotpositionen</p>
+  </div>
+
+</div>
+
+<div class="broker-container">
   <h2> <i class="fa-solid fa-money-bill-transfer"></i> Depotübersicht </h2>
 
   <p>In diesem Bereich finden Sie eine Auflistung Ihrer aktuellen Depotpositionen. Sortieren Sie die Spalten
     individuell, indem Sie auf den Spaltennamen klicken.<br> Um Detailinformationen zu einer bestimmten Aktie zu
     erhalten, klicken Sie einfach auf die entsprechende Aktienposition.</p>
+
+
 
   <div *ngIf="isLoading" class="loading-spinner">
     <i class="fa fa-spinner fa-spin"></i>
@@ -97,7 +110,9 @@
       <tr>
         <td>
           <div class="logo-container">
-            <img class="logo" src="https://www.shutterstock.com/image-vector/credit-card-vector-icon-isolated-600nw-1177277911.jpg" alt="Cash Icon">
+            <img class="logo"
+              src="https://www.shutterstock.com/image-vector/credit-card-vector-icon-isolated-600nw-1177277911.jpg"
+              alt="Cash Icon">
             <span class="name">CASH</span>
           </div>
         </td>
@@ -140,12 +155,4 @@
   <div *ngIf="keineDepots">
     <p>Da Sie keine Aktien im Depot haben ist keine Analyse möglich.</p>
   </div>
-</div>
-
-<div class="broker-container">
-  <h2> <i class="fa-solid fa-sack-dollar"></i> Gesamtwert des Portfolios </h2>
-  <div *ngIf="isLoading" class="loading-spinner">
-    <i class="fa fa-spinner fa-spin"></i>
-  </div>
-  <p style="font-size: larger; font-weight: bold;">{{calculatePortfolioValue() | number}}$</p>
 </div>
