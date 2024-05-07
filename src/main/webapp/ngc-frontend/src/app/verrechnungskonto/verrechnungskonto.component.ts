@@ -4,11 +4,14 @@ import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from '../AuthService';
 import { forkJoin } from 'rxjs';
+import { MatDialog } from '@angular/material/dialog';
+import { EinzahlenDialogComponent } from '../einzahlen-dialog/einzahlen-dialog.component';
+
 
 @Component({
   selector: 'app-verrechnungskonto',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, ],
   templateUrl: './verrechnungskonto.component.html',
   styleUrl: './verrechnungskonto.component.css'
 })
@@ -22,7 +25,7 @@ export class VerrechnungskontoComponent implements OnInit{
   kontoID: number = 0;
   kontostand: number = 0;
 
-  constructor(private http: HttpClient, private authService: AuthService) { }
+  constructor(private http: HttpClient, private authService: AuthService, private dialog: MatDialog) { }
 
   ngOnInit() {
     this.loadUserIDs(() => {
@@ -103,6 +106,23 @@ export class VerrechnungskontoComponent implements OnInit{
         alert("Bitte geben Sie einen gültigen Betrag ein.");
       }
     }
+  }
+
+  openEinzahlenPopup() {
+    const dialogRef = this.dialog.open(EinzahlenDialogComponent, {
+      data: {
+        kontoID: this.kontoID
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log(result);
+      if (result != null && result === 'Aktie erfolgreich verkauft!') {
+        this.loadKontostand();
+      } else {
+        console.log(result);
+      }
+    });
   }
 
   openWithdrawalPopup() {
