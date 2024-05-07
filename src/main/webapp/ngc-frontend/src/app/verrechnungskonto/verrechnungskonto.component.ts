@@ -11,11 +11,11 @@ import { EinzahlenDialogComponent } from '../einzahlen-dialog/einzahlen-dialog.c
 @Component({
   selector: 'app-verrechnungskonto',
   standalone: true,
-  imports: [CommonModule, FormsModule, ],
+  imports: [CommonModule, FormsModule,],
   templateUrl: './verrechnungskonto.component.html',
   styleUrl: './verrechnungskonto.component.css'
 })
-export class VerrechnungskontoComponent implements OnInit{
+export class VerrechnungskontoComponent implements OnInit {
   zahlungen: any[] = []; // Hier wird das Array initialisiert
   isLoading = true;
   keineZahlungen = false;
@@ -30,13 +30,13 @@ export class VerrechnungskontoComponent implements OnInit{
   ngOnInit() {
     this.loadUserIDs(() => {
       this.loadKontostand();
-      this.loadTransactions();
+      this.loadZahlungen();
     });
   }
 
-  loadUserIDs(callback: () => void){
+  loadUserIDs(callback: () => void) {
     const token = this.authService.getToken();
-    if(token !== null && token !== '') {
+    if (token !== null && token !== '') {
       forkJoin([
         this.authService.getUserIDFromToken(token),
         this.authService.getKontoIDFromToken(token)
@@ -54,7 +54,7 @@ export class VerrechnungskontoComponent implements OnInit{
 
 
   // Lade die Transaktionen
-  loadTransactions() {
+  loadZahlungen() {
     this.http.get<any[]>(`http://localhost:8080/zahlungen/zahlungenByKontoID/${this.kontoID}`).subscribe((data) => {
       this.zahlungen = data.sort((a, b) => {
         return new Date(b.zeitpunkt).getTime() - new Date(a.zeitpunkt).getTime();
@@ -96,17 +96,7 @@ export class VerrechnungskontoComponent implements OnInit{
     });
   }
 
-  openDepositPopup() {
-    const einzahlungsbetrag = prompt("Bitte geben Sie den einzuzahlenden Betrag ein:");
-    if (einzahlungsbetrag !== null) {
-      const betrag = parseFloat(einzahlungsbetrag);
-      if (!isNaN(betrag) && betrag > 0) {
-        this.einzahlen(betrag);
-      } else {
-        alert("Bitte geben Sie einen gültigen Betrag ein.");
-      }
-    }
-  }
+
 
   openEinzahlenPopup() {
     const dialogRef = this.dialog.open(EinzahlenDialogComponent, {
@@ -117,11 +107,11 @@ export class VerrechnungskontoComponent implements OnInit{
 
     dialogRef.afterClosed().subscribe(result => {
       console.log(result);
-      if (result != null && result === 'Aktie erfolgreich verkauft!') {
-        this.loadKontostand();
-      } else {
-        console.log(result);
-      }
+      this.isLoading = true;
+      this.loadKontostand();
+      this.loadZahlungen();
+      this.isLoading = false;
+
     });
   }
 
@@ -137,23 +127,15 @@ export class VerrechnungskontoComponent implements OnInit{
     }
   }
 
-  einzahlen(betrag: number) {
-    // Hier kannst du die Logik für die Einzahlung implementieren, z.B. eine HTTP-Anfrage an den Server senden
-    this.http.put(`http://localhost:8080/konto/einzahlen?kontoID=${this.kontoID}&betrag=${betrag}`, {}).subscribe((response) => {
-      console.log("Einzahlung erfolgreich:", response);
-      this.loadKontostand();
-      this.loadTransactions();
-    }, (error) => {
-      console.error("Fehler bei der Einzahlung:", error);
-    });
-  }
+
+
 
 
   auszahlen(betrag: number) {
     this.http.put(`http://localhost:8080/konto/auszahlen?kontoID=${this.kontoID}&betrag=${betrag}`, {}).subscribe((response) => {
       console.log("Auszahlen erfolgreich:", response);
       this.loadKontostand();
-      this.loadTransactions();
+      this.loadZahlungen();
     }, (error) => {
       console.error("Fehler bei der Einzahlung:", error);
     });

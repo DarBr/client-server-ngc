@@ -37,7 +37,7 @@ export class EinzahlenDialogComponent {
       const url = `http://localhost:8080/konto/einzahlen?kontoID=${this.kontoID}&betrag=${betrag}`;
       http://localhost:8080/konto/einzahlen?depotID=702&betrag=12
       this.http.put(url, {}, {responseType: 'text'}).subscribe(response => {
-        if (response === 'Aktie erfolgreich verkauft!') {
+        if (response === 'Einzahlung erfolgreich!') {
           this.rueckgabe = response;
           this.isLoading = false;
           this.dialogRef.close(this.rueckgabe);
