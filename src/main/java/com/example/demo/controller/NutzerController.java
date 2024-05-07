@@ -2,6 +2,7 @@ package com.example.demo.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import com.example.demo.config.JwtUtil;
@@ -48,14 +49,7 @@ public class NutzerController {
     //Nutzer login überprüfen
     @GetMapping("/login")
     public ResponseEntity<?> login(@RequestParam String username, @RequestParam String password) {
-        Nutzer nutzer = nutzerService.getNutzerByUsername(username);
-
-        if (nutzer != null && nutzer.getPassword().equals(password)) {
-            String token = jwtUtil.generateToken(nutzer);
-            return ResponseEntity.ok(token);
-        } else {
-            return ResponseEntity.ok("Login fehlgeschlagen");
-        }
+        return ResponseEntity.ok(nutzerService.loginNutzer(username, password));
     }
 
     //Nutzer login überprüfen
@@ -111,5 +105,11 @@ public class NutzerController {
         } else {
             return ResponseEntity.ok(0);
         }
+    }
+
+    //Password des Nutzers ändern
+    @PostMapping("/changePassword")
+    public ResponseEntity<?> changePassword(@RequestParam String username, @RequestParam String password, @RequestParam String newPassword) {
+        return ResponseEntity.ok(nutzerService.changePassword(username, password, newPassword));
     }
 }

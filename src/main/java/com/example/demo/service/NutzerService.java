@@ -1,6 +1,8 @@
 package com.example.demo.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -22,6 +24,8 @@ public class NutzerService {
     @Autowired
     private JwtUtil jwtUtil;
 
+    private BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+
     public Nutzer saveNutzer(Nutzer nutzer) {
 
         if (checkUserExists(nutzer.getUsername())) {
@@ -37,7 +41,9 @@ public class NutzerService {
             // Setzen Sie die Konto-ID im Nutzerobjekt
             nutzer.setKontoID(id);
             nutzer.setDepotID(id);
-
+            // Hash the password
+            String hashedPassword = passwordEncoder.encode(nutzer.getPassword());
+            nutzer.setPassword(hashedPassword);
             // Speichern Sie den Nutzer mit der zugewiesenen Konto-ID
             return nutzerRepository.save(nutzer);
         }
@@ -93,6 +99,30 @@ public class NutzerService {
             return nutzer.getDepotID();
         } else {
             return 0;
+        }
+    }
+
+    //Login des Nutzers
+    public String loginNutzer(String username, String password){
+        Nutzer nutzer = getNutzerByUsername(username);
+        if (nutzer != null && passwordEncoder.matches(password, nutzer.getPassword())) {
+            String token = jwtUtil.generateToken(nutzer);
+            return token;
+        } else {
+            return "Login fehlgeschlagen";
+        }
+    }
+
+    //Password des Nutzers ändern
+    public String changePassword(String username, String password, String newPassword) {
+        Nutzer nutzer = getNutzerByUsername(username);
+        if (passwordEncoder.matches(password, nutzer.getPassword())) {
+            String hashedPassword = passwordEncoder.encode(newPassword);
+            nutzer.setPassword(hashedPassword);
+            nutzerRepository.save(nutzer);
+            return "Passwort erfolgreich geändert";
+        } else {
+            return "Passwort konnte nicht geändert werden";
         }
     }
 }
