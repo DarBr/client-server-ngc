@@ -21,7 +21,7 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
             .authorizeHttpRequests(requests -> requests
-                .requestMatchers("/nutzer/**", "/nutzer/login", "/konto/**", "/konto/speichern", "/konto/einzahlen", "/depot/**", "/depot/kaufen", "/transaktionen/**", "/zahlungen/**")
+                .requestMatchers("/nutzer/**")
                 .permitAll()
                 .anyRequest().authenticated())
             .addFilterBefore(jwtAuthenticationFilter, BasicAuthenticationFilter.class)
