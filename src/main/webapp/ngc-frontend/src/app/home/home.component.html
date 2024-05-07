@@ -1,6 +1,9 @@
 <div class="broker-container">
   <h2> <i class="fa-solid fa-money-bill-transfer"></i> Depotübersicht </h2>
-  <p>In diesem Bereich finden Sie eine Auflistung Ihrer aktuellen Depotpositionen. Sortieren Sie die Spalten individuell, indem Sie auf den Spaltennamen klicken.<br> Um Detailinformationen zu einer bestimmten Aktie zu erhalten, klicken Sie einfach auf die entsprechende Aktienposition.</p>
+
+  <p>In diesem Bereich finden Sie eine Auflistung Ihrer aktuellen Depotpositionen. Sortieren Sie die Spalten
+    individuell, indem Sie auf den Spaltennamen klicken.<br> Um Detailinformationen zu einer bestimmten Aktie zu
+    erhalten, klicken Sie einfach auf die entsprechende Aktienposition.</p>
 
   <div *ngIf="isLoading" class="loading-spinner">
     <i class="fa fa-spinner fa-spin"></i>
@@ -44,7 +47,8 @@
               </span>
             </td>
             <td>
-              <button class="sell-button" (click)="openVerkaufenPopup(item); $event.stopPropagation()">Aktie verkaufen</button>
+              <button class="sell-button" (click)="openVerkaufenPopup(item); $event.stopPropagation()">Aktie
+                verkaufen</button>
             </td>
           </tr>
           <tr *ngIf="item.showDetails" class="details-row">
@@ -88,7 +92,18 @@
 
         </ng-container>
       </tbody>
+      
+
+        <tr>
+          <td colspan="3"><strong style="margin-left: 10px;">CASH</strong></td>
+          <td colspan="4">{{this.kontostand}}$</td>
+        </tr>
+
+      
+      
+
       <tfoot>
+        
         <tr>
           <td colspan="4">Gesamtveränderung</td>
           <td>{{ totalChangeTotal() }}$</td>

@@ -35,6 +35,7 @@ export class HomeComponent implements OnInit {
   userID: number = 0;
   marketStatus: string = '';
   depotID: number = 0;
+  kontoID: number = 0;
   depots: any[] = [];
   keineDepots = false;
   isLoading = true;
@@ -42,6 +43,7 @@ export class HomeComponent implements OnInit {
   sortAscending: boolean = true;
   kontostand: number = 0;
   portfolioDistributionChart: Chart<'pie', number[], string> | null = null;
+https: any;
 
   constructor(private http: HttpClient, private authService: AuthService, private dialog: MatDialog) { }
 
@@ -51,23 +53,34 @@ export class HomeComponent implements OnInit {
       this.loadDepotData(() => {
         this.calculatePortfolioValue();
         this.createPortfolioDistributionChart();
+        this.loadKontostand();
+       
       });
     });
+   
   }
+
+
+
 
   loadUserIDs(callback: () => void) {
     const token = this.authService.getToken();
     if (token !== null && token !== '') {
       forkJoin([
         this.authService.getUserIDFromToken(token),
-        this.authService.getDepotIDFromToken(token)
-      ]).subscribe(([userID, depotID]) => {
+        this.authService.getDepotIDFromToken(token),
+        this.authService.getKontoIDFromToken(token)
+      ]).subscribe(([userID, depotID, kontoID]) => {
         if (userID !== 0 && userID !== null) {
           this.userID = userID;
         }
         if (depotID !== 0 && depotID !== null) {
           this.depotID = depotID;
         }
+        if (kontoID !== 0 && kontoID !== null) {
+          this.kontoID = kontoID;
+        }
+        
         callback();
       });
     }
@@ -129,7 +142,7 @@ export class HomeComponent implements OnInit {
   
       forkJoin(observables).subscribe((updatedDepots) => {
         this.depots = updatedDepots;
-        this.isLoading = false;
+        
         if (this.depots.length === 0) {
           this.keineDepots = true;
         }
@@ -201,6 +214,15 @@ export class HomeComponent implements OnInit {
 
   toggleDetails(item: any): void {
     item.showDetails = !item.showDetails;
+  }
+
+  loadKontostand() {
+    this.http.get<any>(`http://localhost:8080/konto/${this.kontoID}`).subscribe((data) => {
+      this.kontostand = Math.round(data.kontostand * 100) / 100;
+      this.isLoading = false;
+      
+    });
+    
   }
 
 
