@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
+@CrossOrigin("*")
 @RequestMapping("/konto")
 public class KontoController {
 
@@ -42,7 +43,7 @@ public class KontoController {
         kontoService.deleteKonto(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
-    
+
     @PutMapping("/einzahlen")
     public ResponseEntity<Konto> einzahlen(@RequestParam int kontoID, @RequestParam double betrag) {
         kontoService.einzahlen(kontoID, betrag);
