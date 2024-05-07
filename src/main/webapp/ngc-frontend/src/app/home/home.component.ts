@@ -1,6 +1,9 @@
 import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import moment from 'moment-timezone';
+import 'moment/locale/de';
+moment.locale('de');
 import { Observable, catchError, forkJoin, map, tap, throwError } from 'rxjs';
 import {
   Chart,
@@ -32,8 +35,9 @@ Chart.register(PieController, ArcElement, Tooltip, Legend);
 })
 
 export class HomeComponent implements OnInit {
-  userID: number = 0;
   marketStatus: string = '';
+  nextOpenTime: string = '';
+  userID: number = 0;
   depotID: number = 0;
   kontoID: number = 0;
   depots: any[] = [];
@@ -54,6 +58,7 @@ export class HomeComponent implements OnInit {
         this.loadDepotData(() => {
           this.calculatePortfolioValue();
           this.createPortfolioDistributionChart();
+          this.checkMarketStatus();
         });
       });
 
@@ -152,6 +157,34 @@ export class HomeComponent implements OnInit {
       });
     });
   }
+
+  checkMarketStatus() {
+    const apiKey = "co5rfg9r01qv77g7nk90co5rfg9r01qv77g7nk9g";
+    const url = `https://finnhub.io/api/v1/stock/market-status?exchange=US&token=${apiKey}`;
+    this.http.get<any>(url).subscribe({
+      next: (response) => {
+        const nowEST = moment().tz('America/New_York');
+        const openEST = moment().tz('America/New_York').set({ hour: 9, minute: 30, second: 0 });
+        const closeEST = moment().tz('America/New_York').set({ hour: 16, minute: 0, second: 0 });
+
+        if (response.isopen) {
+          this.marketStatus = 'Die Börse ist geöffnet.';
+          this.nextOpenTime = closeEST.clone().tz('Europe/Berlin').format('dddd, D. MMMM YYYY, HH:mm:ss [Uhr]');
+        } else {
+          this.marketStatus = 'Die Börse ist geschlossen.';
+          if (nowEST.isAfter(closeEST)) {
+            openEST.add(1, 'days'); // Zum nächsten Tag wechseln
+          }
+          this.nextOpenTime = openEST.clone().tz('Europe/Berlin').format('dddd, D. MMMM YYYY, HH:mm:ss [Uhr]');
+        }
+      },
+      error: () => {
+        this.marketStatus = 'Fehler beim Laden des Marktstatus.';
+        this.nextOpenTime = 'Zeit nicht verfügbar. Bitte später prüfen.';
+      }
+    });
+  }
+
 
 
   getAktienDetails(isin: string): Observable<any> {
