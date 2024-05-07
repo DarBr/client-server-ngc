@@ -92,21 +92,26 @@
 
         </ng-container>
       </tbody>
-      
 
-        <tr>
-          <td colspan="3"><strong style="margin-left: 10px;">CASH</strong></td>
-          <td colspan="4">{{this.kontostand}}$</td>
-        </tr>
 
-      
-      
-
+      <tr>
+        <td>
+          <div class="logo-container">
+            <img class="logo" src="https://www.shutterstock.com/image-vector/credit-card-vector-icon-isolated-600nw-1177277911.jpg" alt="Cash Icon">
+            <span class="name">CASH</span>
+          </div>
+        </td>
+        <td></td> <!-- Leer lassen für die Anzahl -->
+        <td></td> <!-- Leer lassen für den Einstandspreis -->
+        <td>{{ kontostand}}$</td>
+        <td></td>
+        <td></td> <!-- Leer lassen für die Wertänderung - Prozentual -->
+        <td></td> <!-- Platzhalter für die Handeln-Spalte -->
+      </tr>
       <tfoot>
-        
         <tr>
-          <td colspan="3">Gesamtveränderung</td>
-          <td>{{ calculatePortfolioValue() + kontostand}}$</td>
+          <td colspan="3">Gesamt</td>
+          <td>{{ calculatePortfolioValue()}}$</td>
           <td>{{ totalChangeTotal() }}$</td>
           <td>{{ totalChangeProzent() }}%</td>
           <td></td> <!-- Platzhalter für die Handeln-Spalte -->
@@ -114,8 +119,6 @@
       </tfoot>
     </table>
   </div>
-
-
 
   <div *ngIf="!isLoading&&keineDepots">
     <p>Sie haben noch keine Aktien im Depot.</p>

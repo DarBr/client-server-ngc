@@ -266,7 +266,7 @@ export class HomeComponent implements OnInit {
         totalValue += depot.currentPrice * depot.anzahl;
       }
     });
-    return Math.round(totalValue * 100) / 100; // Runden Sie den Gesamtwert auf zwei Dezimalstellen
+    return Math.round(totalValue + this.kontostand);
   }
 
   sortTable(column: string): void {
