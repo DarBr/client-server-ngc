@@ -7,6 +7,7 @@ import { provideClientHydration } from '@angular/platform-browser';
 import { HTTP_INTERCEPTORS, provideHttpClient } from '@angular/common/http';
 import { JwtInterceptor } from './JwtInterceptor';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
+import { HTTPErrorInterceptor } from './HTTPErrorInterceptor';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -14,6 +15,8 @@ export const appConfig: ApplicationConfig = {
     provideClientHydration(),
     provideHttpClient(),
     { provide: RouteReuseStrategy, useClass: CustomReuseStrategy },
-    { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true }, provideAnimationsAsync()
+    { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true }, 
+    provideAnimationsAsync(),
+    { provide: HTTP_INTERCEPTORS, useClass: HTTPErrorInterceptor, multi: true }
   ]
 };

@@ -9,17 +9,18 @@ import { AppComponent } from './app.component';
 export class AuthGuard implements CanActivate {
   constructor(private authService: AuthService, private router: Router) {}
 
-  canActivate(): boolean {
+  async canActivate(): Promise<boolean> {
     const token = this.authService.getToken();
     if (token === null) {
       this.router.navigate(['login']);
       return false;
     }
-    if (!this.authService.validateToken(token)) {
+    const isValid = await this.authService.validateToken(token);
+    if (!isValid) {
       this.router.navigate(['login']);
+      this.authService.deleteToken();
       return false;
     }
-    
     return true;
   }
 }
