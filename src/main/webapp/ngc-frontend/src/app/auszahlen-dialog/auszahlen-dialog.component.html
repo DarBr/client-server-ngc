@@ -1,7 +1,7 @@
 <div class="verkaufenPopup">
-    <h2 mat-dialog-title><b>Einzahlung</b></h2>
+    <h2 mat-dialog-title><b>Auszahlung</b></h2>
     <mat-dialog-content>
-        <p>Geben Sie den Betrag ein, den sie einzahlen möchten.</p>
+        <p>Geben Sie den Betrag ein, den sie auszahlen möchten.</p>
     </mat-dialog-content>
     <mat-form-field id="inputAnzahlFormField">
         <input id="anzahlInput" matInput type="number" min="0" step="1" placeholder="Geben Sie den Betrag ein" [(ngModel)]="betrag" maxlength="5" pattern="[0-9]*">
@@ -15,6 +15,6 @@
     </mat-dialog-content>
     <mat-dialog-actions>
         <button mat-button mat-dialog-close>Abbrechen</button>
-        <button mat-button (click)="einzahlen(betrag)">Einzahlen</button>
+        <button mat-button (click)="einzahlen(betrag)">Auszahlen</button>
     </mat-dialog-actions>
 </div>

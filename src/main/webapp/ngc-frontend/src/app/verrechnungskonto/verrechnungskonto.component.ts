@@ -6,6 +6,7 @@ import { AuthService } from '../AuthService';
 import { forkJoin } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
 import { EinzahlenDialogComponent } from '../einzahlen-dialog/einzahlen-dialog.component';
+import { AuszahlenDialogComponent } from '../auszahlen-dialog/auszahlen-dialog.component';
 
 
 @Component({
@@ -100,6 +101,23 @@ export class VerrechnungskontoComponent implements OnInit {
 
   openEinzahlenPopup() {
     const dialogRef = this.dialog.open(EinzahlenDialogComponent, {
+      data: {
+        kontoID: this.kontoID
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log(result);
+      this.isLoading = true;
+      this.loadKontostand();
+      this.loadZahlungen();
+      this.isLoading = false;
+
+    });
+  }
+
+  openAuszahlenPopup() {
+    const dialogRef = this.dialog.open(AuszahlenDialogComponent, {
       data: {
         kontoID: this.kontoID
       }
