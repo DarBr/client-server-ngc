@@ -43,21 +43,22 @@ export class HomeComponent implements OnInit {
   sortAscending: boolean = true;
   kontostand: number = 0;
   portfolioDistributionChart: Chart<'pie', number[], string> | null = null;
-https: any;
+  https: any;
 
   constructor(private http: HttpClient, private authService: AuthService, private dialog: MatDialog) { }
 
   ngOnInit() {
 
     this.loadUserIDs(() => {
-      this.loadDepotData(() => {
-        this.calculatePortfolioValue();
-        this.createPortfolioDistributionChart();
-        this.loadKontostand();
-       
+      this.loadKontostand(() => {
+        this.loadDepotData(() => {
+          this.calculatePortfolioValue();
+          this.createPortfolioDistributionChart();
+        });
       });
+
     });
-   
+
   }
 
 
@@ -80,7 +81,7 @@ https: any;
         if (kontoID !== 0 && kontoID !== null) {
           this.kontoID = kontoID;
         }
-        
+
         callback();
       });
     }
@@ -89,11 +90,11 @@ https: any;
   loadDepotData(callback: () => void) {
     this.depots = [];
     this.isLoading = true;
-  
+
     this.http.get<any[]>(`http://localhost:8080/depot/${this.depotID}`).pipe(
       catchError((error: HttpErrorResponse) => {
         this.isLoading = false;
-  
+
         if (error.status === 404) {
           this.keineDepots = true;
         }
@@ -102,7 +103,7 @@ https: any;
       })
     ).subscribe((data) => {
       const depots = data;
-  
+
       const observables = depots.map(depot => {
         return forkJoin([
           this.getAktienDetails(depot.isin),
@@ -120,7 +121,7 @@ https: any;
             depot.d = Math.round(aktienDetails.d * 100) / 100;
             depot.dp = Math.round(aktienDetails.dp * 100) / 100;
 
-            
+
             // Aktualisieren der Depotdetails mit Stockprofile-Informationen
             depot.country = stockProfile.country;
             depot.currency = stockProfile.currency;
@@ -134,23 +135,24 @@ https: any;
             depot.shareOutstanding = stockProfile.shareOutstanding;
             depot.ticker = stockProfile.ticker;
             depot.weburl = stockProfile.weburl;
-  
+
             return depot;
           })
         );
       });
-  
+
       forkJoin(observables).subscribe((updatedDepots) => {
         this.depots = updatedDepots;
-        
+        this.isLoading = false;
         if (this.depots.length === 0) {
           this.keineDepots = true;
+
         }
         callback();
       });
     });
   }
-  
+
 
   getAktienDetails(isin: string): Observable<any> {
     const apiKey = "co5rfg9r01qv77g7nk90co5rfg9r01qv77g7nk9g";
@@ -160,9 +162,9 @@ https: any;
   }
 
   getStockProfile(symbol: string): Observable<any> {
-    const apiKey = "co5rfg9r01qv77g7nk90co5rfg9r01qv77g7nk9g"; 
+    const apiKey = "co5rfg9r01qv77g7nk90co5rfg9r01qv77g7nk9g";
     const url = `https://finnhub.io/api/v1/stock/profile2?symbol=${symbol}&token=${apiKey}`;
-  
+
     return this.http.get<any>(url).pipe(
       map(response => {
         if (response) {
@@ -189,7 +191,7 @@ https: any;
       })
     );
   }
-  
+
 
 
   getLogo(isin: string): Observable<string> {
@@ -216,13 +218,15 @@ https: any;
     item.showDetails = !item.showDetails;
   }
 
-  loadKontostand() {
+  loadKontostand(callback: () => void) {
     this.http.get<any>(`http://localhost:8080/konto/${this.kontoID}`).subscribe((data) => {
       this.kontostand = Math.round(data.kontostand * 100) / 100;
       this.isLoading = false;
-      
+      callback();
     });
-    
+
+   
+
   }
 
 
