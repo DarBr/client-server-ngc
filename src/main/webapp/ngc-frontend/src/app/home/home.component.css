@@ -1,22 +1,26 @@
 @import "@fortawesome/fontawesome-free/css/all.css";
 
 
-
 .market-status-box {
-  padding: 5px 10px;
-  background-color: #e0f7fa;
-  border-radius: 10px;
-  border: 1px solid #bce0e6;
-  display: inline-block;
+  padding: 20px;
+  background-color: #f8f8f8;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   margin-bottom: 20px;
-  margin-left: auto;
-  margin-right: auto;
   text-align: center;
-  color: #333;
-  white-space: nowrap;
-  font-weight: bold;
-  /* Added font-weight property */
 }
+
+.market-status-box h2 {
+  margin-bottom: 5px;
+  color: #244467;
+  font-weight: bold;
+}
+
+.market-status-box p {
+  margin: 0;
+  color: #333;
+}
+
 
 .table-transaktionen {
   width: 100%;
