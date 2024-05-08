@@ -19,6 +19,7 @@ export class LoginComponent {
   isLoggedIn: boolean = false;
   username: string = '';
   password: string = '';
+  startBudget: number = 0;
   errorMessage: string = '';
   formSubmitted: boolean = false;
   successMessage: string = '';
@@ -46,16 +47,16 @@ export class LoginComponent {
 
   onRegister() {
     this.formSubmitted = true;
-    if (!this.username || !this.password) {
+    if (!this.username || !this.password || this.startBudget<1) {
       return;
     }
     this.errorMessage = '';
     this.successMessage = '';
     const url = 'http://localhost:8080/nutzer/add';
-    const params = {
-      username: this.username,
-      password: this.password
-    };
+    const params = new HttpParams()
+      .set('username', this.username)
+      .set('password', this.password)
+      .set('startBudget', this.startBudget);
 
 
     this.http.post(url, params).subscribe(response => {
@@ -66,6 +67,7 @@ export class LoginComponent {
         this.successMessage = 'Benutzer wurde erfolgreich angelegt. Sie können sich jetzt einloggen.';
         this.username = '';
         this.password = '';
+        this.startBudget = 0;
         this.formSubmitted = false;
       }
     });

@@ -14,7 +14,8 @@
 }
 
 .login-form input[type="text"],
-.login-form input[type="password"] {
+.login-form input[type="password"],
+.login-form input[type="number"] {
     width: 100%;
     padding: 1.5vh;
     margin-bottom: 1.5vh;

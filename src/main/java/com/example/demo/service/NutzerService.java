@@ -26,23 +26,25 @@ public class NutzerService {
 
     private BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
-    public Nutzer saveNutzer(Nutzer nutzer) {
+    public Nutzer saveNutzer(String username, String password, double startBudget) {
 
-        if (checkUserExists(nutzer.getUsername())) {
+        if (checkUserExists(username)) {
             System.err.println("Nutzer existiert bereits");
             return null;
             
         } else {
             // Hier wird ein neues Konto für den Nutzer erstellt und gespeichert
             Konto konto = new Konto();
-            konto.setKontostand(1000.0); // Setzen Sie den Anfangskontostand nach Bedarf
+            konto.setKontostand(startBudget); // Setzen Sie den Anfangskontostand nach Bedarf
             konto = kontoRepository.save(konto); // Das Konto wird gespeichert, um seine ID zu erhalten
             int id = konto.getKontoID();
+            Nutzer nutzer = new Nutzer();
             // Setzen Sie die Konto-ID im Nutzerobjekt
+            nutzer.setUsername(username);
             nutzer.setKontoID(id);
             nutzer.setDepotID(id);
             // Hash the password
-            String hashedPassword = passwordEncoder.encode(nutzer.getPassword());
+            String hashedPassword = passwordEncoder.encode(password);
             nutzer.setPassword(hashedPassword);
             // Speichern Sie den Nutzer mit der zugewiesenen Konto-ID
             return nutzerRepository.save(nutzer);

@@ -24,8 +24,8 @@ public class NutzerController {
     
     // Nutzer hinzufügen
     @PostMapping("/add")
-    public Nutzer erstelleNutzer(@RequestBody Nutzer nutzer) {
-        return nutzerService.saveNutzer(nutzer);
+    public Nutzer erstelleNutzer(@RequestParam String username, @RequestParam String password, @RequestParam double startBudget) {
+        return nutzerService.saveNutzer(username, password, startBudget);
     }
 
     //Alle Nutzer abrufen

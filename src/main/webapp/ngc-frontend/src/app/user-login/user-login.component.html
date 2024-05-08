@@ -23,9 +23,11 @@
                 <form class="login-form">
                     <input type="text" name="username" [(ngModel)]="username" placeholder="Username" required>
                     <input type="password" name="password" [(ngModel)]="password" placeholder="Password" required>
+                    <p>Wie viel Startguthaben möchten sie einzahlen? (min. 1$)</p>
+                    <input type="number" name="startBudget" [(ngModel)]="startBudget" required>
                     <button type="submit" (click)="onRegister()">Registrieren</button>
                 </form>
-                <p *ngIf="(!username || !password) && formSubmitted" class="error-message">Bitte füllen Sie beide Felder aus.</p>
+                <p *ngIf="(!username || !password || startBudget<1) && formSubmitted" class="error-message">Bitte füllen Sie alle Felder korrekt aus.</p>
                 <p class="error-message" *ngIf="errorMessage">{{ errorMessage }}</p>
                 <p class="sucess-message" *ngIf="successMessage">{{ successMessage }}</p>
             </div>
