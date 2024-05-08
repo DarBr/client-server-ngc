@@ -7,26 +7,30 @@
     <i class="fa fa-spinner fa-spin"></i>
   </div>
   <div *ngIf="!isLoading">
-    <p style="font-size: larger; font-weight: bold;">{{calculatePortfolioValue() | number}}$ | {{depots.length + 1}} Depotpositionen: {{depots.length}} Aktien, 1 CASH</p>
+    <p style="font-size: larger; font-weight: bold;">{{calculatePortfolioValue() | number}}$ | {{depots.length }} Depotpositionen: {{depots.length - 1}} Aktien, 1 CASH</p>
   </div>
 
 </div>
 
+<!-- Broker-Container -->
 <div class="broker-container">
   <h2> <i class="fa-solid fa-money-bill-transfer"></i> Depotübersicht </h2>
 
+  <!-- Paragraph -->
   <p>In diesem Bereich finden Sie eine Auflistung Ihrer aktuellen Depotpositionen. Sortieren Sie die Spalten
     individuell, indem Sie auf den Spaltennamen klicken.<br> Um Detailinformationen zu einer bestimmten Aktie zu
     erhalten, klicken Sie einfach auf die entsprechende Aktienposition.</p>
 
-
-
+  <!-- Loading Spinner -->
   <div *ngIf="isLoading" class="loading-spinner">
     <i class="fa fa-spinner fa-spin"></i>
   </div>
 
+  <!-- Wenn nicht geladen und keine Depots vorhanden -->
   <div *ngIf="!isLoading && !keineDepots">
+    <!-- Tabelle -->
     <table class="table-transaktionen">
+      <!-- Tabellenkopf -->
       <thead>
         <tr>
           <th (click)="sortTable('isin')">Aktie</th>
@@ -37,95 +41,127 @@
           <th (click)="sortTable('changeProzent')">Wertänderung - Prozentual</th>
           <th>Handeln</th>
         </tr>
-      </thead>
-      <tbody>
-        <ng-container *ngFor="let item of depots">
-          <tr (click)="toggleDetails(item)">
-            <td>
-              <div class="logo-container">
-                <img class="logo" [src]="item.logo" alt="Logo">
-                <span class="name">{{ item.isin }}</span>
-              </div>
-            </td>
-            <td>{{ item.anzahl }}</td>
-            <td>{{ item.einstandspreis }}$</td>
-            <td>{{ item.currentPrice }}$</td>
-            <td>{{ item.changeTotal}}$</td>
-            <td>
-              <span class="change-cell">
-                <i class="fas"
-                  [ngClass]="{'fa-arrow-trend-up': item.changeProzent > 0, 'fa-arrow-trend-down': item.changeProzent < 0}"
-                  [ngStyle]="{'color': item.changeProzent > 0 ? 'green' : (item.changeProzent < 0 ? 'red' : 'black'), 'margin-right': '5px'}"></i>
-                <span class="change-text"
-                  [ngClass]="{'positive': item.changeProzent > 0, 'negative': item.changeProzent < 0}">
-                  {{ item.changeProzent }}%
-                </span>
-              </span>
-            </td>
-            <td>
-              <button class="sell-button" (click)="openVerkaufenPopup(item); $event.stopPropagation()">Aktie
-                verkaufen</button>
-            </td>
-          </tr>
-          <tr *ngIf="item.showDetails" class="details-row">
-            <td colspan="7">
-              <div class="details-container">
-                <h4> <i class="fa-solid fa-circle-info"></i> {{item.isin}} - Detailinformationen</h4>
-                <div class="detail-row">
-                  <div class="detail">
-                    <span class="label">Aktueller Preis: </span>
-                    <span class="value">{{ item.currentPrice }}$</span>
+        <tbody>
+          <!-- Schleife durch die Depotpositionen -->
+          <ng-container *ngFor="let item of depots">
+            <!-- Überprüfe, ob das Element nicht "CASH" ist -->
+            <ng-container *ngIf="item.isin !== 'CASH'; else cashRow">
+              <!-- Normale Tabellenzeile ohne Verkaufsbutton für "CASH" -->
+              <tr (click)="toggleDetails(item)">
+                <!-- Aktie -->
+                <td>
+                  <div class="logo-container">
+                    <img class="logo" [src]="item.logo" alt="Logo">
+                    <span class="name">{{ item.isin }}</span>
                   </div>
-                  <div class="detail">
-                    <span class="label">Absolute Änderung: </span>
-                    <span class="value">{{ item.d }}$</span>
+                </td>
+                <!-- Anzahl -->
+                <td>{{ item.anzahl }}</td>
+                <!-- Einstandspreis -->
+                <td>{{ item.einstandspreis }}$</td>
+                <!-- Aktueller Wert -->
+                <td>{{ item.currentPrice }}$</td>
+                <!-- Wertänderung - Total -->
+                <td>{{ item.changeTotal}}$</td>
+                <!-- Wertänderung - Prozentual -->
+                <td>
+                  <span class="change-cell">
+                    <i class="fas"
+                      [ngClass]="{'fa-arrow-trend-up': item.changeProzent > 0, 'fa-arrow-trend-down': item.changeProzent < 0}"
+                      [ngStyle]="{'color': item.changeProzent > 0 ? 'green' : (item.changeProzent < 0 ? 'red' : 'black'), 'margin-right': '5px'}"></i>
+                    <span class="change-text"
+                      [ngClass]="{'positive': item.changeProzent > 0, 'negative': item.changeProzent < 0}">
+                      {{ item.changeProzent }}%
+                    </span>
+                  </span>
+                </td>
+                <!-- Handeln -->
+                <td>
+                  <button class="sell-button" (click)="openVerkaufenPopup(item); $event.stopPropagation()">Aktie
+                    verkaufen</button>
+                </td>
+              </tr>
+              <!-- Detail-Row -->
+              <tr *ngIf="item.showDetails" class="details-row">
+                <td colspan="7">
+                  <div class="details-container">
+                    <h4> <i class="fa-solid fa-circle-info"></i> {{item.isin}} - Detailinformationen</h4>
+                    <div class="detail-row">
+                      <div class="detail">
+                        <span class="label">Aktueller Preis: </span>
+                        <span class="value">{{ item.currentPrice }}$</span>
+                      </div>
+                      <div class="detail">
+                        <span class="label">Absolute Änderung: </span>
+                        <span class="value">{{ item.d }}$</span>
+                      </div>
+                    </div>
+                    <div class="detail-row">
+                      <div class="detail">
+                        <span class="label">Tageshöchstpreis: </span>
+                        <span class="value">{{ item.h }}$</span>
+                      </div>
+                      <div class="detail">
+                        <span class="label">Prozentuale Änderung: </span>
+                        <span class="value">{{ item.dp }}%</span>
+                      </div>
+                    </div>
+                    <div class="detail-row">
+                      <div class="detail">
+                        <span class="label">Tagestiefstpreis: </span>
+                        <span class="value">{{ item.l }}$</span>
+                      </div>
+                      <div class="detail">
+                        <span class="label">Markt: </span>
+                        <span class="value">{{ item.exchange }}</span>
+                      </div>
+                    </div>
+                    <div class="detail-row">
+                      <div class="detail">
+                        <span class="label">Währung: </span>
+                        <span class="value">{{ item.currency }}</span>
+                      </div>
+                      <div class="detail">
+                        <span class="label">Land: </span>
+                        <span class="value">{{ item.country }}</span>
+                      </div>
+                    </div>
+                    <div class="detail-row">
+                      <div class="detail">
+                        <span class="label">Ticker: </span>
+                        <span class="value">{{ item.ticker }}</span>
+                      </div>
+                      <div class="detail">
+                        <span class="label">Website: </span>
+                        <span class="value">{{ item.weburl }}</span>
+                      </div>
+                    </div>
                   </div>
-                </div>
-                <div class="detail-row">
-                  <div class="detail">
-                    <span class="label">Tageshöchstpreis: </span>
-                    <span class="value">{{ item.h }}$</span>
+                </td>
+              </tr>
+            </ng-container>
+            <!-- Cash-Row -->
+            <ng-template #cashRow>
+              <tr>
+                <td>
+                  <div class="logo-container">
+                    <img class="logo" [src]="item.logo" alt="Logo">
+                    <span class="name">{{ item.isin }}</span>
                   </div>
-                  <div class="detail">
-                    <span class="label">Prozentuale Änderung: </span>
-                    <span class="value">{{ item.dp }}%</span>
-                  </div>
-                </div>
-                <div class="detail-row">
-                  <div class="detail">
-                    <span class="label">Tagestiefpreis: </span>
-                    <span class="value">{{ item.l }}$</span>
-                  </div>
-                  <div class="detail">
-                    <span class="label">Industrie: </span>
-                    <span class="value">{{ item.finnhubIndustry }}</span>
-                  </div>
-                </div>
-              </div>
-            </td>
-          </tr>
-
-
-        </ng-container>
-      </tbody>
-
-
-      <tr>
-        <td>
-          <div class="logo-container">
-            <img class="logo"
-              src="assets/credit-card-vector-icon-isolated-600nw-1177277911.webp"
-              alt="Cash Icon">
-            <span class="name">CASH</span>
-          </div>
-        </td>
-        <td></td> <!-- Leer lassen für die Anzahl -->
-        <td></td> <!-- Leer lassen für den Einstandspreis -->
-        <td>{{ kontostand}}$</td>
-        <td></td>
-        <td></td> <!-- Leer lassen für die Wertänderung - Prozentual -->
-        <td></td> <!-- Platzhalter für die Handeln-Spalte -->
-      </tr>
+                </td>
+                <td>{{ item.anzahl }}</td>
+                <td>-</td>
+                <td>{{ item.currentPrice }}$</td>
+                <td>-</td>
+                <td>-</td>
+                <td>-</td>
+              </tr>
+             
+            </ng-template>
+          </ng-container>
+        </tbody>
+        
+      <!-- Tabellenfuß -->
       <tfoot>
         <tr>
           <td colspan="3">Gesamt</td>
@@ -138,7 +174,8 @@
     </table>
   </div>
 
-  <div *ngIf="!isLoading&&keineDepots">
+  <!-- Wenn nicht geladen und keine Depots vorhanden -->
+  <div *ngIf="!isLoading && keineDepots">
     <p>Sie haben noch keine Aktien im Depot.</p>
   </div>
 </div>

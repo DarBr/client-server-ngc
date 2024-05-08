@@ -56,6 +56,7 @@ export class HomeComponent implements OnInit {
     this.loadUserIDs(() => {
       this.loadKontostand(() => {
         this.loadDepotData(() => {
+          this.updateChartDataForCash();
           this.calculatePortfolioValue();
           this.createPortfolioDistributionChart();
           this.checkMarketStatus();
@@ -64,6 +65,7 @@ export class HomeComponent implements OnInit {
 
     });
 
+   
   }
 
 
@@ -249,6 +251,7 @@ export class HomeComponent implements OnInit {
 
   toggleDetails(item: any): void {
     item.showDetails = !item.showDetails;
+    console.log(this.depots);
   }
 
   loadKontostand(callback: () => void) {
@@ -299,8 +302,11 @@ export class HomeComponent implements OnInit {
         totalValue += depot.currentPrice * depot.anzahl;
       }
     });
-    return Math.round(totalValue + this.kontostand);
+    return Math.round(totalValue * 100) / 100;
   }
+
+ 
+  
 
   sortTable(column: string): void {
     if (this.sortColumn === column) {
@@ -320,6 +326,31 @@ export class HomeComponent implements OnInit {
       }
       return this.sortAscending ? comparison : comparison * -1;
     });
+
+    // Move CASH to the last position
+    const cashIndex = this.depots.findIndex(depot => depot.isin === 'CASH');
+    if (cashIndex !== -1) {
+      const cashDepot = this.depots.splice(cashIndex, 1)[0];
+      this.depots.push(cashDepot);
+    }
+  }
+
+  updateChartDataForCash() {
+    // Dummy-Objekt für CASH erstellen
+    const cashData = {
+      isin: 'CASH',
+      currentPrice: this.kontostand,
+      anzahl: 1,
+      logo: "assets/credit-card-vector-icon-isolated-600nw-1177277911.webp",
+      einstandspreis: this.kontostand,
+      changeTotal: 0,
+      changeProzent: 0,
+
+    };
+  
+    // Hinzufügen von CASH zu den Portfolio-Daten
+    this.depots.push(cashData);
+    this.createPortfolioDistributionChart();
   }
 
   createPortfolioDistributionChart() {
