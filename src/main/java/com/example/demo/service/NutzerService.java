@@ -118,13 +118,16 @@ public class NutzerService {
     //Password des Nutzers ändern
     public String changePassword(String username, String password, String newPassword) {
         Nutzer nutzer = getNutzerByUsername(username);
+        if(nutzer == null){
+            return "Nutzer existiert nicht";
+        }
         if (passwordEncoder.matches(password, nutzer.getPassword())) {
             String hashedPassword = passwordEncoder.encode(newPassword);
             nutzer.setPassword(hashedPassword);
             nutzerRepository.save(nutzer);
             return "Passwort erfolgreich geändert";
         } else {
-            return "Passwort konnte nicht geändert werden";
+            return "Das aktuelle Passwort ist falsch";
         }
     }
 }

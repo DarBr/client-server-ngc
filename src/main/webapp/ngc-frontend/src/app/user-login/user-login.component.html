@@ -23,7 +23,7 @@
                 <form class="login-form">
                     <input type="text" name="username" [(ngModel)]="username" placeholder="Username" required>
                     <input type="password" name="password" [(ngModel)]="password" placeholder="Password" required>
-                    <p>Wie viel Startguthaben möchten sie einzahlen? (min. 1$)</p>
+                    <p>Wie viel Startguthaben möchten Sie einzahlen? (min. 1$)</p>
                     <input type="number" name="startBudget" [(ngModel)]="startBudget" required>
                     <button type="submit" (click)="onRegister()">Registrieren</button>
                 </form>
@@ -35,7 +35,8 @@
     </div>
 </div>
 <div class="logout-container" *ngIf="isLoggedIn">
-    <h1>Logout</h1>
-    <p>Sie sind bereits eingeloggt.</p>
+    <h1>Profil-Übersicht</h1>
+    <p><b>Username:</b> {{ showUsername }}</p>
+    <button type="submit" id="changePasswordButton" (click)="openChangePasswordDialog()">Passwort ändern</button>
     <button type="submit" (click)="onLogout()">Logout</button>
 </div>

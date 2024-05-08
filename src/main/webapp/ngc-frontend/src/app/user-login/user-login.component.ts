@@ -6,7 +6,8 @@ import { Observable } from 'rxjs/internal/Observable';
 import { AuthService } from '../AuthService';
 import { Router } from '@angular/router';
 import { AppComponent } from '../app.component';
-import { HomeComponent } from '../home/home.component';
+import { MatDialog } from '@angular/material/dialog';
+import { ChangePasswordDialogComponent } from '../change-password-dialog/change-password-dialog.component';
 
 @Component({
   selector: 'app-user-login',
@@ -21,11 +22,12 @@ export class LoginComponent {
   password: string = '';
   startBudget: number = 0;
   errorMessage: string = '';
+  showUsername: string = '';
   formSubmitted: boolean = false;
   successMessage: string = '';
   activeTab: string = 'login';
 
-  constructor(private http: HttpClient, private authService: AuthService, private router: Router, private appComponent: AppComponent) { }
+  constructor(private http: HttpClient, private authService: AuthService, private router: Router, private appComponent: AppComponent, private dialog: MatDialog) { }
 
   async ngOnInit() {
     this.appComponent.ngOnInit();
@@ -34,6 +36,7 @@ export class LoginComponent {
       const validation = await this.authService.validateToken(token);
       if (validation === true) {
         this.isLoggedIn = true;
+        this.showUsername = (await this.authService.getUsernameFromToken(token)) ?? '';
       }
     }
   }
@@ -96,6 +99,22 @@ export class LoginComponent {
         this.password = '';
         this.router.navigate(['/']);
         this.appComponent.ngOnInit();     
+      }
+    });
+  }
+
+  openChangePasswordDialog() {
+    const dialogRef = this.dialog.open(ChangePasswordDialogComponent, {
+      data: {
+        username: this.showUsername
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if(result === 'Passwort erfolgreich geändert') {
+        this.authService.deleteToken();
+        this.isLoggedIn = false;
+        this.ngOnInit();
       }
     });
   }

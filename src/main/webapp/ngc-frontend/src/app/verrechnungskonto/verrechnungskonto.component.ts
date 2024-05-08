@@ -12,7 +12,7 @@ import { AuszahlenDialogComponent } from '../auszahlen-dialog/auszahlen-dialog.c
 @Component({
   selector: 'app-verrechnungskonto',
   standalone: true,
-  imports: [CommonModule, FormsModule,],
+  imports: [CommonModule, FormsModule],
   templateUrl: './verrechnungskonto.component.html',
   styleUrl: './verrechnungskonto.component.css'
 })
