@@ -7,7 +7,7 @@
     <i class="fa fa-spinner fa-spin"></i>
   </div>
   <div *ngIf="!isLoading">
-    <p style="font-size: larger; font-weight: bold;">{{calculatePortfolioValue() | number}}$ | {{depots.length}} Depotpositionen</p>
+    <p style="font-size: larger; font-weight: bold;">{{calculatePortfolioValue() | number}}$ | {{depots.length + 1}} Depotpositionen: {{depots.length}} Aktien, 1 CASH</p>
   </div>
 
 </div>
