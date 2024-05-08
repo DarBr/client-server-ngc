@@ -56,7 +56,7 @@ export class HomeComponent implements OnInit {
     this.loadUserIDs(() => {
       this.loadKontostand(() => {
         this.loadDepotData(() => {
-          this.updateChartDataForCash();
+
           this.calculatePortfolioValue();
           this.createPortfolioDistributionChart();
           this.checkMarketStatus();
@@ -65,7 +65,7 @@ export class HomeComponent implements OnInit {
 
     });
 
-   
+
   }
 
 
@@ -261,7 +261,7 @@ export class HomeComponent implements OnInit {
       callback();
     });
 
-   
+
 
   }
 
@@ -305,8 +305,8 @@ export class HomeComponent implements OnInit {
     return Math.round(totalValue * 100) / 100;
   }
 
- 
-  
+
+
 
   sortTable(column: string): void {
     if (this.sortColumn === column) {
@@ -335,75 +335,84 @@ export class HomeComponent implements OnInit {
     }
   }
 
-  updateChartDataForCash() {
-     this.loadKontostand(() => {
+  addCashToDepot(callback: () => void) {
+    this.loadKontostand(() => {
         // Dummy-Objekt für CASH erstellen
         const cashData = {
-          isin: 'CASH',
-          currentPrice: this.kontostand,
-          anzahl: 1,
-          logo: "assets/credit-card-vector-icon-isolated-600nw-1177277911.webp",
-          einstandspreis: this.kontostand,
-          changeTotal: 0,
-          changeProzent: 0,
+            isin: 'CASH',
+            currentPrice: this.kontostand,
+            anzahl: 1,
+            logo: "assets/credit-card-vector-icon-isolated-600nw-1177277911.webp",
+            einstandspreis: this.kontostand,
+            changeTotal: 0,
+            changeProzent: 0,
         };
-      
+
         // Hinzufügen von CASH zu den Portfolio-Daten
         this.depots.push(cashData);
-     });
-    this.createPortfolioDistributionChart();
-  }
+
+        // Aufruf der Callback-Funktion, um anzuzeigen, dass das CASH erfolgreich hinzugefügt wurde
+        callback();
+    });
+}
+
 
   createPortfolioDistributionChart() {
-    if (!this.isLoading && this.depots.length && !this.keineDepots) {
-      const labels = this.depots.map(depot => depot.isin);
-      const data = this.depots.map(depot => Math.round((depot.currentPrice || 0) * (depot.anzahl || 0) * 100) / 100);
-      const backgroundColors = this.generateBackgroundColors(data.length);
-      const borderColors = this.generateBorderColors(data.length);
+    this.addCashToDepot(() => {
+        // Der weitere Code wird erst ausgeführt, wenn das CASH erfolgreich zum Depot hinzugefügt wurde
 
-      const chartData: ChartData<'pie', number[], string> = {
-        labels: labels,
-        datasets: [{
-          label: 'Portfolio Distribution',
-          data: data,
-          backgroundColor: backgroundColors,
-          borderColor: borderColors,
-          borderWidth: 1
-        }]
-      };
+        console.log(this.depots);
 
-      const config: ChartConfiguration<'pie', number[], string> = {
-        type: 'pie',
-        data: chartData,
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          plugins: {
-            tooltip: {
-              callbacks: {
-                label: function (context: TooltipItem<'pie'>) {
-                  const label = context.label || '';
-                  const value = context.parsed || 0;
-                  const total = context.dataset.data.reduce((acc, val) => acc + val, 0);
-                  const percentage = ((value / total) * 100).toFixed(2) + '%';
-                  return `${label}: ${value} (${percentage})`;
-                }
-              }
+        if (!this.isLoading && this.depots.length && !this.keineDepots) {
+            const labels = this.depots.map(depot => depot.isin);
+            const data = this.depots.map(depot => Math.round((depot.currentPrice || 0) * (depot.anzahl || 0) * 100) / 100);
+            const backgroundColors = this.generateBackgroundColors(data.length);
+            const borderColors = this.generateBorderColors(data.length);
+
+            const chartData: ChartData<'pie', number[], string> = {
+                labels: labels,
+                datasets: [{
+                    label: 'Portfolio Distribution',
+                    data: data,
+                    backgroundColor: backgroundColors,
+                    borderColor: borderColors,
+                    borderWidth: 1
+                }]
+            };
+
+            const config: ChartConfiguration<'pie', number[], string> = {
+                type: 'pie',
+                data: chartData,
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        tooltip: {
+                            callbacks: {
+                                label: function (context: TooltipItem<'pie'>) {
+                                    const label = context.label || '';
+                                    const value = context.parsed || 0;
+                                    const total = context.dataset.data.reduce((acc, val) => acc + val, 0);
+                                    const percentage = ((value / total) * 100).toFixed(2) + '%';
+                                    return `${label}: ${value} (${percentage})`;
+                                }
+                            }
+                        }
+                    }
+                },
+            };
+
+            if (this.portfolioDistributionChart) {
+                this.portfolioDistributionChart.destroy();
             }
-          }
-        },
-      };
 
-      if (this.portfolioDistributionChart) {
-        this.portfolioDistributionChart.destroy();
-      }
-
-      this.portfolioDistributionChart = new Chart<'pie', number[], string>(
-        document.getElementById('portfolioDistributionChart') as HTMLCanvasElement,
-        config
-      );
-    }
-  }
+            this.portfolioDistributionChart = new Chart<'pie', number[], string>(
+                document.getElementById('portfolioDistributionChart') as HTMLCanvasElement,
+                config
+            );
+        }
+    });
+}
 
   // Helper method to generate background colors
   generateBackgroundColors(count: number): string[] {
@@ -453,7 +462,7 @@ export class HomeComponent implements OnInit {
       if (result != null && result === 'Aktie erfolgreich verkauft!') {
         this.loadDepotData(() => {
           this.calculatePortfolioValue();
-          this.updateChartDataForCash();
+          this.createPortfolioDistributionChart();
         });
       } else {
         console.log(result);
@@ -461,7 +470,7 @@ export class HomeComponent implements OnInit {
     });
   }
 
-  
+
 
 }
 
