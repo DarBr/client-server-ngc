@@ -4,7 +4,7 @@
         <p>Geben Sie den Betrag ein, den sie einzahlen möchten.</p>
     </mat-dialog-content>
     <mat-form-field id="inputAnzahlFormField">
-        <input id="anzahlInput" matInput type="number" min="0" step="1" placeholder="Geben Sie den Betrag ein" [(ngModel)]="betrag" maxlength="5" pattern="[0-9]*">
+        <input id="anzahlInput" matInput type="number" min="0" step="1" placeholder="Einzahlungsbetrag" [(ngModel)]="betrag" maxlength="5" pattern="[0-9]*">
 
     </mat-form-field>
     <mat-dialog-content *ngIf="isLoading">

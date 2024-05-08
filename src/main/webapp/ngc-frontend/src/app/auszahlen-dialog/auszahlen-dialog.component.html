@@ -4,7 +4,7 @@
         <p>Geben Sie den Betrag ein, den sie auszahlen möchten.</p>
     </mat-dialog-content>
     <mat-form-field id="inputAnzahlFormField">
-        <input id="anzahlInput" matInput type="number" min="0" step="1" placeholder="Geben Sie den Betrag ein" [(ngModel)]="betrag" maxlength="5" pattern="[0-9]*">
+        <input id="anzahlInput" matInput type="number" min="0" step="1" placeholder="Auszahlungsbetrag" [(ngModel)]="betrag" maxlength="5" pattern="[0-9]*">
 
     </mat-form-field>
     <mat-dialog-content *ngIf="isLoading">
@@ -15,6 +15,6 @@
     </mat-dialog-content>
     <mat-dialog-actions>
         <button mat-button mat-dialog-close>Abbrechen</button>
-        <button mat-button (click)="einzahlen(betrag)">Auszahlen</button>
+        <button mat-button (click)="auszahlen(betrag)">Auszahlen</button>
     </mat-dialog-actions>
 </div>

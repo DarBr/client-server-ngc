@@ -133,30 +133,5 @@ export class VerrechnungskontoComponent implements OnInit {
     });
   }
 
-  openWithdrawalPopup() {
-    const auszahlungsbetrag = prompt("Bitte geben Sie den auszuzahlenden Betrag ein:");
-    if (auszahlungsbetrag !== null) {
-      const betrag = parseFloat(auszahlungsbetrag);
-      if (!isNaN(betrag) && betrag > 0) {
-        this.auszahlen(betrag);
-      } else {
-        alert("Bitte geben Sie einen gültigen Betrag ein.");
-      }
-    }
-  }
-
-
-
-
-
-  auszahlen(betrag: number) {
-    this.http.put(`http://localhost:8080/konto/auszahlen?kontoID=${this.kontoID}&betrag=${betrag}`, {}).subscribe((response) => {
-      console.log("Auszahlen erfolgreich:", response);
-      this.loadKontostand();
-      this.loadZahlungen();
-    }, (error) => {
-      console.error("Fehler bei der Einzahlung:", error);
-    });
-
-  }
+  
 }

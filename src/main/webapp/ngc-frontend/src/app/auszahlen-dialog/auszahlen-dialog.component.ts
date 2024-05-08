@@ -29,22 +29,32 @@ export class AuszahlenDialogComponent {
 
   }
 
-  einzahlen(betrag: number) {
+  auszahlen(betrag: number) {
     this.isLoading = true;
     if (betrag !== null)
       if (!isNaN(betrag) && betrag > 0) {
         this.errorMessage = '';
         const url = `http://localhost:8080/konto/auszahlen?kontoID=${this.kontoID}&betrag=${betrag}`;
-        http://localhost:8080/konto/einzahlen?depotID=702&betrag=12
-        this.http.put(url, {}, { responseType: 'text' }).subscribe(response => {
-          if (response === 'Einzahlung erfolgreich!') {
-            this.rueckgabe = response;
-            this.isLoading = false;
-            this.dialogRef.close(this.rueckgabe);
+  
+        // Kontostand abrufen
+        const kontostandUrl = `http://localhost:8080/konto/${this.kontoID}`;
+        this.http.get<any>(kontostandUrl).subscribe(konto => {
+          if (konto.stand >= betrag) {
+            // Auszahlung durchführen, wenn der Kontostand ausreicht
+            this.http.put(url, {}, { responseType: 'text' }).subscribe(response => {
+              if (response === 'Einzahlung erfolgreich!') {
+                this.rueckgabe = response;
+                this.isLoading = false;
+                this.dialogRef.close(this.rueckgabe);
+              } else {
+                this.rueckgabe = response;
+                this.isLoading = false;
+                this.dialogRef.close(this.rueckgabe);
+              }
+            });
           } else {
-            this.rueckgabe = response;
             this.isLoading = false;
-            this.dialogRef.close(this.rueckgabe);
+            this.errorMessage = 'Ihr Kontostand reicht nicht aus, um diese Auszahlung vorzunehmen!';
           }
         });
       } else {
