@@ -70,3 +70,40 @@
 .logout-container button:hover {
     background-color: #1a356c;
 }
+
+.tab-nav {
+    display: flex;
+    justify-content: space-between;
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    margin-bottom: 1.5vh;
+}
+
+.tab {
+    flex: 1;
+    text-align: center;
+    border: 1px solid #ccc;
+    border-radius: 5px 5px 0 0;
+    background-color: #f9f9f9;
+}
+
+.tab:hover{
+    cursor: pointer;
+}
+
+.tab a {
+    display: block;
+    padding: 10px;
+    text-decoration: none;
+    color: #000;
+}
+
+.tab.active {
+    background-color: #244467;
+}
+
+.tab.active a {
+    color: #fff;
+    font-weight: bold;
+}

@@ -1,15 +1,36 @@
 <div class="login-container" *ngIf="!isLoggedIn">
-    <h2>Login</h2>
-    <form class="login-form">
-        <input type="text" name="username" [(ngModel)]="username" placeholder="Username" required>
-        <input type="password" name="password" [(ngModel)]="password" placeholder="Password" required>
-        <button type="submit" (click)="onRegister()" [disabled]="!username || !password">Registrieren</button>
-        <button type="submit" (click)="onLogin()" [disabled]="!username || !password">Login</button>
-    </form>
-    <p *ngIf="(!username || !password) && formSubmitted" class="error-message">Bitte füllen Sie beide Felder aus.</p>
-    <p class="error-message" *ngIf="errorMessage">{{ errorMessage }}</p>
-    <p class="sucess-message" *ngIf="successMessage">{{ successMessage }}</p>
-
+    <div class="tab-container">
+        <ul class="tab-nav">
+            <li class="tab" [class.active]="activeTab === 'login'">
+                <a (click)="changeTab('login')">Login</a>
+            </li>
+            <li class="tab" [class.active]="activeTab === 'register'">
+                <a (click)="changeTab('register')">Registrieren</a>
+            </li>
+        </ul>
+        <div class="tab-content">
+            <div class="tab-pane" *ngIf="activeTab === 'login'">
+                <form class="login-form">
+                    <input type="text" name="username" [(ngModel)]="username" placeholder="Username" required>
+                    <input type="password" name="password" [(ngModel)]="password" placeholder="Password" required>
+                    <button type="submit" (click)="onLogin()">Login</button>
+                </form>
+                <p *ngIf="(!username || !password) && formSubmitted" class="error-message">Bitte füllen Sie beide Felder aus.</p>
+                <p class="error-message" *ngIf="errorMessage">{{ errorMessage }}</p>
+                <p class="sucess-message" *ngIf="successMessage">{{ successMessage }}</p>
+            </div>
+            <div class="tab-pane" *ngIf="activeTab === 'register'">
+                <form class="login-form">
+                    <input type="text" name="username" [(ngModel)]="username" placeholder="Username" required>
+                    <input type="password" name="password" [(ngModel)]="password" placeholder="Password" required>
+                    <button type="submit" (click)="onRegister()">Registrieren</button>
+                </form>
+                <p *ngIf="(!username || !password) && formSubmitted" class="error-message">Bitte füllen Sie beide Felder aus.</p>
+                <p class="error-message" *ngIf="errorMessage">{{ errorMessage }}</p>
+                <p class="sucess-message" *ngIf="successMessage">{{ successMessage }}</p>
+            </div>
+        </div>
+    </div>
 </div>
 <div class="logout-container" *ngIf="isLoggedIn">
     <h1>Logout</h1>

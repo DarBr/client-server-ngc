@@ -22,6 +22,7 @@ export class LoginComponent {
   errorMessage: string = '';
   formSubmitted: boolean = false;
   successMessage: string = '';
+  activeTab: string = 'login';
 
   constructor(private http: HttpClient, private authService: AuthService, private router: Router, private appComponent: AppComponent) { }
 
@@ -36,8 +37,18 @@ export class LoginComponent {
     }
   }
 
+  changeTab(tab: string) {
+    this.activeTab = tab;
+    this.errorMessage = '';
+    this.successMessage = '';
+    this.formSubmitted = false;
+  }
+
   onRegister() {
     this.formSubmitted = true;
+    if (!this.username || !this.password) {
+      return;
+    }
     this.errorMessage = '';
     this.successMessage = '';
     const url = 'http://localhost:8080/nutzer/add';
@@ -52,9 +63,10 @@ export class LoginComponent {
         this.errorMessage = 'Der Benutzername ist bereits vergeben.';
         
       } else {
-        this.successMessage = 'Benutzer wurde erfolgreich angelegt.';
+        this.successMessage = 'Benutzer wurde erfolgreich angelegt. Sie können sich jetzt einloggen.';
         this.username = '';
         this.password = '';
+        this.formSubmitted = false;
       }
     });
 
@@ -62,11 +74,13 @@ export class LoginComponent {
 
   onLogin() {
     this.formSubmitted = true;
+    if (!this.username || !this.password) {
+      return;
+    }
     const url = 'http://localhost:8080/nutzer/login';
     const params = new HttpParams()
       .set('username', this.username)
       .set('password', this.password);
-
 
     this.http.get(url, {params, responseType: 'text'}).subscribe(response => {
       if (response ==="Login fehlgeschlagen") {
