@@ -2,33 +2,34 @@
 
 
 
-  .market-status-box {
-    padding: 5px 10px;
-    background-color: #e0f7fa;
-    border-radius: 10px;
-    border: 1px solid #bce0e6;
-    display: inline-block;
-    margin-bottom: 20px;
-    margin-left: auto;
-    margin-right: auto;
-    text-align: center;
-    color: #333;
-    white-space: nowrap;
-    font-weight: bold; /* Added font-weight property */
-  }
+.market-status-box {
+  padding: 5px 10px;
+  background-color: #e0f7fa;
+  border-radius: 10px;
+  border: 1px solid #bce0e6;
+  display: inline-block;
+  margin-bottom: 20px;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+  color: #333;
+  white-space: nowrap;
+  font-weight: bold;
+  /* Added font-weight property */
+}
 
-  .table-transaktionen {
-    width: 100%;
-    border-collapse: collapse;
-    margin: 20px 0;
-    font-size: 0.9em;
-    min-width: 400px;
-    border-radius: 5px;
-    overflow: hidden;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
-  }
+.table-transaktionen {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 20px 0;
+  font-size: 0.9em;
+  min-width: 400px;
+  border-radius: 5px;
+  overflow: hidden;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+}
 
-  /* Rest of the code remains unchanged */
+/* Rest of the code remains unchanged */
 
 
 
@@ -67,6 +68,10 @@
 .table-transaktionen tr:hover {
   background-color: #ddd;
   cursor: pointer;
+}
+
+.table-transaktionen tr:last-child {
+  font-weight: bold;
 }
 
 
@@ -238,29 +243,38 @@ tfoot td:last-child {
 
 .logo-container {
   display: flex;
-  align-items: center; /* Zentriert den Aktiennamen vertikal */
+  align-items: center;
+  /* Zentriert den Aktiennamen vertikal */
 }
 
 .logo-container img.logo {
-  margin-right: 10px; /* Abstand zwischen Bild und Aktienname */
+  margin-right: 10px;
+  /* Abstand zwischen Bild und Aktienname */
   border-radius: 3px;
 
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1); /* Reduziere den Schatten */
-  max-width: 40px; /* Verringere die maximale Breite */
-  max-height: 40px; /* Verringere die maximale Höhe */
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  /* Reduziere den Schatten */
+  max-width: 40px;
+  /* Verringere die maximale Breite */
+  max-height: 40px;
+  /* Verringere die maximale Höhe */
 }
 
 .logo-container span.name {
-  font-weight: bold; /* Setze den Aktiennamen fett */
-  color: #333; /* Farbe des Aktiennamens */
+  font-weight: bold;
+  /* Setze den Aktiennamen fett */
+  color: #333;
+  /* Farbe des Aktiennamens */
 }
 
 .loading-spinner {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100px; /* Passende Höhe für den Ladeindikator */
-  font-size: 40px; /* Ändere die Größe des Icons */
+  height: 100px;
+  /* Passende Höhe für den Ladeindikator */
+  font-size: 40px;
+  /* Ändere die Größe des Icons */
   color: #244467;
 }
 
@@ -277,7 +291,7 @@ tfoot td:last-child {
   margin-bottom: 10px;
   color: #244467;
   font-weight: bolder;
-} 
+}
 
 .detail-row {
   display: flex;
@@ -299,16 +313,3 @@ tfoot td:last-child {
 }
 
 /* Spezielles Design für die "CASH" Zeile */
-.cash-row {
-  background-color: #f8f8f8; /* Hintergrundfarbe */
-  font-weight: bold; /* Fettschrift für den Text */
-  color: green; /* Textfarbe */
-}
-
-.cash-row td {
-  padding: 12px 15px; /* Ändere den Zellabstand */
-}
-
-.cash-row:hover {
-  background-color: #ddd; /* Hervorhebung bei Hover-Effekt */
-}
