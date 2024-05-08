@@ -18,7 +18,7 @@ import io.jsonwebtoken.UnsupportedJwtException;
 @Component
 public class JwtUtil {
 
-    private String secretKey = "mySecretKey"; // Ändern Sie dies zu einem sicheren Schlüssel!
+    private String secretKey = "ClientServerProjektNextGenCapitel"; // Ändern Sie dies zu einem sicheren Schlüssel!
 
     public String generateToken(Nutzer nutzer) {
         Claims claims = Jwts.claims().setSubject(nutzer.getUsername());
@@ -26,7 +26,7 @@ public class JwtUtil {
         return Jwts.builder()
                 .setClaims(claims)
                 .setIssuedAt(Date.from(Instant.now()))
-                .setExpiration(Date.from(Instant.now().plusMillis(1000 * 60 * 60 * 10))) // 10 Stunden Gültigkeit
+                .setExpiration(Date.from(Instant.now().plusMillis(1000 * 60 * 30))) // 30 Minuten Gültigkeit
                 .signWith(SignatureAlgorithm.HS256, secretKey)
                 .compact();
     }
