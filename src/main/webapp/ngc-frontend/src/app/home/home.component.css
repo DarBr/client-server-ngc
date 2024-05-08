@@ -298,3 +298,17 @@ tfoot td:last-child {
   color: #333;
 }
 
+/* Spezielles Design für die "CASH" Zeile */
+.cash-row {
+  background-color: #f8f8f8; /* Hintergrundfarbe */
+  font-weight: bold; /* Fettschrift für den Text */
+  color: green; /* Textfarbe */
+}
+
+.cash-row td {
+  padding: 12px 15px; /* Ändere den Zellabstand */
+}
+
+.cash-row:hover {
+  background-color: #ddd; /* Hervorhebung bei Hover-Effekt */
+}

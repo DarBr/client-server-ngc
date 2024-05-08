@@ -336,20 +336,21 @@ export class HomeComponent implements OnInit {
   }
 
   updateChartDataForCash() {
-    // Dummy-Objekt für CASH erstellen
-    const cashData = {
-      isin: 'CASH',
-      currentPrice: this.kontostand,
-      anzahl: 1,
-      logo: "assets/credit-card-vector-icon-isolated-600nw-1177277911.webp",
-      einstandspreis: this.kontostand,
-      changeTotal: 0,
-      changeProzent: 0,
-
-    };
-  
-    // Hinzufügen von CASH zu den Portfolio-Daten
-    this.depots.push(cashData);
+     this.loadKontostand(() => {
+        // Dummy-Objekt für CASH erstellen
+        const cashData = {
+          isin: 'CASH',
+          currentPrice: this.kontostand,
+          anzahl: 1,
+          logo: "assets/credit-card-vector-icon-isolated-600nw-1177277911.webp",
+          einstandspreis: this.kontostand,
+          changeTotal: 0,
+          changeProzent: 0,
+        };
+      
+        // Hinzufügen von CASH zu den Portfolio-Daten
+        this.depots.push(cashData);
+     });
     this.createPortfolioDistributionChart();
   }
 
@@ -452,7 +453,7 @@ export class HomeComponent implements OnInit {
       if (result != null && result === 'Aktie erfolgreich verkauft!') {
         this.loadDepotData(() => {
           this.calculatePortfolioValue();
-          this.createPortfolioDistributionChart();
+          this.updateChartDataForCash();
         });
       } else {
         console.log(result);
