@@ -1,7 +1,8 @@
+<div class="market-status-box">
+  <p>{{ marketStatus }} <span *ngIf="marketStatus === 'Die Börse ist geschlossen.'">Nächste Öffnung: {{ nextOpenTime }}</span></p>
+</div>
 <div class="broker-container">
-  <div class="market-status-box">
-    <p>{{ marketStatus }} <span *ngIf="marketStatus === 'Die Börse ist geschlossen.'">Nächste Öffnung: {{ nextOpenTime }}</span></p>
-  </div>
+  
   <h2> <i class="fa-solid fa-sack-dollar"></i> Gesamtwert des Portfolios </h2>
   <div *ngIf="isLoading" class="loading-spinner">
     <i class="fa fa-spinner fa-spin"></i>
@@ -132,8 +133,8 @@
                         <span class="value">{{ item.ticker }}</span>
                       </div>
                       <div class="detail">
-                        <span class="label">Website: </span>
-                        <span class="value">{{ item.weburl }}</span>
+                        <span class="label">Branche: </span>
+                        <span class="value">{{ item.finnhubIndustry }}</span>
                       </div>
                     </div>
                   </div>
@@ -141,7 +142,7 @@
               </tr>
             </ng-container>
             <!-- Cash-Row -->
-            <ng-template #cashRow>
+            <ng-template #cashRow class="cash-row">
               <tr>
                 <td>
                   <div class="logo-container">
@@ -150,11 +151,11 @@
                   </div>
                 </td>
                 <td>{{ item.anzahl }}</td>
-                <td>-</td>
+                <td></td>
                 <td>{{ item.currentPrice }}$</td>
-                <td>-</td>
-                <td>-</td>
-                <td>-</td>
+                <td></td>
+                <td></td>
+                <td></td>
               </tr>
              
             </ng-template>
