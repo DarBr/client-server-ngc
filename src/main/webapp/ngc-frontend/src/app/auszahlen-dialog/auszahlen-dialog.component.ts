@@ -38,8 +38,9 @@ export class AuszahlenDialogComponent {
   
         // Kontostand abrufen
         const kontostandUrl = `http://localhost:8080/konto/${this.kontoID}`;
+
         this.http.get<any>(kontostandUrl).subscribe(konto => {
-          if (konto.stand >= betrag) {
+          if (konto.kontostand >= betrag) {
             // Auszahlung durchführen, wenn der Kontostand ausreicht
             this.http.put(url, {}, { responseType: 'text' }).subscribe(response => {
               if (response === 'Einzahlung erfolgreich!') {
