@@ -21,7 +21,7 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
             .authorizeHttpRequests(requests -> requests
-                .requestMatchers("/nutzer/**")
+                .requestMatchers("/nutzer/add", "/nutzer/login", "/nutzer/validateToken", "/nutzer/depotidfromtoken", "/nutzer/kontoidfromtoken", "/nutzer/useridfromtoken", "/nutzer/usernamefromtoken")
                 .permitAll()
                 .anyRequest().authenticated())
             .addFilterBefore(jwtAuthenticationFilter, BasicAuthenticationFilter.class)
