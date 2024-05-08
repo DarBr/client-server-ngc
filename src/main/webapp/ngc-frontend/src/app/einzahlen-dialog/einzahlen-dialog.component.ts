@@ -35,7 +35,6 @@ export class EinzahlenDialogComponent {
     if (!isNaN(betrag) && betrag > 0) {
       this.errorMessage = '';
       const url = `http://localhost:8080/konto/einzahlen?kontoID=${this.kontoID}&betrag=${betrag}`;
-      http://localhost:8080/konto/einzahlen?depotID=702&betrag=12
       this.http.put(url, {}, {responseType: 'text'}).subscribe(response => {
         if (response === 'Einzahlung erfolgreich!') {
           this.rueckgabe = response;
