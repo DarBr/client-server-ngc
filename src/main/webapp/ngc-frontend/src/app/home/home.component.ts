@@ -168,9 +168,10 @@ export class HomeComponent implements OnInit {
         const nowEST = moment().tz('America/New_York');
         const openEST = moment().tz('America/New_York').set({ hour: 9, minute: 30, second: 0 });
         const closeEST = moment().tz('America/New_York').set({ hour: 16, minute: 0, second: 0 });
+       
 
-        if (response.isopen) {
-          this.marketStatus = 'Die Börse ist geöffnet.';
+        if (response.isOpen) {
+          this.marketStatus = 'Die Börse ist aktuell geöffnet.';
           this.nextOpenTime = closeEST.clone().tz('Europe/Berlin').format('dddd, D. MMMM YYYY, HH:mm:ss [Uhr]');
         } else {
           this.marketStatus = 'Die Börse ist geschlossen.';
@@ -361,7 +362,7 @@ export class HomeComponent implements OnInit {
     this.addCashToDepot(() => {
         // Der weitere Code wird erst ausgeführt, wenn das CASH erfolgreich zum Depot hinzugefügt wurde
 
-        console.log(this.depots);
+       
 
         if (!this.isLoading && this.depots.length && !this.keineDepots) {
             const labels = this.depots.map(depot => depot.isin);
