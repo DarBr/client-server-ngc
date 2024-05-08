@@ -4,7 +4,7 @@
         <i class="fa fa-spinner fa-spin"></i>
     </div>
     <div *ngIf="!isLoading">
-        <p>Ihr aktueller Kontostand beträgt: {{ kontostand }}$</p>
+        <p>Ihr aktueller Kontostand beträgt: <b>{{ kontostand }}$</b></p>
         <p></p>
         <button (click)=" openEinzahlenPopup()">Geld einzahlen</button>
         <button (click)=" openAuszahlenPopup()">Geld auszahlen</button>
@@ -23,7 +23,7 @@
             <thead>
                 <tr>
                     <th (click)="sortTable('zeitpunkt')">Zeitpunkt</th>
-                    <th (click)="sortTable('betrag')">Betrag</th>
+                    <th (click)="sortTable('betrag')">Betrag (in $)</th>
                     <th (click)="sortTable('typ')">Typ</th>
                 </tr>
             </thead>
