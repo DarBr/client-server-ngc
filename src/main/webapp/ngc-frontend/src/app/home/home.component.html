@@ -196,18 +196,20 @@
 
 <div class="broker-container">
   <h2> <i class="fa-solid fa-chart-pie"></i> Analyse</h2>
-  <p>Die Analyse zeigt die Verteilung Ihres Portfolios auf die verschiedenen Aktien. Hovern Sie über die einzelnen
-    Segmente, um weitere Informationen zu erhalten.<br>Es ist auch möglich einzelne Segemente vorübergehend
-    auszublenden. Klicken Sie dazu auf das entsprechende Element in der Legende.</p>
   <div *ngIf="isLoading" class="loading-spinner">
     <i class="fa fa-spinner fa-spin"></i>
   </div>
-  <div class="chart-container" *ngIf="!keineDepots">
-    <canvas id="portfolioDistributionChart"></canvas>
-    <!-- Gesamtpreis -->
-
+  <div class="chart-container" *ngIf="!keineDepots"></div>
+  <div class="tab" *ngIf="!keineDepots">
+    <button class="tablinks" (click)="openTab('portfolioDistributionChart')">Portfolio Chart</button>
+    <button class="tablinks" (click)="openTab('industryDistributionChart')">Industry Chart</button>
   </div>
-  <div *ngIf="keineDepots">
-    <p>Da Sie keine Aktien im Depot haben ist keine Analyse möglich.</p>
+  
+  <div [hidden]="activeTab !== 'portfolioDistributionChart'" class="tabcontent">
+    <canvas id="portfolioDistributionChart"></canvas>
+  </div>
+  
+  <div [hidden]="activeTab !== 'industryDistributionChart'" class="tabcontent">
+    <canvas id="industryDistributionChart"></canvas>
   </div>
 </div>

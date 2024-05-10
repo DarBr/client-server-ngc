@@ -47,6 +47,8 @@ export class HomeComponent implements OnInit {
   sortAscending: boolean = true;
   kontostand: number = 0;
   portfolioDistributionChart: Chart<'pie', number[], string> | null = null;
+  industryDistributionChart: Chart<'pie', number[], string> | null = null;
+  activeTab = 'portfolioDistributionChart';
   https: any;
 
   constructor(private http: HttpClient, private authService: AuthService, private dialog: MatDialog) { }
@@ -59,6 +61,7 @@ export class HomeComponent implements OnInit {
 
           this.calculatePortfolioValue();
           this.createPortfolioDistributionChart();
+          this.createIndustryDistributionChart(); 
           this.checkMarketStatus();
         });
       });
@@ -186,6 +189,9 @@ export class HomeComponent implements OnInit {
         this.nextOpenTime = 'Zeit nicht verfügbar. Bitte später prüfen.';
       }
     });
+  }
+  openTab(tabId: string) {
+    this.activeTab = tabId;
   }
 
 
@@ -414,6 +420,63 @@ export class HomeComponent implements OnInit {
         }
     });
 }
+
+createIndustryDistributionChart() {
+  const industryData = this.depots.reduce((acc: {[key: string]: number}, depot) => {
+    const industry = depot.finnhubIndustry as string;
+    const value = typeof depot.currentPrice === 'number' ? depot.currentPrice * depot.anzahl : 0;
+    acc[industry] = (acc[industry] || 0) + value;
+    return acc;
+  }, {});
+
+  const labels = Object.keys(industryData);
+  const data = Object.values(industryData);
+
+  const backgroundColors = this.generateBackgroundColors(data.length);
+  const borderColors = this.generateBorderColors(data.length);
+
+  const chartData: ChartData<'pie', number[], string> = {
+    labels: labels,
+    datasets: [{
+      data: data,
+      backgroundColor: backgroundColors,
+      borderColor: borderColors,
+      borderWidth: 1
+    }]
+  };
+
+  const config: ChartConfiguration<'pie', number[], string> = {
+    type: 'pie',
+    data: chartData,
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        tooltip: {
+          callbacks: {
+            label: function (context: TooltipItem<'pie'>) {
+              const label = context.label;
+              const value = context.parsed as number;
+              const total = context.dataset.data.reduce((acc, val) => acc + val, 0);
+              const percentage = ((value / total) * 100).toFixed(2) + '%';
+              return `${label}: ${value} (${percentage})`;
+            }
+          }
+        }
+      }
+    }
+  };
+
+  if (this.industryDistributionChart) {
+    this.industryDistributionChart.destroy();
+  }
+
+  this.industryDistributionChart = new Chart(
+    document.getElementById('industryDistributionChart') as HTMLCanvasElement,
+    config
+  );
+}
+
 
   // Helper method to generate background colors
   generateBackgroundColors(count: number): string[] {
