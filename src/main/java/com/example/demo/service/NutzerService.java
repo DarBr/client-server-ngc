@@ -130,4 +130,19 @@ public class NutzerService {
             return "Das aktuelle Passwort ist falsch";
         }
     }
+
+    //Benutzername des Nutzers ändern
+    public String changeUsername(String username, String newUsername) {
+        Nutzer nutzer = getNutzerByUsername(username);
+        if(nutzer == null){
+            return "Nutzer existiert nicht";
+        }
+        if (!checkUserExists(newUsername)) {
+            nutzer.setUsername(newUsername);
+            nutzerRepository.save(nutzer);
+            return "Benutzername erfolgreich geändert";
+        } else {
+            return "Der neue Benutzername existiert bereits. Bitte wählen Sie einen anderen Benutzernamen aus.";
+        }
+    }
 }

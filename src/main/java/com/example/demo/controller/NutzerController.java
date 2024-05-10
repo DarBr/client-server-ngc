@@ -112,4 +112,10 @@ public class NutzerController {
     public ResponseEntity<?> changePassword(@RequestParam String username, @RequestParam String password, @RequestParam String newPassword) {
         return ResponseEntity.ok(nutzerService.changePassword(username, password, newPassword));
     }
+
+    //Benutzername des Nutzers ändern
+    @PostMapping("/changeUsername")
+    public ResponseEntity<?> changeUsername(@RequestParam String username, @RequestParam String newUsername) {
+        return ResponseEntity.ok(nutzerService.changeUsername(username, newUsername));
+    }
 }
