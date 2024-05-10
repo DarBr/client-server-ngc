@@ -1,0 +1,24 @@
+<div class="changeUsernamePopUp">
+    <h2 mat-dialog-title><b>Benutzernamen ändern</b></h2>
+    <mat-dialog-content>
+        <p>Bitte füllen Sie die Felder aus, um den Benutzernamen <b>{{this.username}}</b> zu ändern.</p> 
+        <p id="addInformation">Nach der erfolgreichen Änderung werden Sie zum Login weitergeleitet, 
+            um eine erneute Anmeldung mit den neuen Benutzerdaten vorzunehmen.</p>
+    </mat-dialog-content>
+    <mat-form-field class="usernameFields">
+        <input matInput type="text" placeholder="Neuer Benutzername" [(ngModel)]="newUsername1" >
+    </mat-form-field>
+    <mat-form-field class="usernameFields">
+        <input matInput type="text" placeholder="Neuen Benutzername wiederholen" [(ngModel)]="newUsername2" >
+    </mat-form-field>
+    <mat-dialog-content *ngIf="isLoading">
+        <p>Verarbeitung der Änderung...</p>
+    </mat-dialog-content>
+    <mat-dialog-content *ngIf="errorMessage!==''">
+        <p class="errorMessage">{{this.errorMessage}}</p>
+    </mat-dialog-content>
+    <mat-dialog-actions>
+        <button mat-button mat-dialog-close>Abbrechen</button>
+        <button mat-button (click)="changeUsername()">Benutzernamen ändern</button>
+    </mat-dialog-actions>
+</div>

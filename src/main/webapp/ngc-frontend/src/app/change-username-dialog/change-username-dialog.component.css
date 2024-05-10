@@ -1,0 +1,64 @@
+.changeUsernamePopUp {
+    margin: 0;
+    width: 45vh;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    background-color: #fff;
+    box-shadow: none;
+}
+
+.changeUsernamePopUp h2 {
+    margin-bottom: 20px;
+    font-size: 24px;
+    text-align: center;
+    color: #333;
+}
+
+.changeUsernamePopUp p {
+    margin-bottom: 20px;
+    font-size: 2.5vh;
+    text-align: center;
+    color: #333;
+}
+
+.changeUsernamePopUp button {
+    margin: 0 auto;
+    display: block;
+    margin-top: 1vh;
+    width: calc(100% - 5vh);
+    padding: 10px;
+    background-color: #244467;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.changeUsernamePopUp button:hover {
+    background-color: #1a356c;
+}
+
+.changeUsernamePopUp .errorMessage {
+    margin-top: 15px;
+    padding: 5px;
+    text-align: center;
+    border-radius: 5px;
+    color: #ff6347;
+    background-color: #ffe6e6;
+}
+
+.usernameFields {
+    display: flex;
+    justify-content: center;
+    width: calc(100% - 10vh);
+    box-sizing: border-box;
+    border-radius: 5px;
+    margin: 0 auto;
+    padding: 0;
+}
+
+#addInformation{
+    font-size: 1.5vh;
+}
