@@ -8,6 +8,7 @@ import { Router } from '@angular/router';
 import { AppComponent } from '../app.component';
 import { MatDialog } from '@angular/material/dialog';
 import { ChangePasswordDialogComponent } from '../change-password-dialog/change-password-dialog.component';
+import { ChangeUsernameDialogComponent } from '../change-username-dialog/change-username-dialog.component';
 
 @Component({
   selector: 'app-user-login',
@@ -112,6 +113,22 @@ export class LoginComponent {
 
     dialogRef.afterClosed().subscribe(result => {
       if(result === 'Passwort erfolgreich geändert') {
+        this.authService.deleteToken();
+        this.isLoggedIn = false;
+        this.ngOnInit();
+      }
+    });
+  }
+
+  openChangeUsernameDialog() {
+    const dialogRef = this.dialog.open(ChangeUsernameDialogComponent, {
+      data: {
+        username: this.showUsername
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if(result === 'Benutzername erfolgreich geändert') {
         this.authService.deleteToken();
         this.isLoggedIn = false;
         this.ngOnInit();

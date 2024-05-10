@@ -68,6 +68,14 @@
     cursor: pointer;
 }
 
+#logoutButton{
+    background-color: #c94932;
+}
+
+#logoutButton:hover{
+    background-color: #962d1b;
+}
+
 .logout-container button:hover {
     background-color: #1a356c;
 }
@@ -110,5 +118,9 @@
 }
 
 #changePasswordButton{
+    margin-bottom: 1.5vh;
+}
+
+#changeUsernameButton{
     margin-bottom: 1.5vh;
 }

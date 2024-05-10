@@ -37,6 +37,7 @@
 <div class="logout-container" *ngIf="isLoggedIn">
     <h1>Profil-Übersicht</h1>
     <p><b>Username:</b> {{ showUsername }}</p>
+    <button type="submit" id="changeUsernameButton" (click)="openChangeUsernameDialog()">Benutzername ändern</button>
     <button type="submit" id="changePasswordButton" (click)="openChangePasswordDialog()">Passwort ändern</button>
-    <button type="submit" (click)="onLogout()">Logout</button>
+    <button type="submit" id="logoutButton" (click)="onLogout()">Logout</button>
 </div>
