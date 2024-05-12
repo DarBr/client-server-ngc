@@ -49,7 +49,7 @@ export class HomeComponent implements OnInit {
   portfolioDistributionChart: Chart<'pie', number[], string> | null = null;
   industryDistributionChart: Chart<'pie', number[], string> | null = null;
   activeTab = 'portfolioDistributionChart';
-  https: any;
+  
 
   constructor(private http: HttpClient, private authService: AuthService, private dialog: MatDialog) { }
 
