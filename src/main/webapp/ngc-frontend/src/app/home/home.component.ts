@@ -195,15 +195,15 @@ export class HomeComponent implements OnInit {
 
 
 
-  getAktienPreise(isin: string): Observable<any> {
-    const apiKey = "co5rfg9r01qv77g7nk90co5rfg9r01qv77g7nk9g";
+  getAktienDetails(isin: string): Observable<any> {
+    const apiKey = "cp0edihr01qnigejvsigcp0edihr01qnigejvsj0";
     const apiUrl = `https://finnhub.io/api/v1/quote?symbol=${isin}&token=${apiKey}`;
 
     return this.http.get<any>(apiUrl);
   }
 
   getStockProfile(symbol: string): Observable<any> {
-    const apiKey = "co5rfg9r01qv77g7nk90co5rfg9r01qv77g7nk9g";
+    const apiKey = "cp0eejhr01qnigejvvagcp0eejhr01qnigejvvb0";
     const url = `https://finnhub.io/api/v1/stock/profile2?symbol=${symbol}&token=${apiKey}`;
 
     return this.http.get<any>(url).pipe(
@@ -236,7 +236,7 @@ export class HomeComponent implements OnInit {
 
 
   getLogo(isin: string): Observable<string> {
-    const apiKey = "co5rfg9r01qv77g7nk90co5rfg9r01qv77g7nk9g";
+    const apiKey = "cp0ef79r01qnigek00sgcp0ef79r01qnigek00t0";
     const url = `https://finnhub.io/api/v1//stock/profile2?symbol=${isin}&token=${apiKey}`;
 
     return this.http.get<any>(url).pipe(
