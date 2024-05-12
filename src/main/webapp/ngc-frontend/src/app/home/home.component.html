@@ -199,8 +199,8 @@
   <div *ngIf="isLoading" class="loading-spinner">
     <i class="fa fa-spinner fa-spin"></i>
   </div>
-  <div class="chart-container" *ngIf="!keineDepots"></div>
-  <div class="tab" *ngIf="!keineDepots">
+  <div class="chart-container" *ngIf="!keineDepots && !isLoading"></div>
+  <div class="tab" *ngIf="!keineDepots && !isLoading">
     <button class="tablinks" (click)="openTab('portfolioDistributionChart')">Portfolio Chart</button>
     <button class="tablinks" (click)="openTab('industryDistributionChart')">Industry Chart</button>
   </div>
