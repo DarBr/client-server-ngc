@@ -169,29 +169,39 @@ export class HomeComponent implements OnInit {
     const apiKey = "co5rfg9r01qv77g7nk90co5rfg9r01qv77g7nk9g";
     const url = `https://finnhub.io/api/v1/stock/market-status?exchange=US&token=${apiKey}`;
     this.http.get<any>(url).subscribe({
-      next: (response) => {
-        const nowEST = moment().tz('America/New_York');
-        const openEST = moment().tz('America/New_York').set({ hour: 9, minute: 30, second: 0 });
-        const closeEST = moment().tz('America/New_York').set({ hour: 16, minute: 0, second: 0 });
+        next: (response) => {
+            const nowEST = moment().tz('America/New_York');
+            const openEST = moment().tz('America/New_York').set({ hour: 9, minute: 30, second: 0 });
+            const closeEST = moment().tz('America/New_York').set({ hour: 16, minute: 0, second: 0 });
 
-
-        if (response.isOpen) {
-          this.marketStatus = 'Die Börse ist aktuell geöffnet.';
-          this.nextOpenTime = closeEST.clone().tz('Europe/Berlin').format('dddd, D. MMMM YYYY, HH:mm:ss [Uhr]');
-        } else {
-          this.marketStatus = 'Die Börse ist geschlossen.';
-          if (nowEST.isAfter(closeEST)) {
-            openEST.add(1, 'days'); // Zum nächsten Tag wechseln
-          }
-          this.nextOpenTime = openEST.clone().tz('Europe/Berlin').format('dddd, D. MMMM YYYY, HH:mm:ss [Uhr]');
+            if (response.isOpen) {
+                this.marketStatus = 'Die Börse ist aktuell geöffnet.';
+                this.nextOpenTime = closeEST.clone().tz('Europe/Berlin').format('dddd, D. MMMM YYYY, HH:mm:ss [Uhr]');
+            } else {
+                this.marketStatus = 'Die Börse ist geschlossen.';
+                if (nowEST.isAfter(closeEST)) {
+                    // Überprüfen, ob heute Freitag oder Wochenende ist
+                    const currentDay = nowEST.day();
+                    if (currentDay === 5) { // Freitag
+                        openEST.add(3, 'days'); // Springe zu Montag
+                    } else if (currentDay === 6) { // Samstag
+                        openEST.add(2, 'days'); // Springe zu Montag
+                    } else if (currentDay === 0) { // Sonntag
+                        openEST.add(1, 'day'); // Springe zu Montag
+                    } else {
+                        openEST.add(1, 'day'); // Nächster Tag, falls nicht Wochenende
+                    }
+                }
+                this.nextOpenTime = openEST.clone().tz('Europe/Berlin').format('dddd, D. MMMM YYYY, HH:mm:ss [Uhr]');
+            }
+        },
+        error: () => {
+            this.marketStatus = 'Fehler beim Laden des Marktstatus.';
+            this.nextOpenTime = 'Zeit nicht verfügbar. Bitte später prüfen.';
         }
-      },
-      error: () => {
-        this.marketStatus = 'Fehler beim Laden des Marktstatus.';
-        this.nextOpenTime = 'Zeit nicht verfügbar. Bitte später prüfen.';
-      }
     });
-  }
+} 
+
   openTab(tabId: string) {
     this.activeTab = tabId;
   }
