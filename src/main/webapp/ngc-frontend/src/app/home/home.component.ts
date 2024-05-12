@@ -181,13 +181,10 @@ export class HomeComponent implements OnInit {
         } else {
           this.marketStatus = 'Die Börse ist geschlossen.';
           if (nowEST.isAfter(closeEST)) {
-            console.log("drin")
+          
             openEST.add(1, 'days'); // Zum nächsten Tag wechseln
           }
-          console.log("raus")
-          console.log(closeEST)
-          console.log(openEST)
-          console.log(nowEST)
+         
           this.nextOpenTime = openEST.clone().tz('Europe/Berlin').format('dddd, D. MMMM YYYY, HH:mm:ss [Uhr]');
         }
       },
