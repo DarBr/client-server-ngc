@@ -116,15 +116,14 @@ export class HomeComponent implements OnInit {
 
       const observables = depots.map(depot => {
         return forkJoin([
-          this.getAktienDetails(depot.isin),
-          this.getLogo(depot.isin),
+          this.getAktienPreise(depot.isin),
           this.getStockProfile(depot.isin) // Hinzugefügt, um Stockprofile zu erhalten
         ]).pipe(
-          map(([aktienDetails, logo, stockProfile]) => {
+          map(([aktienDetails, stockProfile]) => {
             depot.currentPrice = Math.round(aktienDetails.c * 100) / 100;
             depot.changeTotal = Math.round(this.calculateChangeTotal(depot) * 100) / 100;
             depot.changeProzent = Math.round(this.calculateChangeProzent(depot) * 100) / 100;
-            depot.logo = logo;
+            depot.logo = stockProfile.logo;
             depot.c = Math.round(aktienDetails.c * 100) / 100;
             depot.h = Math.round(aktienDetails.h * 100) / 100;
             depot.l = Math.round(aktienDetails.l * 100) / 100;
@@ -196,7 +195,7 @@ export class HomeComponent implements OnInit {
 
 
 
-  getAktienDetails(isin: string): Observable<any> {
+  getAktienPreise(isin: string): Observable<any> {
     const apiKey = "co5rfg9r01qv77g7nk90co5rfg9r01qv77g7nk9g";
     const apiUrl = `https://finnhub.io/api/v1/quote?symbol=${isin}&token=${apiKey}`;
 
@@ -353,6 +352,7 @@ export class HomeComponent implements OnInit {
             einstandspreis: this.kontostand,
             changeTotal: 0,
             changeProzent: 0,
+            finnhubIndustry: 'CASH'
         };
 
         // Hinzufügen von CASH zu den Portfolio-Daten

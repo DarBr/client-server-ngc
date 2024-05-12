@@ -316,4 +316,6 @@ tfoot td:last-child {
   color: #333;
 }
 
-/* Spezielles Design für die "CASH" Zeile */
+.tabcontent {
+  max-height: 300px;
+}
