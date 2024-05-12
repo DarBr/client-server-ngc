@@ -195,7 +195,7 @@ export class HomeComponent implements OnInit {
 
 
 
-  getAktienDetails(isin: string): Observable<any> {
+  getAktienPreise(isin: string): Observable<any> {
     const apiKey = "cp0edihr01qnigejvsigcp0edihr01qnigejvsj0";
     const apiUrl = `https://finnhub.io/api/v1/quote?symbol=${isin}&token=${apiKey}`;
 
@@ -235,25 +235,8 @@ export class HomeComponent implements OnInit {
 
 
 
-  getLogo(isin: string): Observable<string> {
-    const apiKey = "cp0ef79r01qnigek00sgcp0ef79r01qnigek00t0";
-    const url = `https://finnhub.io/api/v1//stock/profile2?symbol=${isin}&token=${apiKey}`;
-
-    return this.http.get<any>(url).pipe(
-      map(response => {
-        if (response && response.logo) {
-          return response.logo;
-        } else {
-          // Wenn kein Logo gefunden wird, gib das eigene Logo zurück
-          return "assets/ngc-logo.jpg";
-        }
-      }),
-      catchError(error => {
-        // Bei einem Fehler den Standard-URL zurückgeben
-        return "assets/ngc-logo.jpg";
-      })
-    );
-  }
+  
+  
 
   toggleDetails(item: any): void {
     item.showDetails = !item.showDetails;
@@ -270,7 +253,6 @@ export class HomeComponent implements OnInit {
 
 
   }
-
 
 
   calculateChangeTotal(item: any): number {
