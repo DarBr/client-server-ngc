@@ -58,11 +58,14 @@ export class HomeComponent implements OnInit {
     this.loadUserIDs(() => {
       this.loadKontostand(() => {
         this.loadDepotData(() => {
+          this.addCashToDepot(() => {
+            this.calculatePortfolioValue();
+            this.createPortfolioDistributionChart();
+            this.createIndustryDistributionChart();
+            this.checkMarketStatus();
+          }
 
-          this.calculatePortfolioValue();
-          this.createPortfolioDistributionChart();
-          this.createIndustryDistributionChart(); 
-          this.checkMarketStatus();
+          );
         });
       });
 
@@ -170,7 +173,7 @@ export class HomeComponent implements OnInit {
         const nowEST = moment().tz('America/New_York');
         const openEST = moment().tz('America/New_York').set({ hour: 9, minute: 30, second: 0 });
         const closeEST = moment().tz('America/New_York').set({ hour: 16, minute: 0, second: 0 });
-       
+
 
         if (response.isOpen) {
           this.marketStatus = 'Die Börse ist aktuell geöffnet.';
@@ -235,8 +238,8 @@ export class HomeComponent implements OnInit {
 
 
 
-  
-  
+
+
 
   toggleDetails(item: any): void {
     item.showDetails = !item.showDetails;
@@ -325,139 +328,138 @@ export class HomeComponent implements OnInit {
 
   addCashToDepot(callback: () => void) {
     this.loadKontostand(() => {
-        // Dummy-Objekt für CASH erstellen
-        const cashData = {
-            isin: 'CASH',
-            currentPrice: this.kontostand,
-            anzahl: 1,
-            logo: "assets/credit-card-vector-icon-isolated-600nw-1177277911.webp",
-            einstandspreis: this.kontostand,
-            changeTotal: 0,
-            changeProzent: 0,
-            finnhubIndustry: 'CASH'
-        };
+      // Dummy-Objekt für CASH erstellen
+      const cashData = {
+        isin: 'CASH',
+        currentPrice: this.kontostand,
+        anzahl: 1,
+        logo: "assets/credit-card-vector-icon-isolated-600nw-1177277911.webp",
+        einstandspreis: this.kontostand,
+        changeTotal: 0,
+        changeProzent: 0,
+        finnhubIndustry: 'CASH'
+      };
 
-        // Hinzufügen von CASH zu den Portfolio-Daten
-        this.depots.push(cashData);
+      // Hinzufügen von CASH zu den Portfolio-Daten
+      this.depots.push(cashData);
 
-        // Aufruf der Callback-Funktion, um anzuzeigen, dass das CASH erfolgreich hinzugefügt wurde
-        callback();
+      // Aufruf der Callback-Funktion, um anzuzeigen, dass das CASH erfolgreich hinzugefügt wurde
+      callback();
     });
-}
+  }
 
 
   createPortfolioDistributionChart() {
-    this.addCashToDepot(() => {
-        // Der weitere Code wird erst ausgeführt, wenn das CASH erfolgreich zum Depot hinzugefügt wurde
 
-       
 
-        if (!this.isLoading && this.depots.length && !this.keineDepots) {
-            const labels = this.depots.map(depot => depot.isin);
-            const data = this.depots.map(depot => Math.round((depot.currentPrice || 0) * (depot.anzahl || 0) * 100) / 100);
-            const backgroundColors = this.generateBackgroundColors(data.length);
-            const borderColors = this.generateBorderColors(data.length);
+    if (!this.isLoading && this.depots.length && !this.keineDepots) {
+      const labels = this.depots.map(depot => depot.isin);
+      const data = this.depots.map(depot => Math.round((depot.currentPrice || 0) * (depot.anzahl || 0) * 100) / 100);
+      const backgroundColors = this.generateBackgroundColors(data.length);
+      const borderColors = this.generateBorderColors(data.length);
 
-            const chartData: ChartData<'pie', number[], string> = {
-                labels: labels,
-                datasets: [{
-                    label: 'Portfolio Distribution',
-                    data: data,
-                    backgroundColor: backgroundColors,
-                    borderColor: borderColors,
-                    borderWidth: 1
-                }]
-            };
+      const chartData: ChartData<'pie', number[], string> = {
+        labels: labels,
+        datasets: [{
+          label: 'Portfolio Distribution',
+          data: data,
+          backgroundColor: backgroundColors,
+          borderColor: borderColors,
+          borderWidth: 1
+        }]
+      };
 
-            const config: ChartConfiguration<'pie', number[], string> = {
-                type: 'pie',
-                data: chartData,
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        tooltip: {
-                            callbacks: {
-                                label: function (context: TooltipItem<'pie'>) {
-                                    const label = context.label || '';
-                                    const value = context.parsed || 0;
-                                    const total = context.dataset.data.reduce((acc, val) => acc + val, 0);
-                                    const percentage = ((value / total) * 100).toFixed(2) + '%';
-                                    return `${label}: ${value} (${percentage})`;
-                                }
-                            }
-                        }
-                    }
-                },
-            };
-
-            if (this.portfolioDistributionChart) {
-                this.portfolioDistributionChart.destroy();
+      const config: ChartConfiguration<'pie', number[], string> = {
+        type: 'pie',
+        data: chartData,
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            tooltip: {
+              callbacks: {
+                label: function (context: TooltipItem<'pie'>) {
+                  const label = context.label || '';
+                  const value = context.parsed || 0;
+                  const total = context.dataset.data.reduce((acc, val) => acc + val, 0);
+                  const percentage = ((value / total) * 100).toFixed(2) + '%';
+                  return `${label}: ${value} (${percentage})`;
+                }
+              }
             }
+          }
+        },
+      };
 
-            this.portfolioDistributionChart = new Chart<'pie', number[], string>(
-                document.getElementById('portfolioDistributionChart') as HTMLCanvasElement,
-                config
-            );
-        }
-    });
-}
+      if (this.portfolioDistributionChart) {
+        this.portfolioDistributionChart.destroy();
+      }
 
-createIndustryDistributionChart() {
-  const industryData = this.depots.reduce((acc: {[key: string]: number}, depot) => {
-    const industry = depot.finnhubIndustry as string;
-    const value = typeof depot.currentPrice === 'number' ? depot.currentPrice * depot.anzahl : 0;
-    acc[industry] = (acc[industry] || 0) + value;
-    return acc;
-  }, {});
+      this.portfolioDistributionChart = new Chart<'pie', number[], string>(
+        document.getElementById('portfolioDistributionChart') as HTMLCanvasElement,
+        config
+      );
+    }
 
-  const labels = Object.keys(industryData);
-  const data = Object.values(industryData);
+  }
 
-  const backgroundColors = this.generateBackgroundColors(data.length);
-  const borderColors = this.generateBorderColors(data.length);
+  createIndustryDistributionChart() {
 
-  const chartData: ChartData<'pie', number[], string> = {
-    labels: labels,
-    datasets: [{
-      data: data,
-      backgroundColor: backgroundColors,
-      borderColor: borderColors,
-      borderWidth: 1
-    }]
-  };
+    console.log(this.depots);
+    const industryData = this.depots.reduce((acc: { [key: string]: number }, depot) => {
+      const industry = depot.finnhubIndustry as string;
+      const value = typeof depot.currentPrice === 'number' ? depot.currentPrice * depot.anzahl : 0;
+      acc[industry] = (acc[industry] || 0) + value;
+      return acc;
+    }, {});
 
-  const config: ChartConfiguration<'pie', number[], string> = {
-    type: 'pie',
-    data: chartData,
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      plugins: {
-        tooltip: {
-          callbacks: {
-            label: function (context: TooltipItem<'pie'>) {
-              const label = context.label;
-              const value = context.parsed as number;
-              const total = context.dataset.data.reduce((acc, val) => acc + val, 0);
-              const percentage = ((value / total) * 100).toFixed(2) + '%';
-              return `${label}: ${value} (${percentage})`;
+    const labels = Object.keys(industryData);
+    const data = Object.values(industryData);
+
+    const backgroundColors = this.generateBackgroundColors(data.length);
+    const borderColors = this.generateBorderColors(data.length);
+
+    const chartData: ChartData<'pie', number[], string> = {
+      labels: labels,
+      datasets: [{
+        data: data,
+        backgroundColor: backgroundColors,
+        borderColor: borderColors,
+        borderWidth: 1
+      }]
+    };
+
+    const config: ChartConfiguration<'pie', number[], string> = {
+      type: 'pie',
+      data: chartData,
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          tooltip: {
+            callbacks: {
+              label: function (context: TooltipItem<'pie'>) {
+                const label = context.label;
+                const value = context.parsed as number;
+                const total = context.dataset.data.reduce((acc, val) => acc + val, 0);
+                const percentage = ((value / total) * 100).toFixed(2) + '%';
+                return `${label}: ${value} (${percentage})`;
+              }
             }
           }
         }
       }
+    };
+
+    if (this.industryDistributionChart) {
+      this.industryDistributionChart.destroy();
     }
-  };
 
-  if (this.industryDistributionChart) {
-    this.industryDistributionChart.destroy();
+    this.industryDistributionChart = new Chart(
+      document.getElementById('industryDistributionChart') as HTMLCanvasElement,
+      config
+    );
   }
-
-  this.industryDistributionChart = new Chart(
-    document.getElementById('industryDistributionChart') as HTMLCanvasElement,
-    config
-  );
-}
 
 
   // Helper method to generate background colors
