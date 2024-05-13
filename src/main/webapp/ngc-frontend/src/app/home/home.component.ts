@@ -230,10 +230,7 @@ export class HomeComponent implements OnInit {
             exchange: response.exchange,
             finnhubIndustry: response.finnhubIndustry,
             ipo: response.ipo,
-            
-            logo: response.logo || "assets/logo.png",
-           
-            
+            logo: response.logo || "assets/logo.png",  
             marketCapitalization: response.marketCapitalization,
             name: response.name,
             phone: response.phone,

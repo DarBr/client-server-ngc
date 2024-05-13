@@ -74,7 +74,9 @@ export class AktieKaufenComponent {
       const url: string = `${this.apiUrl}?q=${query}&token=${this.apiKey}`;
       this.http.get<any>(url).subscribe(response => {
         if (response && response.result) {
-          this.symbols = response.result.filter((symbol: { symbol: string; }) => /^[A-Za-z]+$/.test(symbol.symbol));
+          this.symbols = response.result.filter((symbol: { symbol: string; type: string }) => {
+            return /^[A-Za-z]+$/.test(symbol.symbol) && symbol.type === 'Common Stock';
+          });
           this.isLoading = false;
           this.initalLoading = false;
         } else {
