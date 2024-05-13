@@ -223,21 +223,24 @@ export class HomeComponent implements OnInit {
       map(response => {
         if (response) {
           // Extrahiere die relevanten Informationen aus der API-Antwort
-          const profile = {
+            const profile = {
             country: response.country,
             currency: response.currency,
             estimateCurrency: response.estimateCurrency,
             exchange: response.exchange,
             finnhubIndustry: response.finnhubIndustry,
             ipo: response.ipo,
-            logo: response.logo,
+            
+            logo: response.logo || "assets/logo.png",
+           
+            
             marketCapitalization: response.marketCapitalization,
             name: response.name,
             phone: response.phone,
             shareOutstanding: response.shareOutstanding,
             ticker: response.ticker,
             weburl: response.weburl
-          };
+            };
           return profile;
         } else {
           throw new Error('Fehler beim Abrufen des Aktienprofils.');
