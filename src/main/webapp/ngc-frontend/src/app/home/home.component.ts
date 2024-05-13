@@ -484,7 +484,17 @@ export class HomeComponent implements OnInit {
       'rgba(236, 240, 241, 0.8)', // Light Gray
       'rgba(149, 165, 166, 0.8)', // Slate
       'rgba(26, 188, 156, 0.8)', // Sea Green
-      'rgba(52, 73, 94, 0.8)' // Dark Slate
+      'rgba(52, 73, 94, 0.8)', // Dark Slate
+      'rgba(255, 0, 0, 0.5)', // Transparent Red
+      'rgba(0, 255, 0, 0.5)', // Transparent Green
+      'rgba(0, 0, 255, 0.5)', // Transparent Blue
+      'rgba(255, 255, 0, 0.5)', // Transparent Yellow
+      'rgba(255, 0, 255, 0.5)', // Transparent Magenta
+      'rgba(0, 255, 255, 0.5)', // Transparent Cyan
+      'rgba(128, 0, 0, 0.5)', // Transparent Maroon
+      'rgba(0, 128, 0, 0.5)', // Transparent Green
+      'rgba(0, 0, 128, 0.5)', // Transparent Navy
+      'rgba(128, 128, 0, 0.5)' // Transparent Olive
     ];
     return Array.from({ length: count }, (_, i) => palette[i % palette.length]);
   }
@@ -501,7 +511,17 @@ export class HomeComponent implements OnInit {
       'rgba(236, 240, 241, 0.8)', // Light Gray
       'rgba(149, 165, 166, 0.8)', // Slate
       'rgba(26, 188, 156, 0.8)', // Sea Green
-      'rgba(52, 73, 94, 0.8)' // Dark Slate
+      'rgba(52, 73, 94, 0.8)', // Dark Slate
+      'rgba(255, 0, 0, 0.5)', // Transparent Red
+      'rgba(0, 255, 0, 0.5)', // Transparent Green
+      'rgba(0, 0, 255, 0.5)', // Transparent Blue
+      'rgba(255, 255, 0, 0.5)', // Transparent Yellow
+      'rgba(255, 0, 255, 0.5)', // Transparent Magenta
+      'rgba(0, 255, 255, 0.5)', // Transparent Cyan
+      'rgba(128, 0, 0, 0.5)', // Transparent Maroon
+      'rgba(0, 128, 0, 0.5)', // Transparent Green
+      'rgba(0, 0, 128, 0.5)', // Transparent Navy
+      'rgba(128, 128, 0, 0.5)' // Transparent Olive
     ];
     return Array.from({ length: count }, (_, i) => palette[i % palette.length]);
   }
@@ -518,9 +538,20 @@ export class HomeComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
       console.log(result);
       if (result != null && result === 'Aktie erfolgreich verkauft!') {
-        this.loadDepotData(() => {
-          this.calculatePortfolioValue();
-          this.createPortfolioDistributionChart();
+        this.loadUserIDs(() => {
+          this.loadKontostand(() => {
+            this.loadDepotData(() => {
+              this.addCashToDepot(() => {
+                this.calculatePortfolioValue();
+                this.createPortfolioDistributionChart();
+                this.createIndustryDistributionChart();
+                this.checkMarketStatus();
+              }
+    
+              );
+            });
+          });
+    
         });
       } else {
         console.log(result);
