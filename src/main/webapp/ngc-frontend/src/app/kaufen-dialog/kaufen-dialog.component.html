@@ -2,11 +2,16 @@
     <h2 mat-dialog-title><b>Aktie kaufen</b></h2>
     <mat-dialog-content>
         <p>Sind Sie sicher, dass Sie Aktien von <b>{{this.symbol}}</b> kaufen möchten?</p>
+       
     </mat-dialog-content>
     <mat-form-field id="inputAnzahlFormField">
-        <input id="anzahlInput" matInput type="number" min="0" step="1" placeholder="Geben Sie die Anzahl ein" [(ngModel)]="kaufAnzahl" maxlength="5" pattern="[0-9]*">
+        <input id="anzahlInput" matInput type="number" min="0" step="1" placeholder="Geben Sie die Anzahl ein" [(ngModel)]="kaufAnzahl" maxlength="5" pattern="[0-9]*" (input)="updateTotalPrice()">
+       
+        
 
     </mat-form-field>
+    <p>Gesamtpreis: {{aktienpreis * kaufAnzahl}}$</p>
+    
     <mat-dialog-content *ngIf="isLoading">
         <p>Verarbeitung der Transaktion...</p>
     </mat-dialog-content>

@@ -37,6 +37,7 @@
           <th>Aktie</th>
           <th>Symbol</th>
           <th>Typ</th>
+          <th>Preis (in $)</th>
           <th>Handeln</th>
         </tr>
       </thead>
@@ -46,10 +47,10 @@
           <td>{{ symbol.description }}</td>
           <td>{{ symbol.symbol }}</td>
           <td>{{ symbol.type }}</td>
+          <td>{{symbol.price }}</td> <!-- Anzeige des Preises -->
           <td><button (click)="openKaufenPopup(symbol)">Kaufen</button></td>
         </tr>
       </tbody>
     </table>
   </div>
-
 </div>

@@ -17,9 +17,12 @@ export class KaufenDialogComponent {
   symbol: string = '';
   kaufAnzahl: number = 0;
   depotID: number = 0;
+  gesamtpreis: number = 0;
+  aktienpreis: number = 0;
   rueckgabe: string = '';
   isLoading: boolean = false;
   errorMessage: string = '';
+
    
 
   constructor(@Inject(MAT_DIALOG_DATA) public data: any, private http: HttpClient, public dialogRef: MatDialogRef<KaufenDialogComponent>) { }
@@ -27,6 +30,8 @@ export class KaufenDialogComponent {
   ngOnInit() {
     this.depotID = this.data.depotID;
     this.symbol = this.data.symbol;
+    this.aktienpreis = this.data.price;
+   
     
   }
 
@@ -64,6 +69,11 @@ export class KaufenDialogComponent {
       this.isLoading = false;
       this.errorMessage = 'Bitte geben Sie eine gültige Anzahl ein!';
     }
+  }
+
+  updateTotalPrice() {
+    // Berechnen Sie den Gesamtpreis basierend auf der eingegebenen Anzahl und dem aktuellen Preis pro Aktie
+    this.gesamtpreis = this.kaufAnzahl * this.data.currentPrice;
   }
   
 }

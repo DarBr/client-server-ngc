@@ -59,12 +59,7 @@ export class AktieKaufenComponent {
     }
   };
 
-  getCurrentPrice(symbol: string): Observable<number> {
-    const url: string = `${this.apiUrl}${symbol}&token=${this.apiKey}`;
-    return this.http.get<any>(url).pipe(
-      map(response => response.c)
-    );
-  }
+  
 
   searchSymbols(inputValue: string) {
     this.isLoading = true;
@@ -77,17 +72,46 @@ export class AktieKaufenComponent {
           this.symbols = response.result.filter((symbol: { symbol: string; type: string }) => {
             return /^[A-Za-z]+$/.test(symbol.symbol) && symbol.type === 'Common Stock';
           });
-          this.isLoading = false;
-          this.initalLoading = false;
+  
+          let requestsCompleted = 0; // Zähler für abgeschlossene Anfragen
+  
+          // Für jedes Symbol den aktuellen Preis abrufen und in das Array speichern
+          this.symbols.forEach((symbol: any) => {
+            this.getCurrentPrice(symbol.symbol).subscribe(price => {
+              symbol.price = price; // Speichern des Preises im Symbolobjekt
+              requestsCompleted++;
+  
+              // Überprüfen, ob alle Preise abgerufen wurden
+              if (requestsCompleted === this.symbols.length) {
+                this.isLoading = false;
+                this.initalLoading = false;
+                // Hier fortfahren mit dem Code, z. B. weitere Verarbeitung oder Anzeige
+              }
+            });
+          });
         } else {
           this.symbols = [];
+          this.isLoading = false; // Setzen Sie isLoading auf false, auch wenn keine Symbole gefunden wurden
+          this.initalLoading = false;
         }
       });
     } else {
       this.symbols = [];
+      this.isLoading = false; // Setzen Sie isLoading auf false, wenn die Abfrage leer ist
+      this.initalLoading = false;
     }
   }
+  
+  
 
+  getCurrentPrice(symbol: string): Observable<number> {
+    const apiKey = "cp0edihr01qnigejvsigcp0edihr01qnigejvsj0";
+    const apiUrl = `https://finnhub.io/api/v1/quote?symbol=${symbol}&token=${apiKey}`;
+    return this.http.get<any>(apiUrl).pipe(
+      map(response => response.c)
+      
+    );
+  }
 
 
 
@@ -103,7 +127,8 @@ export class AktieKaufenComponent {
       data: {
         symbol: item.symbol,
         vorhandeneAnzahl: item.anzahl,
-        depotID: this.depotID
+        depotID: this.depotID,
+        price: item.price
       }
     });
 
