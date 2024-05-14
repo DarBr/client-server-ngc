@@ -22,9 +22,16 @@
         <table class="table-transaktionen">
             <thead>
                 <tr>
-                    <th (click)="sortTable('zeitpunkt')">Zeitpunkt</th>
-                    <th (click)="sortTable('betrag')">Betrag (in $)</th>
-                    <th (click)="sortTable('typ')">Typ</th>
+                    <th (click)="sortTable('zeitpunkt')">Zeitpunkt
+                        <i class="fas" [ngClass]="{'fa-solid fa-arrow-up': sortColumn === 'zeitpunkt' && sortAscending, 'fa-solid fa-arrow-down': sortColumn === 'zeitpunkt' && !sortAscending, '': sortColumn !== 'zeitpunkt'}"></i>
+                      </th>
+                      <th (click)="sortTable('betrag')">Betrag (in $)
+                        <i class="fas" [ngClass]="{'fa-solid fa-arrow-up': sortColumn === 'betrag' && sortAscending, 'fa-solid fa-arrow-down': sortColumn === 'betrag' && !sortAscending, '': sortColumn !== 'betrag'}"></i>
+                      </th>
+                      <th (click)="sortTable('typ')">Typ
+                        <i class="fas" [ngClass]="{'fa-solid fa-arrow-up': sortColumn === 'typ' && sortAscending, 'fa-solid fa-arrow-down': sortColumn === 'typ' && !sortAscending, '': sortColumn !== 'typ'}"></i>
+                      </th>
+                      
                 </tr>
             </thead>
             <tbody>

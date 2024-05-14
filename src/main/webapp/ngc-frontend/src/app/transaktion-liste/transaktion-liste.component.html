@@ -25,11 +25,22 @@
     <table class="table-transaktionen">
       <thead>
         <tr>
-          <th (click)="sortTable('isin')">ISIN</th>
-          <th (click)="sortTable('betrag')">Betrag (in $)</th>
-          <th (click)="sortTable('zeitstempel')">Zeitstempel</th>
-          <th (click)="sortTable('anzahl')">Anzahl</th>
-          <th (click)="sortTable('typ')">Typ</th>
+          <th (click)="sortTable('isin')">ISIN
+            <i class="fas" [ngClass]="{'fa-solid fa-arrow-up': sortColumn === 'isin' && sortAscending, 'fa-solid fa-arrow-down': sortColumn === 'isin' && !sortAscending, '': sortColumn !== 'isin'}"></i>
+          </th>
+          <th (click)="sortTable('betrag')">Betrag (in $)
+            <i class="fas" [ngClass]="{'fa-solid fa-arrow-up': sortColumn === 'betrag' && sortAscending, 'fa-solid fa-arrow-down': sortColumn === 'betrag' && !sortAscending, '': sortColumn !== 'betrag'}"></i>
+          </th>
+          <th (click)="sortTable('zeitstempel')">Zeitstempel
+            <i class="fas" [ngClass]="{'fa-solid fa-arrow-up': sortColumn === 'zeitstempel' && sortAscending, 'fa-solid fa-arrow-down': sortColumn === 'zeitstempel' && !sortAscending, '': sortColumn !== 'zeitstempel'}"></i>
+          </th>
+          <th (click)="sortTable('anzahl')">Anzahl
+            <i class="fas" [ngClass]="{'fa-solid fa-arrow-up': sortColumn === 'anzahl' && sortAscending, 'fa-solid fa-arrow-down': sortColumn === 'anzahl' && !sortAscending, '': sortColumn !== 'anzahl'}"></i>
+          </th>
+          <th (click)="sortTable('typ')">Typ
+            <i class="fas" [ngClass]="{'fa-solid fa-arrow-up': sortColumn === 'typ' && sortAscending, 'fa-solid fa-arrow-down': sortColumn === 'typ' && !sortAscending, '': sortColumn !== 'typ'}"></i>
+          </th>
+          
 
         </tr>
       </thead>
