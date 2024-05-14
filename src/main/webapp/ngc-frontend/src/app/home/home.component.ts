@@ -253,7 +253,7 @@ export class HomeComponent implements OnInit {
 
   toggleDetails(item: any): void {
     item.showDetails = !item.showDetails;
-    console.log(this.depots);
+    
   }
 
   loadKontostand(callback: () => void) {
@@ -315,9 +315,9 @@ export class HomeComponent implements OnInit {
     } else {
       this.sortAscending = true;
     }
-
+  
     this.sortColumn = column;
-
+  
     this.depots.sort((a, b) => {
       let comparison = 0;
       if (a[column] > b[column]) {
@@ -327,7 +327,7 @@ export class HomeComponent implements OnInit {
       }
       return this.sortAscending ? comparison : comparison * -1;
     });
-
+  
     // Move CASH to the last position
     const cashIndex = this.depots.findIndex(depot => depot.isin === 'CASH');
     if (cashIndex !== -1) {
@@ -335,6 +335,7 @@ export class HomeComponent implements OnInit {
       this.depots.push(cashDepot);
     }
   }
+  
 
   addCashToDepot(callback: () => void) {
     this.loadKontostand(() => {
@@ -414,8 +415,6 @@ export class HomeComponent implements OnInit {
   }
 
   createIndustryDistributionChart() {
-
-    console.log(this.depots);
     const industryData = this.depots.reduce((acc: { [key: string]: number }, depot) => {
       const industry = depot.finnhubIndustry as string;
       const value = typeof depot.currentPrice === 'number' ? depot.currentPrice * depot.anzahl : 0;

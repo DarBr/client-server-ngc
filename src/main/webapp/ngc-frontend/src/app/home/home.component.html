@@ -1,13 +1,13 @@
 <div class="market-status-box">
-      <div *ngIf="isLoading" class="loading-spinner">
-        <i class="fa fa-spinner fa-spin"></i>
-      </div>
-      <div *ngIf="!isLoading">
-        <h2>{{ marketStatus }}</h2>
-        <p *ngIf="marketStatus === 'Die Börse ist aktuell geöffnet.'">Börse schließt: {{ nextOpenTime }}</p>
-        <p *ngIf="marketStatus !== 'Die Börse ist aktuell geöffnet.'">Börse öffnet: {{ nextOpenTime }}</p>
-      </div>
-    </div>
+  <div *ngIf="isLoading" class="loading-spinner">
+    <i class="fa fa-spinner fa-spin"></i>
+  </div>
+  <div *ngIf="!isLoading">
+    <h2>{{ marketStatus }}</h2>
+    <p *ngIf="marketStatus === 'Die Börse ist aktuell geöffnet.'">Börse schließt: {{ nextOpenTime }}</p>
+    <p *ngIf="marketStatus !== 'Die Börse ist aktuell geöffnet.'">Börse öffnet: {{ nextOpenTime }}</p>
+  </div>
+</div>
 
 <!-- Broker-Container -->
 <div class="broker-container">
@@ -19,7 +19,7 @@
     <p style="font-size: larger; font-weight: bold;">{{ calculatePortfolioValue() | number }}$ | {{ depots.length }}
       Depotpositionen: {{ depots.length - 1 }} Aktien, 1 CASH</p>
     <!-- Market Status Box -->
-    
+
   </div>
 </div>
 
@@ -45,14 +45,37 @@
       <!-- Tabellenkopf -->
       <thead>
         <tr>
-          <th (click)="sortTable('isin')">Aktie</th>
-          <th (click)="sortTable('anzahl')">Anzahl</th>
-          <th (click)="sortTable('einstandspreis')">Einstandspreis</th>
-          <th (click)="sortTable('currentPrice')">Aktueller Wert</th>
-          <th (click)="sortTable('changeTotal')">Wertänderung - Total</th>
-          <th (click)="sortTable('changeProzent')">Wertänderung - Prozentual</th>
+          <th (click)="sortTable('isin')">
+            Aktie
+            <i class="fas"
+              [ngClass]="{'fa-solid fa-arrow-up': sortColumn === 'isin' && sortAscending, 'fa-solid fa-arrow-down': sortColumn === 'isin' && !sortAscending, '': sortColumn !== 'isin'}"></i>
+          </th>
+          <th (click)="sortTable('anzahl')">
+            Anzahl
+            <i class="fas"
+              [ngClass]="{'fa-solid fa-arrow-up': sortColumn === 'anzahl' && sortAscending, 'fa-solid fa-arrow-down': sortColumn === 'anzahl' && !sortAscending, '': sortColumn !== 'anzahl'}"></i>
+          </th>
+          <th (click)="sortTable('einstandspreis')">
+            Einstandspreis
+            <i class="fas"
+              [ngClass]="{'fa-solid fa-arrow-up': sortColumn === 'einstandspreis' && sortAscending, 'fa-solid fa-arrow-down': sortColumn === 'einstandspreis' && !sortAscending, '': sortColumn !== 'einstandspreis'}"></i>
+          </th>
+          <th (click)="sortTable('currentPrice')">Aktueller Wert
+            <i class="fas"
+              [ngClass]="{'fa-solid fa-arrow-up': sortColumn === 'currentPrice' && sortAscending, 'fa-solid fa-arrow-down': sortColumn === 'currentPrice' && !sortAscending, '': sortColumn !== 'currentPrice'}"></i>
+          </th>
+          <th (click)="sortTable('changeTotal')">Wertänderung - Total
+            <i class="fas"
+              [ngClass]="{'fa-solid fa-arrow-up': sortColumn === 'changeTotal' && sortAscending, 'fa-solid fa-arrow-down': sortColumn === 'changeTotal' && !sortAscending, '': sortColumn !== 'changeTotal'}"></i>
+          </th>
+          <th (click)="sortTable('changeProzent')">Wertänderung - Prozentual
+            <i class="fas"
+              [ngClass]="{'fa-solid fa-arrow-up': sortColumn === 'changeProzent' && sortAscending, 'fa-solid fa-arrow-down': sortColumn === 'changeProzent' && !sortAscending, '': sortColumn !== 'changeProzent'}"></i>
+          </th>
+
           <th>Handeln</th>
         </tr>
+      </thead>
       <tbody>
         <!-- Schleife durch die Depotpositionen -->
         <ng-container *ngFor="let item of depots">
@@ -204,11 +227,11 @@
     <button class="tablinks" (click)="openTab('portfolioDistributionChart')">Portfolio Chart</button>
     <button class="tablinks" (click)="openTab('industryDistributionChart')">Industry Chart</button>
   </div>
-  
+
   <div [hidden]="activeTab !== 'portfolioDistributionChart'" class="tabcontent">
     <canvas id="portfolioDistributionChart"></canvas>
   </div>
-  
+
   <div [hidden]="activeTab !== 'industryDistributionChart'" class="tabcontent">
     <canvas id="industryDistributionChart"></canvas>
   </div>
