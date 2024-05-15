@@ -224,6 +224,11 @@
   </div>
   <div class="chart-container" *ngIf="!keineDepots && !isLoading"></div>
   <div class="tab" *ngIf="!keineDepots && !isLoading">
+    <p>In diesem Bereich finden Sie eine Analyse über Ihr Depot. Das Depot kann nach den Anteilen der einzelnen
+      Unternehmen oder nach den einzelnen Branchen analysiert werden.<br> Um den prozentualen Anteil einer Position zu
+      sehen, hovern Sie einfach über das Segment. Es ist auch möglich einzelne Segmente vorübergehend auszublenden.
+      <br>Klicken sie dazu auf das entsprechende Element in der Legende.</p>
+
     <button class="tablinks" (click)="openTab('portfolioDistributionChart')">Portfolio Chart</button>
     <button class="tablinks" (click)="openTab('industryDistributionChart')">Industry Chart</button>
   </div>
