@@ -49,7 +49,7 @@ export class HomeComponent implements OnInit {
   portfolioDistributionChart: Chart<'pie', number[], string> | null = null;
   industryDistributionChart: Chart<'pie', number[], string> | null = null;
   activeTab = 'portfolioDistributionChart';
-  
+
 
   constructor(private http: HttpClient, private authService: AuthService, private dialog: MatDialog) { }
 
@@ -169,38 +169,38 @@ export class HomeComponent implements OnInit {
     const apiKey = "co5rfg9r01qv77g7nk90co5rfg9r01qv77g7nk9g";
     const url = `https://finnhub.io/api/v1/stock/market-status?exchange=US&token=${apiKey}`;
     this.http.get<any>(url).subscribe({
-        next: (response) => {
-            const nowEST = moment().tz('America/New_York');
-            const openEST = moment().tz('America/New_York').set({ hour: 9, minute: 30, second: 0 });
-            const closeEST = moment().tz('America/New_York').set({ hour: 16, minute: 0, second: 0 });
+      next: (response) => {
+        const nowEST = moment().tz('America/New_York');
+        const openEST = moment().tz('America/New_York').set({ hour: 9, minute: 30, second: 0 });
+        const closeEST = moment().tz('America/New_York').set({ hour: 16, minute: 0, second: 0 });
 
-            if (response.isOpen) {
-                this.marketStatus = 'Die Börse ist aktuell geöffnet.';
-                this.nextOpenTime = closeEST.clone().tz('Europe/Berlin').format('dddd, D. MMMM YYYY, HH:mm:ss [Uhr]');
+        if (response.isOpen) {
+          this.marketStatus = 'Die Börse ist aktuell geöffnet.';
+          this.nextOpenTime = closeEST.clone().tz('Europe/Berlin').format('dddd, D. MMMM YYYY, HH:mm:ss [Uhr]');
+        } else {
+          this.marketStatus = 'Die Börse ist geschlossen.';
+          if (nowEST.isAfter(closeEST)) {
+            // Überprüfen, ob heute Freitag oder Wochenende ist
+            const currentDay = nowEST.day();
+            if (currentDay === 5) { // Freitag
+              openEST.add(3, 'days'); // Springe zu Montag
+            } else if (currentDay === 6) { // Samstag
+              openEST.add(2, 'days'); // Springe zu Montag
+            } else if (currentDay === 0) { // Sonntag
+              openEST.add(1, 'day'); // Springe zu Montag
             } else {
-                this.marketStatus = 'Die Börse ist geschlossen.';
-                if (nowEST.isAfter(closeEST)) {
-                    // Überprüfen, ob heute Freitag oder Wochenende ist
-                    const currentDay = nowEST.day();
-                    if (currentDay === 5) { // Freitag
-                        openEST.add(3, 'days'); // Springe zu Montag
-                    } else if (currentDay === 6) { // Samstag
-                        openEST.add(2, 'days'); // Springe zu Montag
-                    } else if (currentDay === 0) { // Sonntag
-                        openEST.add(1, 'day'); // Springe zu Montag
-                    } else {
-                        openEST.add(1, 'day'); // Nächster Tag, falls nicht Wochenende
-                    }
-                }
-                this.nextOpenTime = openEST.clone().tz('Europe/Berlin').format('dddd, D. MMMM YYYY, HH:mm:ss [Uhr]');
+              openEST.add(1, 'day'); // Nächster Tag, falls nicht Wochenende
             }
-        },
-        error: () => {
-            this.marketStatus = 'Fehler beim Laden des Marktstatus.';
-            this.nextOpenTime = 'Zeit nicht verfügbar. Bitte später prüfen.';
+          }
+          this.nextOpenTime = openEST.clone().tz('Europe/Berlin').format('dddd, D. MMMM YYYY, HH:mm:ss [Uhr]');
         }
+      },
+      error: () => {
+        this.marketStatus = 'Fehler beim Laden des Marktstatus.';
+        this.nextOpenTime = 'Zeit nicht verfügbar. Bitte später prüfen.';
+      }
     });
-} 
+  }
 
   openTab(tabId: string) {
     this.activeTab = tabId;
@@ -223,21 +223,21 @@ export class HomeComponent implements OnInit {
       map(response => {
         if (response) {
           // Extrahiere die relevanten Informationen aus der API-Antwort
-            const profile = {
+          const profile = {
             country: response.country,
             currency: response.currency,
             estimateCurrency: response.estimateCurrency,
             exchange: response.exchange,
             finnhubIndustry: response.finnhubIndustry,
             ipo: response.ipo,
-            logo: response.logo || "assets/logo.png",  
+            logo: response.logo || "assets/logo.png",
             marketCapitalization: response.marketCapitalization,
             name: response.name,
             phone: response.phone,
             shareOutstanding: response.shareOutstanding,
             ticker: response.ticker,
             weburl: response.weburl
-            };
+          };
           return profile;
         } else {
           throw new Error('Fehler beim Abrufen des Aktienprofils.');
@@ -253,7 +253,6 @@ export class HomeComponent implements OnInit {
 
   toggleDetails(item: any): void {
     item.showDetails = !item.showDetails;
-    
   }
 
   loadKontostand(callback: () => void) {
@@ -262,9 +261,6 @@ export class HomeComponent implements OnInit {
       this.isLoading = false;
       callback();
     });
-
-
-
   }
 
 
@@ -315,9 +311,9 @@ export class HomeComponent implements OnInit {
     } else {
       this.sortAscending = true;
     }
-  
+
     this.sortColumn = column;
-  
+
     this.depots.sort((a, b) => {
       let comparison = 0;
       if (a[column] > b[column]) {
@@ -327,7 +323,7 @@ export class HomeComponent implements OnInit {
       }
       return this.sortAscending ? comparison : comparison * -1;
     });
-  
+
     // Move CASH to the last position
     const cashIndex = this.depots.findIndex(depot => depot.isin === 'CASH');
     if (cashIndex !== -1) {
@@ -335,7 +331,7 @@ export class HomeComponent implements OnInit {
       this.depots.push(cashDepot);
     }
   }
-  
+
 
   addCashToDepot(callback: () => void) {
     this.loadKontostand(() => {
@@ -546,11 +542,11 @@ export class HomeComponent implements OnInit {
                 this.createIndustryDistributionChart();
                 this.checkMarketStatus();
               }
-    
+
               );
             });
           });
-    
+
         });
       } else {
         console.log(result);

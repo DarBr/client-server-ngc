@@ -6,7 +6,7 @@
 
 
   <div class="filter-container">
-    <label for="isinFilter">Filtern nach ISIN:</label>
+    <label for="isinFilter">Filtern nach Aktie:</label>
     <input type="text" id="isinFilter" [(ngModel)]="isinFilter" (input)="applyFilters()">
 
     <label for="typeFilter">Filtern nach Typ:</label>
@@ -25,7 +25,7 @@
     <table class="table-transaktionen">
       <thead>
         <tr>
-          <th (click)="sortTable('isin')">ISIN
+          <th (click)="sortTable('isin')">Aktie
             <i class="fas" [ngClass]="{'fa-solid fa-arrow-up': sortColumn === 'isin' && sortAscending, 'fa-solid fa-arrow-down': sortColumn === 'isin' && !sortAscending, '': sortColumn !== 'isin'}"></i>
           </th>
           <th (click)="sortTable('betrag')">Betrag (in $)
