@@ -33,7 +33,7 @@ export class AktieKaufenComponent {
   symbols: any[] = [];
 
 
-  constructor(private http: HttpClient, private authService: AuthService, private dialog: MatDialog ) { }
+  constructor(private http: HttpClient, private authService: AuthService, private dialog: MatDialog) { }
 
   ngOnInit() {
     this.initalLoading = true;
@@ -59,7 +59,7 @@ export class AktieKaufenComponent {
     }
   };
 
-  
+
 
   searchSymbols(inputValue: string) {
     this.isLoading = true;
@@ -72,23 +72,29 @@ export class AktieKaufenComponent {
           this.symbols = response.result.filter((symbol: { symbol: string; type: string }) => {
             return /^[A-Za-z]+$/.test(symbol.symbol) && symbol.type === 'Common Stock';
           });
-  
+         
+
           let requestsCompleted = 0; // Zähler für abgeschlossene Anfragen
+
+          if(this.symbols.length > 0){
+            this.symbols.forEach((symbol: any) => {
+              this.getCurrentPrice(symbol.symbol).subscribe(price => {
+                symbol.price = price; // Speichern des Preises im Symbolobjekt
+                requestsCompleted++;
   
-          // Für jedes Symbol den aktuellen Preis abrufen und in das Array speichern
-          this.symbols.forEach((symbol: any) => {
-            this.getCurrentPrice(symbol.symbol).subscribe(price => {
-              symbol.price = price; // Speichern des Preises im Symbolobjekt
-              requestsCompleted++;
-  
-              // Überprüfen, ob alle Preise abgerufen wurden
-              if (requestsCompleted === this.symbols.length) {
-                this.isLoading = false;
-                this.initalLoading = false;
-                // Hier fortfahren mit dem Code, z. B. weitere Verarbeitung oder Anzeige
-              }
+                // Überprüfen, ob alle Preise abgerufen wurden
+                if (requestsCompleted === this.symbols.length) {
+                  this.isLoading = false;
+                  this.initalLoading = false;
+                  // Hier fortfahren mit dem Code, z. B. weitere Verarbeitung oder Anzeige
+                }
+              });
             });
-          });
+          }
+          if(this.symbols.length === 0){
+            this.isLoading = false;
+            this.initalLoading = false;
+          }
         } else {
           this.symbols = [];
           this.isLoading = false; // Setzen Sie isLoading auf false, auch wenn keine Symbole gefunden wurden
@@ -100,17 +106,20 @@ export class AktieKaufenComponent {
       this.isLoading = false; // Setzen Sie isLoading auf false, wenn die Abfrage leer ist
       this.initalLoading = false;
     }
+
+
   }
-  
-  
+
+
 
   getCurrentPrice(symbol: string): Observable<number> {
     const apiKey = "cp0edihr01qnigejvsigcp0edihr01qnigejvsj0";
     const apiUrl = `https://finnhub.io/api/v1/quote?symbol=${symbol}&token=${apiKey}`;
     return this.http.get<any>(apiUrl).pipe(
       map(response => response.c)
-      
+
     );
+
   }
 
 
@@ -133,14 +142,14 @@ export class AktieKaufenComponent {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      
+
       if (result != null && result === 'Aktie erfolgreich gekauft!') {
         console.log("Aktienkauf erfolgreich!");
-       }else if (result != null && result.includes('Kauf fehlgeschlagen')) {
+      } else if (result != null && result.includes('Kauf fehlgeschlagen')) {
         console.log("Fehler beim Aktienkauf!");
       }
     });
   }
 
-  
+
 }
