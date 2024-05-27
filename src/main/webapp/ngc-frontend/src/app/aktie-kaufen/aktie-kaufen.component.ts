@@ -72,21 +72,30 @@ export class AktieKaufenComponent {
           this.symbols = response.result.filter((symbol: { symbol: string; type: string }) => {
             return /^[A-Za-z]+$/.test(symbol.symbol) && symbol.type === 'Common Stock';
           });
-         
-
+  
           let requestsCompleted = 0; // Zähler für abgeschlossene Anfragen
-
+  
           if(this.symbols.length > 0){
             this.symbols.forEach((symbol: any) => {
               this.getCurrentPrice(symbol.symbol).subscribe(price => {
-                symbol.price = price; // Speichern des Preises im Symbolobjekt
-                requestsCompleted++;
+                // Überprüfen, ob der Preis größer oder gleich 0.01 ist
+                if (price >= 0.01) {
+                  symbol.price = price; // Speichern des Preises im Symbolobjekt
+                  requestsCompleted++;
   
-                // Überprüfen, ob alle Preise abgerufen wurden
-                if (requestsCompleted === this.symbols.length) {
-                  this.isLoading = false;
-                  this.initalLoading = false;
-                  // Hier fortfahren mit dem Code, z. B. weitere Verarbeitung oder Anzeige
+                  // Überprüfen, ob alle Preise abgerufen wurden
+                  if (requestsCompleted === this.symbols.length) {
+                    this.isLoading = false;
+                    this.initalLoading = false;
+                    // Hier fortfahren mit dem Code, z. B. weitere Verarbeitung oder Anzeige
+                  }
+                } else {
+                  // Wenn der Preis kleiner als 0.01 ist, entfernen Sie das Symbol aus dem Array
+                  const index = this.symbols.indexOf(symbol);
+                  if (index > -1) {
+                    this.symbols.splice(index, 1);
+                  }
+                  requestsCompleted++;
                 }
               });
             });
@@ -106,8 +115,6 @@ export class AktieKaufenComponent {
       this.isLoading = false; // Setzen Sie isLoading auf false, wenn die Abfrage leer ist
       this.initalLoading = false;
     }
-
-
   }
 
 
