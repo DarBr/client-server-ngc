@@ -9,8 +9,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.example.demo.config.JwtUtil;
 import com.example.demo.model.Konto;
 import com.example.demo.model.Nutzer;
+import com.example.demo.model.Zahlung;
 import com.example.demo.repository.KontoRepository;
 import com.example.demo.repository.NutzerRepository;
+import com.example.demo.repository.ZahlungRepository;
 
 import java.util.List;
 import java.util.Optional;
@@ -21,6 +23,8 @@ public class NutzerService {
     private NutzerRepository nutzerRepository;
     @Autowired
     private KontoRepository kontoRepository;
+    @Autowired
+    private ZahlungRepository zahlungRepository;
     @Autowired
     private JwtUtil jwtUtil;
 
@@ -33,13 +37,17 @@ public class NutzerService {
             return null;
             
         } else {
-            // Hier wird ein neues Konto für den Nutzer erstellt und gespeichert
+            // Hier wird ein neues Konto für den Nutzer erstellt und das Startbudget gespeichert
             Konto konto = new Konto();
-            konto.setKontostand(startBudget); // Setzen Sie den Anfangskontostand nach Bedarf
-            konto = kontoRepository.save(konto); // Das Konto wird gespeichert, um seine ID zu erhalten
+            konto.setKontostand(startBudget);
+            kontoRepository.save(konto); // Das Konto wird gespeichert
             int id = konto.getKontoID();
+            //Zahlung erstellen
+            Zahlung zahlung = new Zahlung(startBudget, "Einzahlung", id);
+            zahlungRepository.save(zahlung);
+            // Nutzer erstellen           
             Nutzer nutzer = new Nutzer();
-            // Setzen Sie die Konto-ID im Nutzerobjekt
+            // Setzen Sie die Konto-ID und Depot-ID im Nutzerobjekt
             nutzer.setUsername(username);
             nutzer.setKontoID(id);
             nutzer.setDepotID(id);
