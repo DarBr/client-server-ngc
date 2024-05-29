@@ -222,7 +222,9 @@
   <div *ngIf="isLoading" class="loading-spinner">
     <i class="fa fa-spinner fa-spin"></i>
   </div>
-  <div class="chart-container" *ngIf="!keineDepots && !isLoading"></div>
+  <div class="chart-container" *ngIf="keineDepots && !isLoading">
+    <p>Sie haben leider keine Aktien im Depot. Somit kann keine Analyse vorgenommen werden.</p>
+  </div>
   <div class="tab" *ngIf="!keineDepots && !isLoading">
     <p>In diesem Bereich finden Sie eine Analyse über Ihr Depot. Das Depot kann nach den Anteilen der einzelnen
       Unternehmen oder nach den einzelnen Branchen analysiert werden.<br> Um den prozentualen Anteil einer Position zu
