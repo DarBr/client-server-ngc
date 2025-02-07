@@ -417,13 +417,13 @@ export class HomeComponent implements OnInit {
       acc[industry] = (acc[industry] || 0) + value;
       return acc;
     }, {});
-
+  
     const labels = Object.keys(industryData);
     const data = Object.values(industryData);
-
+  
     const backgroundColors = this.generateBackgroundColors(data.length);
     const borderColors = this.generateBorderColors(data.length);
-
+  
     const chartData: ChartData<'pie', number[], string> = {
       labels: labels,
       datasets: [{
@@ -433,7 +433,7 @@ export class HomeComponent implements OnInit {
         borderWidth: 1
       }]
     };
-
+  
     const config: ChartConfiguration<'pie', number[], string> = {
       type: 'pie',
       data: chartData,
@@ -445,9 +445,9 @@ export class HomeComponent implements OnInit {
             callbacks: {
               label: function (context: TooltipItem<'pie'>) {
                 const label = context.label;
-                const value = context.parsed as number;
+                const value = (context.parsed as number).toFixed(2); // Runden der absoluten Werte
                 const total = context.dataset.data.reduce((acc, val) => acc + val, 0);
-                const percentage = ((value / total) * 100).toFixed(2) + '%';
+                const percentage = ((parseFloat(value) / total) * 100).toFixed(2) + '%'; // Runden der Prozentzahlen
                 return `${label}: ${value} (${percentage})`;
               }
             }
@@ -455,11 +455,11 @@ export class HomeComponent implements OnInit {
         }
       }
     };
-
+  
     if (this.industryDistributionChart) {
       this.industryDistributionChart.destroy();
     }
-
+  
     this.industryDistributionChart = new Chart(
       document.getElementById('industryDistributionChart') as HTMLCanvasElement,
       config
