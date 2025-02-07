@@ -66,29 +66,28 @@ export class TransaktionListeComponent implements OnInit {
       };
     });
   }
+
+ applyFilters() {
+  // Kopiere das Originalarray für die gefilterten Transaktionen
+  let filteredTransaktionen = [...this.originalTransaktionen];
   
-  applyFilters() {
-    // Kopiere das Originalarray für die gefilterten Transaktionen
-    let filteredTransaktionen = [...this.originalTransaktionen];
-    
-    // Filter nach ISIN, falls ein Filterwert vorhanden ist
-    if (this.isinFilter) {
-      filteredTransaktionen = filteredTransaktionen.filter(transaction => transaction.isin.includes(this.isinFilter));
-    }
-  
-    // Filter nach Typ, falls ein Filterwert vorhanden ist
-    if (this.typeFilter) {
-      filteredTransaktionen = filteredTransaktionen.filter(transaction => transaction.typ === this.typeFilter);
-    }
-  
-    // Überprüfen, ob Filter angewendet wurden und Transaktionen vorhanden sind
-    this.keineTransaktionen = filteredTransaktionen.length === 0 && (this.isinFilter !== '' || this.typeFilter !== '');
-  
-    // Aktualisiere die angezeigten Transaktionen
-    this.transaktionen = filteredTransaktionen;
+  // Filter nach ISIN, falls ein Filterwert vorhanden ist
+  if (this.isinFilter) {
+    const isinFilterUpper = this.isinFilter.toUpperCase();
+    filteredTransaktionen = filteredTransaktionen.filter(transaction => transaction.isin.toUpperCase().includes(isinFilterUpper));
   }
-  
-  
+
+  // Filter nach Typ, falls ein Filterwert vorhanden ist
+  if (this.typeFilter) {
+    filteredTransaktionen = filteredTransaktionen.filter(transaction => transaction.typ === this.typeFilter);
+  }
+
+  // Überprüfen, ob Filter angewendet wurden und Transaktionen vorhanden sind
+  this.keineTransaktionen = filteredTransaktionen.length === 0 && (this.isinFilter !== '' || this.typeFilter !== '');
+
+  // Aktualisiere die angezeigten Transaktionen
+  this.transaktionen = filteredTransaktionen;
+} 
   
   
 
