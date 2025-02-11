@@ -4,6 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { AuthService } from '../AuthService';
 import { forkJoin } from 'rxjs';
 import { FormsModule } from '@angular/forms';
+import { environment } from '../../environments/environment';
 
 
 @Component({
@@ -14,6 +15,9 @@ import { FormsModule } from '@angular/forms';
   imports: [CommonModule, FormsModule]
 })
 export class TransaktionListeComponent implements OnInit {
+
+  private apiUrl = environment.apiPath;
+
   userID: number = 0;
   depotID: number = 0;
   transaktionen: any[] = []; // Hier wird das Array initialisiert
@@ -53,7 +57,7 @@ export class TransaktionListeComponent implements OnInit {
 
   // Lade die Transaktionen
   loadTransactions() {
-    this.http.get<any[]>(`http://localhost:8080/transaktionen/transaktionenByKontoID/${this.depotID}`).subscribe((data) => {
+    this.http.get<any[]>(`${this.apiUrl}/transaktionen/transaktionenByKontoID/${this.depotID}`).subscribe((data) => {
       this.transaktionen = data.sort((a, b) => new Date(b.zeitstempel).getTime() - new Date(a.zeitstempel).getTime());
       this.originalTransaktionen = this.transaktionen;
       this.applyFilters();

@@ -1,10 +1,13 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { environment } from '../environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
+
+  private apiUrl = environment.apiPath;
 
   constructor(private http: HttpClient) { };
 
@@ -25,7 +28,7 @@ export class AuthService {
 
   
   public async getUsernameFromToken(storedtoken: string): Promise<string | null> {
-    const url = 'http://localhost:8080/nutzer/usernamefromtoken';
+    const url = `${this.apiUrl}/nutzer/usernamefromtoken`;
     const params = {
         token: storedtoken
     };
@@ -38,7 +41,7 @@ export class AuthService {
   }
 
   public async getUserIDFromToken(storedtoken: string): Promise<number | null> {
-    const url = 'http://localhost:8080/nutzer/useridfromtoken';
+    const url = `${this.apiUrl}/nutzer/useridfromtoken`;
     const params = {
         token: storedtoken
     };
@@ -51,7 +54,7 @@ export class AuthService {
   }
 
   public async getDepotIDFromToken(storedtoken: string): Promise<number | null> {
-    const url = 'http://localhost:8080/nutzer/depotidfromtoken';
+    const url = `${this.apiUrl}/nutzer/depotidfromtoken`;
     const params = {
         token: storedtoken
     };
@@ -64,7 +67,7 @@ export class AuthService {
   }
 
   public async getKontoIDFromToken(storedtoken: string): Promise<number | null> {
-    const url = 'http://localhost:8080/nutzer/kontoidfromtoken';
+    const url = `${this.apiUrl}/nutzer/kontoidfromtoken`;
     const params = {
         token: storedtoken
     };
@@ -77,7 +80,7 @@ export class AuthService {
   }
   
   public async validateToken(storedtoken: string): Promise<boolean | null> {
-    const url = 'http://localhost:8080/nutzer/validateToken';
+    const url = `${this.apiUrl}/nutzer/validateToken`;
     const params = {
         tokenuebergeben: storedtoken
     };

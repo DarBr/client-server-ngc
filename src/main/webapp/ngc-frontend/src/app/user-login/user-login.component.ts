@@ -9,6 +9,7 @@ import { AppComponent } from '../app.component';
 import { MatDialog } from '@angular/material/dialog';
 import { ChangePasswordDialogComponent } from '../change-password-dialog/change-password-dialog.component';
 import { ChangeUsernameDialogComponent } from '../change-username-dialog/change-username-dialog.component';
+import { environment } from '../../environments/environment';
 
 @Component({
   selector: 'app-user-login',
@@ -18,6 +19,9 @@ import { ChangeUsernameDialogComponent } from '../change-username-dialog/change-
   imports: [CommonModule, FormsModule]
 })
 export class LoginComponent {
+
+  private apiUrl = environment.apiPath;
+
   isLoggedIn: boolean = false;
   username: string = '';
   password: string = '';
@@ -56,7 +60,7 @@ export class LoginComponent {
     }
     this.errorMessage = '';
     this.successMessage = '';
-    const url = 'http://localhost:8080/nutzer/add';
+    const url = `${this.apiUrl}/nutzer/add`;
     const params = new HttpParams()
       .set('username', this.username)
       .set('password', this.password)
@@ -83,7 +87,7 @@ export class LoginComponent {
     if (!this.username || !this.password) {
       return;
     }
-    const url = 'http://localhost:8080/nutzer/login';
+    const url = `${this.apiUrl}/nutzer/login`;
     const params = new HttpParams()
       .set('username', this.username)
       .set('password', this.password);

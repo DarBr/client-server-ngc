@@ -5,6 +5,8 @@ import { FormsModule } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { environment } from '../../environments/environment';
+
 @Component({
   selector: 'app-kaufen-dialog',
   standalone: true,
@@ -13,6 +15,8 @@ import { MatInputModule } from '@angular/material/input';
   styleUrl: './kaufen-dialog.component.css'
 })
 export class KaufenDialogComponent {
+
+  private apiUrl = environment.apiPath;
 
   symbol: string = '';
   kaufAnzahl: number = 0;
@@ -39,7 +43,7 @@ export class KaufenDialogComponent {
     this.isLoading = true;
     if (buyQuantity !== null && !isNaN(buyQuantity) && buyQuantity > 0) {
       this.errorMessage = '';
-      const url = `http://localhost:8080/depot/kaufen?depotID=${this.depotID}&isin=${this.symbol}&anzahl=${buyQuantity}`;
+      const url = `${this.apiUrl}/depot/kaufen?depotID=${this.depotID}&isin=${this.symbol}&anzahl=${buyQuantity}`;
       this.http.post(url, {}, {responseType: 'text'}).subscribe(
         (response: string) => {
           if (response === 'Aktie erfolgreich gekauft!') {

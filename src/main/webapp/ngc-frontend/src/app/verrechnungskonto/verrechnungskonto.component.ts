@@ -7,6 +7,7 @@ import { forkJoin } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
 import { EinzahlenDialogComponent } from '../einzahlen-dialog/einzahlen-dialog.component';
 import { AuszahlenDialogComponent } from '../auszahlen-dialog/auszahlen-dialog.component';
+import { environment } from '../../environments/environment';
 
 
 @Component({
@@ -17,6 +18,9 @@ import { AuszahlenDialogComponent } from '../auszahlen-dialog/auszahlen-dialog.c
   styleUrl: './verrechnungskonto.component.css'
 })
 export class VerrechnungskontoComponent implements OnInit {
+
+  private apiUrl = environment.apiPath;
+
   zahlungen: any[] = []; // Hier wird das Array initialisiert
   isLoading = true;
   keineZahlungen = false;
@@ -56,7 +60,7 @@ export class VerrechnungskontoComponent implements OnInit {
 
   // Lade die Transaktionen
   loadZahlungen() {
-    this.http.get<any[]>(`http://localhost:8080/zahlungen/zahlungenByKontoID/${this.kontoID}`).subscribe((data) => {
+    this.http.get<any[]>(`${this.apiUrl}/zahlungen/zahlungenByKontoID/${this.kontoID}`).subscribe((data) => {
       this.zahlungen = data.sort((a, b) => {
         return new Date(b.zeitpunkt).getTime() - new Date(a.zeitpunkt).getTime();
       });
@@ -92,7 +96,7 @@ export class VerrechnungskontoComponent implements OnInit {
   }
 
   loadKontostand() {
-    this.http.get<any>(`http://localhost:8080/konto/${this.kontoID}`).subscribe((data) => {
+    this.http.get<any>(`${this.apiUrl}/konto/${this.kontoID}`).subscribe((data) => {
       this.kontostand = Math.round(data.kontostand * 100) / 100;
     });
   }

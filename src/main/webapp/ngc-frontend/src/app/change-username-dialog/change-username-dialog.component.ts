@@ -5,6 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { environment } from '../../environments/environment';
 
 @Component({
   selector: 'app-change-username-dialog',
@@ -14,6 +15,9 @@ import { MatInputModule } from '@angular/material/input';
   styleUrl: './change-username-dialog.component.css'
 })
 export class ChangeUsernameDialogComponent {
+
+  private apiUrl = environment.apiPath;
+
   isLoading: boolean = false;
   newUsername1: string = '';
   newUsername2: string = '';
@@ -39,7 +43,7 @@ export class ChangeUsernameDialogComponent {
       .set('username', this.username)
       .set('newUsername', this.newUsername1);
     
-    const url = 'http://localhost:8080/nutzer/changeUsername';
+    const url = `${this.apiUrl}/nutzer/changeUsername`;
     this.http.post(url, params, {responseType: 'text'}).subscribe(response => {
       if (response === 'Benutzername erfolgreich geändert') {
         this.isLoading = false;

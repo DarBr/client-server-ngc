@@ -5,6 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { environment } from '../../environments/environment';
 
 
 @Component({
@@ -15,6 +16,8 @@ import { MatInputModule } from '@angular/material/input';
   styleUrl: './auszahlen-dialog.component.css'
 })
 export class AuszahlenDialogComponent {
+
+  private apiUrl = environment.apiPath;
 
   rueckgabe: string = '';
   isLoading: boolean = false;
@@ -34,10 +37,10 @@ export class AuszahlenDialogComponent {
     if (betrag !== null)
       if (!isNaN(betrag) && betrag > 0) {
         this.errorMessage = '';
-        const url = `http://localhost:8080/konto/auszahlen?kontoID=${this.kontoID}&betrag=${betrag}`;
+        const url = `${this.apiUrl}/konto/auszahlen?kontoID=${this.kontoID}&betrag=${betrag}`;
   
         // Kontostand abrufen
-        const kontostandUrl = `http://localhost:8080/konto/${this.kontoID}`;
+        const kontostandUrl = `${this.apiUrl}/konto/${this.kontoID}`;
 
         this.http.get<any>(kontostandUrl).subscribe(konto => {
           if (konto.kontostand >= betrag) {

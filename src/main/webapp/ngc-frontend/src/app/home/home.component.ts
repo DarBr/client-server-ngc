@@ -19,12 +19,10 @@ import {
 import { AuthService } from '../AuthService';
 import { MatDialog } from '@angular/material/dialog';
 import { VerkaufenDialogComponent } from '../verkaufen-dialog/verkaufen-dialog.component';
+import { environment } from '../../environments/environment';
 
 // Register the components for the pie chart
 Chart.register(PieController, ArcElement, Tooltip, Legend);
-
-
-
 
 @Component({
   selector: 'app-home',
@@ -35,6 +33,9 @@ Chart.register(PieController, ArcElement, Tooltip, Legend);
 })
 
 export class HomeComponent implements OnInit {
+
+  private apiUrl = environment.apiPath
+
   marketStatus: string = '';
   nextOpenTime: string = '';
   userID: number = 0;
@@ -104,7 +105,7 @@ export class HomeComponent implements OnInit {
     this.depots = [];
     this.isLoading = true;
 
-    this.http.get<any[]>(`http://localhost:8080/depot/${this.depotID}`).pipe(
+    this.http.get<any[]>(`${this.apiUrl}/depot/${this.depotID}`).pipe(
       catchError((error: HttpErrorResponse) => {
         this.isLoading = false;
 
@@ -256,7 +257,7 @@ export class HomeComponent implements OnInit {
   }
 
   loadKontostand(callback: () => void) {
-    this.http.get<any>(`http://localhost:8080/konto/${this.kontoID}`).subscribe((data) => {
+    this.http.get<any>(`${this.apiUrl}/konto/${this.kontoID}`).subscribe((data) => {
       this.kontostand = Math.round(data.kontostand * 100) / 100;
       this.isLoading = false;
       callback();

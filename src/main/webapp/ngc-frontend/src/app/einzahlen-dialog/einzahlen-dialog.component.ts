@@ -5,6 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { environment } from '../../environments/environment';
 
 
 @Component({
@@ -15,6 +16,8 @@ import { MatInputModule } from '@angular/material/input';
   styleUrl: './einzahlen-dialog.component.css'
 })
 export class EinzahlenDialogComponent {
+
+  private apiUrl = environment.apiPath;
 
   rueckgabe: string = '';
   isLoading: boolean = false;
@@ -34,7 +37,7 @@ export class EinzahlenDialogComponent {
   if (betrag !== null)
     if (!isNaN(betrag) && betrag > 0) {
       this.errorMessage = '';
-      const url = `http://localhost:8080/konto/einzahlen?kontoID=${this.kontoID}&betrag=${betrag}`;
+      const url = `${this.apiUrl}/konto/einzahlen?kontoID=${this.kontoID}&betrag=${betrag}`;
       this.http.put(url, {}, {responseType: 'text'}).subscribe(response => {
         if (response === 'Einzahlung erfolgreich!') {
           this.rueckgabe = response;
