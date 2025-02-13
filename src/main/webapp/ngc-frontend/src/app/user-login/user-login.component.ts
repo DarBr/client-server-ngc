@@ -25,6 +25,12 @@ export class LoginComponent {
   isLoggedIn: boolean = false;
   username: string = '';
   password: string = '';
+  confirmpassword: string = '';
+  strength: number = 0;
+  showInfo: boolean = false;
+  passwordVisible: boolean = false;
+  confirmpasswordVisible: boolean = false;
+  loginpasswordVisible: boolean = false;
   startBudget: number = 0;
   errorMessage: string = '';
   showUsername: string = '';
@@ -48,6 +54,9 @@ export class LoginComponent {
 
   changeTab(tab: string) {
     this.activeTab = tab;
+    this.username = '';
+    this.password = '';
+    this.confirmpassword = '';
     this.errorMessage = '';
     this.successMessage = '';
     this.formSubmitted = false;
@@ -55,31 +64,55 @@ export class LoginComponent {
 
   onRegister() {
     this.formSubmitted = true;
-    if (!this.username || !this.password || this.startBudget<1) {
+    if(this.strength<2){
+      this.errorMessage = 'Das Passwort ist zu schwach.';
+      this.password = '';
+      this.confirmpassword = '';
+      this.startBudget = 0;
       return;
     }
-    this.errorMessage = '';
-    this.successMessage = '';
-    const url = `${this.apiUrl}/nutzer/add`;
-    const params = new HttpParams()
-      .set('username', this.username)
-      .set('password', this.password)
-      .set('startBudget', this.startBudget);
+    if (this.startBudget<1) {
+      this.errorMessage = 'Das Startbudget muss mindestens 1 betragen.';
+      this.startBudget = 0;
+      return;
+    }
+    if (!this.username || !this.password || !this.confirmpassword || this.startBudget<1) {
+      this.username = '';
+       this.password = '';
+       this.confirmpassword = '';
+      this.startBudget = 0;
+      return;
+    }
+    if (this.password !== this.confirmpassword) {
+      this.errorMessage = 'Die Passwörter stimmen nicht überein.';
+      this.password = '';
+      this.confirmpassword = '';
+      this.startBudget = 0;
+    }else{
+      this.errorMessage = '';
+      this.successMessage = '';
+      const url = `${this.apiUrl}/nutzer/add`;
+      const params = new HttpParams()
+        .set('username', this.username)
+        .set('password', this.password)
+        .set('startBudget', this.startBudget);
 
-
-    this.http.post(url, params).subscribe(response => {
-      if (response === null) {
-        this.errorMessage = 'Der Benutzername ist bereits vergeben.';
-        
-      } else {
-        this.successMessage = 'Benutzer wurde erfolgreich angelegt. Sie können sich jetzt einloggen.';
-        this.username = '';
-        this.password = '';
-        this.startBudget = 0;
-        this.formSubmitted = false;
-      }
-    });
-
+      this.http.post(url, params).subscribe(response => {
+        if (response === null) {
+          this.errorMessage = 'Der Benutzername ist bereits vergeben.';
+          this.username = '';
+          this.password = '';
+          this.confirmpassword = '';
+          this.startBudget = 0;
+        } else {
+          this.successMessage = 'Benutzer wurde erfolgreich angelegt. Sie können sich jetzt einloggen.';
+          this.username = '';
+          this.password = '';
+          this.startBudget = 0;
+          this.formSubmitted = false;
+        }
+      });
+    }
   }
 
   onLogin() {
@@ -106,6 +139,53 @@ export class LoginComponent {
         this.appComponent.ngOnInit();     
       }
     });
+  }
+
+  clearError() {
+    this.errorMessage = '';
+    this.formSubmitted = false;
+  }
+
+  passwordStrength(password: string): number {
+    let score = 0;
+    
+    if (!password) return score;
+  
+    // Länge (mind. 8 Zeichen)
+    if (password.length >= 8) score++;
+  
+    // Enthält Zahlen
+    if (/\d/.test(password)) score++;
+  
+    // Enthält Groß- und Kleinbuchstaben
+    if (/[a-z]/.test(password) && /[A-Z]/.test(password)) score++;
+  
+    // Enthält Sonderzeichen
+    if (/[@$!%*?&]/.test(password)) score++;
+  
+    return score; // Maximal 4 Punkte
+  }
+
+  getStrengthLabel(strength: number): string {
+    switch (strength) {
+      case 1: return "Schwach";
+      case 2: return "Mittel";
+      case 3: return "Stark";
+      case 4: return "Sehr stark";
+      default: return "Sehr schwach";
+    }
+  }
+
+  togglePasswordVisibility() {
+    this.passwordVisible = !this.passwordVisible;
+  }
+
+  toggleConfirmPasswordVisibility() {
+    this.confirmpasswordVisible = !this.confirmpasswordVisible;
+  }
+
+  toggleloginPasswordVisibility() {
+    this.loginpasswordVisible = !this.loginpasswordVisible;
   }
 
   openChangePasswordDialog() {

@@ -11,8 +11,11 @@
         <div class="tab-content">
             <div class="tab-pane" *ngIf="activeTab === 'login'">
                 <form class="login-form">
-                    <input type="text" name="username" [(ngModel)]="username" placeholder="Username" required>
-                    <input type="password" name="password" [(ngModel)]="password" placeholder="Password" required>
+                    <input type="text" name="username" [(ngModel)]="username" placeholder="Username" (input)="clearError()" required>
+                    <div class="password-inputs">
+                        <input [type]="loginpasswordVisible ? 'text' : 'password'" name="password" [(ngModel)]="password" placeholder="Password" (input)="clearError()" required>
+                        <i class="fa" [ngClass]="loginpasswordVisible ? 'fa-eye' : 'fa-eye-slash'" (click)="toggleloginPasswordVisibility()"></i>
+                    </div>
                     <button type="submit" (click)="onLogin()">Login</button>
                 </form>
                 <p *ngIf="(!username || !password) && formSubmitted" class="error-message">Bitte füllen Sie beide Felder aus.</p>
@@ -21,10 +24,40 @@
             </div>
             <div class="tab-pane" *ngIf="activeTab === 'register'">
                 <form class="login-form">
-                    <input type="text" name="username" [(ngModel)]="username" placeholder="Username" required>
-                    <input type="password" name="password" [(ngModel)]="password" placeholder="Password" required>
+                    <input type="text" name="username" [(ngModel)]="username" placeholder="Username" (input)="clearError()" required>
+                    <div class="password-inputs">
+                        <input [type]="passwordVisible ? 'text' : 'password'" name="password" [(ngModel)]="password" (input)="strength = passwordStrength(password)" (input)="clearError()" placeholder="Password" required>
+                        <i class="fa" [ngClass]="passwordVisible ? 'fa-eye' : 'fa-eye-slash'" (click)="togglePasswordVisibility()"></i>
+                    </div>
+                    <div class="password-inputs">
+                        <input [type]="confirmpasswordVisible ? 'text' : 'password'" name="confirmpassword" [(ngModel)]="confirmpassword" (input)="clearError()" placeholder="Confirmm Password" required>
+                        <i class="fa" [ngClass]="confirmpasswordVisible ? 'fa-eye' : 'fa-eye-slash'" (click)="toggleConfirmPasswordVisibility()"></i>
+                    </div>
+                    <div class="password-strength-container">
+                        <div class="password-info-container">
+                            <p><span class="info-icon" (mouseenter)="showInfo = true" (mouseleave)="showInfo = false">ℹ️</span><b> Passwortstärke:</b></p>
+                            <div class="tooltip" *ngIf="showInfo">
+                              <p>💡 Passwortanforderungen</p>
+                              <p>Es müssen Mindestens zwei der folgenden Anforderungen erfüllt sein!</p>
+                              <ul>
+                                <li>1. Mindestens 8 Zeichen</li>
+                                <li>2. Mindestens eine Zahl</li>
+                                <li>3. Groß- und Kleinbuchstaben</li>
+                                <li>4. Mindestens ein Sonderzeichen ($, !, %, *, ?, &)</li>
+                              </ul>
+                            </div>
+                        </div>
+                          
+                        <div class="password-strength-bar">
+                          <div *ngFor="let i of [0, 1, 2, 3, 4]" 
+                               class="bar-segment" 
+                               [class.filled]="strength >= i">
+                          </div>
+                        </div>
+                        <p class="strength-label">{{ getStrengthLabel(strength) }}</p>
+                      </div>                      
                     <p>Wie viel Startguthaben möchten Sie einzahlen? (min. 1$)</p>
-                    <input type="number" name="startBudget" [(ngModel)]="startBudget" min="1" step="1" placeholder="Geben Sie die Anzahl ein" pattern="[0-9]*" required>
+                    <input type="number" name="startBudget" [(ngModel)]="startBudget" min="1" step="1" (input)="clearError()" placeholder="Geben Sie die Anzahl ein" pattern="[0-9]*" required>
                     <button type="submit" (click)="onRegister()">Registrieren</button>
                 </form>
                 <p *ngIf="(!username || !password || startBudget<1) && formSubmitted" class="error-message">Bitte füllen Sie alle Felder korrekt aus.</p>
