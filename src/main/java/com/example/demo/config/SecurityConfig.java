@@ -20,7 +20,7 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
             .authorizeHttpRequests(requests -> requests
-                .requestMatchers("/nutzer/add", "/nutzer/login", "/nutzer/validateToken", "/nutzer/depotidfromtoken", "/nutzer/kontoidfromtoken", "/nutzer/useridfromtoken", "/nutzer/usernamefromtoken")
+                .requestMatchers("/nutzer/add", "/nutzer/login", "/nutzer/validateToken", "/nutzer/depotidfromtoken", "/nutzer/kontoidfromtoken", "/nutzer/useridfromtoken", "/nutzer/usernamefromtoken", "/portfolio/**")
                 .permitAll()
                 .anyRequest().authenticated())
             .addFilterBefore(jwtAuthenticationFilter, BasicAuthenticationFilter.class)
