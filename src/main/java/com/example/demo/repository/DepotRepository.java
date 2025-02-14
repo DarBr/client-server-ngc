@@ -12,4 +12,5 @@ public interface DepotRepository extends JpaRepository<Depot, Integer> {
     // Hier können zusätzliche, spezifische Methoden definiert werden, falls benötigt
     List<Depot> findByDepotID(int depotID);
     Depot findByDepotIDAndISIN(int depotID, String isin);
+    void deleteDepotsByDepotID(int depotID);
 }

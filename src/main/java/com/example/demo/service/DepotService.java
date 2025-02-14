@@ -50,6 +50,13 @@ public class DepotService {
         return false;
     }
 
+    public void deleteDepotsByDepotID(int depotID) {
+        List<Depot> depots = depotRepository.findByDepotID(depotID);
+        for (Depot depot : depots) {
+            depotRepository.delete(depot);
+        }
+    }
+
     @Transactional
     public boolean aktieKaufen(int depotID, String isin, int anzahl) throws IOException {
         Nutzer nutzer = nutzerRepository.findByDepotID(depotID);

@@ -36,15 +36,14 @@ public class TransaktionService {
         transaktionRepository.deleteById(id);
     }
 
-    public List<Transaktion> findTransaktionenByKontoId(int id) {
-        List<Transaktion> transaktions = transaktionRepository.findAll();
-        List<Transaktion> result = new ArrayList<Transaktion>();
-        for (Transaktion transaktion : transaktions) {
-            if (transaktion.getDepotID() == id) {
-                result.add(transaktion);
-            }
+    public List<Transaktion> findTransaktionenByDepotID(int id) {
+        return transaktionRepository.findByDepotID(id);
+    }
+
+    public void deleteTransaktionenByDepotID(int id) {
+        List <Transaktion> transaktionen = findTransaktionenByDepotID(id);
+        for (Transaktion transaktion : transaktionen) {
+            deleteTransaktionById(transaktion.getTransaktionsID());
         }
-        return result;
     }
 }
-

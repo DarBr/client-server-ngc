@@ -42,7 +42,12 @@ public class TransaktionController {
     }
 
     @GetMapping("/transaktionenByKontoID/{id}")
-    public List<Transaktion> findeZahlungByKontoId(@PathVariable int id) {
-        return transaktionService.findTransaktionenByKontoId(id);
+    public List<Transaktion> findTransaktionByKontoId(@PathVariable int id) {
+        return transaktionService.findTransaktionenByDepotID(id);
+    }
+
+    @DeleteMapping("/transaktionenByKontoID/{id}")
+    public void loescheTransaktionByKontoId(@PathVariable int id) {
+        transaktionService.deleteTransaktionenByDepotID(id);
     }
 }

@@ -32,13 +32,13 @@ public class ZahlungService {
     }
 
     public List<Zahlung> findZahlungByKontoId(int id) {
-        List<Zahlung> zahlungen = zahlungRepository.findAll();
-        List<Zahlung> result = new ArrayList<Zahlung>();
+        return zahlungRepository.findByKontoID(id);
+    }
+
+    public void deleteZahlungByKontoId(int kontoID) {
+        List<Zahlung> zahlungen = findZahlungByKontoId(kontoID);
         for (Zahlung zahlung : zahlungen) {
-            if (zahlung.getKontoID() == id) {
-                result.add(zahlung);
-            }
+            deleteZahlungById(zahlung.getId());
         }
-        return result;
     }
 }

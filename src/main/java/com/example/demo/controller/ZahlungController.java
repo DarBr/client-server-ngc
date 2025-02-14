@@ -39,4 +39,9 @@ public class ZahlungController {
     public void loescheZahlung(@PathVariable int id) {
         zahlungService.deleteZahlungById(id);
     }
+
+    @DeleteMapping("/zahlungenByKontoID/{id}")
+    public void loescheZahlungenByKontoId(@PathVariable int id) {
+        zahlungService.deleteZahlungByKontoId(id);
+    }
 }

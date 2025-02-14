@@ -3,14 +3,17 @@ package com.example.demo.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-
+import org.springframework.transaction.annotation.Transactional;
 
 import com.example.demo.config.JwtUtil;
+import com.example.demo.model.Depot;
 import com.example.demo.model.Konto;
 import com.example.demo.model.Nutzer;
 import com.example.demo.model.Zahlung;
+import com.example.demo.repository.DepotRepository;
 import com.example.demo.repository.KontoRepository;
 import com.example.demo.repository.NutzerRepository;
+import com.example.demo.repository.TransaktionRepository;
 import com.example.demo.repository.ZahlungRepository;
 
 import java.util.List;
@@ -24,6 +27,10 @@ public class NutzerService {
     private KontoRepository kontoRepository;
     @Autowired
     private ZahlungRepository zahlungRepository;
+    @Autowired
+    private TransaktionRepository transaktionRepository;
+    @Autowired
+    private DepotRepository depotRepository;
     @Autowired
     private JwtUtil jwtUtil;
 
@@ -71,8 +78,25 @@ public class NutzerService {
         return nutzerRepository.findByUsername(username).orElse(null);
     }
 
+    @Transactional
     public void deleteNutzer(int id) {
-        nutzerRepository.deleteById(id);
+        Nutzer nutzer = nutzerRepository.findById(id).orElse(null);
+        if (nutzer != null) {
+            // Löschen des Kontos und aller damit verbundenen Ein- und Auszahlungen
+            Konto konto = kontoRepository.findById(nutzer.getKontoID()).orElse(null);
+            if (konto != null) {
+                zahlungRepository.deleteByKontoID(konto.getKontoID());
+                kontoRepository.delete(konto);
+            }
+
+            transaktionRepository.deleteByDepotID(nutzer.getDepotID());
+
+            // // Löschen des Depots und aller damit verbundenen Transaktionen und Depotpositionen
+            depotRepository.deleteDepotsByDepotID(nutzer.getDepotID());
+
+            // Löschen des Nutzers
+            nutzerRepository.delete(nutzer);
+        }
     }
 
     public boolean checkUserExists(String username) {
@@ -152,4 +176,6 @@ public class NutzerService {
             return "Der neue Benutzername existiert bereits. Bitte wählen Sie einen anderen Benutzernamen aus.";
         }
     }
+
+
 }
