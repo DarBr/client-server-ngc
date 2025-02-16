@@ -24,6 +24,12 @@ public class PortfolioSnapshotController {
         return new ResponseEntity<>(snapshots, HttpStatus.OK);
     }
 
+    @GetMapping("/snapshots")
+    public ResponseEntity<List<PortfolioSnapshot>> getSnapshots() {
+        List<PortfolioSnapshot> snapshots = portfolioSnapshotRepository.findAll();
+        return new ResponseEntity<>(snapshots, HttpStatus.OK);
+    }
+
     @PostMapping("/snapshots")
     public ResponseEntity<PortfolioSnapshot> addSnapshot(@RequestBody PortfolioSnapshot snapshot) {
         PortfolioSnapshot savedSnapshot = portfolioSnapshotRepository.save(snapshot);

@@ -63,12 +63,8 @@ public class PortfolioSnapshotService {
         return cashValue + stocksValue;
     }
 
-    /**
-     * Dieser Scheduled Job wird täglich um 17:00 Uhr ausgeführt.
-     * Er iteriert über alle registrierten Nutzer, berechnet den aktuellen Portfolio-Wert
-     * und speichert für jeden einen Snapshot.
-     */
-    @Scheduled(cron = "0 45 15,15 22 * * *")
+    @Scheduled(cron = "0 45 15 * * *") // Läuft täglich um 15:45
+    @Scheduled(cron = "0 15 22 * * *") // Läuft täglich um 22:15
     public void takeDailySnapshotsForAllUsers() {
         List<Nutzer> userList = nutzerRepository.findAll();
         for (Nutzer user : userList) {
