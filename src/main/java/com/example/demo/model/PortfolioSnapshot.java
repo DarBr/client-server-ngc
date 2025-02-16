@@ -16,14 +16,18 @@ public class PortfolioSnapshot {
     // Der berechnete Portfoliowert zu diesem Zeitpunkt
     private double portfolioValue;
 
+    private int depotId;
+
+
     // Standard-Konstruktor (wichtig für JPA)
     public PortfolioSnapshot() {
     }
 
 
-    public PortfolioSnapshot(LocalDateTime snapshotTime, double portfolioValue) {
+    public PortfolioSnapshot(LocalDateTime snapshotTime, double portfolioValue, int depotId) {
         this.snapshotTime = snapshotTime;
         this.portfolioValue = portfolioValue;
+        this.depotId = depotId;
     }
 
 
@@ -45,6 +49,14 @@ public class PortfolioSnapshot {
 
     public void setPortfolioValue(double portfolioValue) {
         this.portfolioValue = portfolioValue;
+    }
+
+    public int getDepotId() {
+        return depotId;
+    }
+
+    public void setDepotId(int depotId) {
+        this.depotId = depotId;
     }
 }
 

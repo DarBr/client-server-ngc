@@ -17,9 +17,10 @@ public class PortfolioSnapshotController {
     @Autowired
     private PortfolioSnapshotRepository portfolioSnapshotRepository;
 
-    @GetMapping("/snapshots")
-    public ResponseEntity<List<PortfolioSnapshot>> getAllSnapshots() {
-        List<PortfolioSnapshot> snapshots = portfolioSnapshotRepository.findAll();
+    // NEU: Endpunkt zum Abrufen der Snapshots für eine bestimmte Depot-ID
+    @GetMapping("/snapshots/{depotId}")
+    public ResponseEntity<List<PortfolioSnapshot>> getSnapshotsForDepot(@PathVariable int depotId) {
+        List<PortfolioSnapshot> snapshots = portfolioSnapshotRepository.findByDepotId(depotId);
         return new ResponseEntity<>(snapshots, HttpStatus.OK);
     }
 
@@ -28,6 +29,5 @@ public class PortfolioSnapshotController {
         PortfolioSnapshot savedSnapshot = portfolioSnapshotRepository.save(snapshot);
         return new ResponseEntity<>(savedSnapshot, HttpStatus.CREATED);
     }
-    
     
 }

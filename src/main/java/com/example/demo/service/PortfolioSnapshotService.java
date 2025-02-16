@@ -68,14 +68,14 @@ public class PortfolioSnapshotService {
      * Er iteriert über alle registrierten Nutzer, berechnet den aktuellen Portfolio-Wert
      * und speichert für jeden einen Snapshot.
      */
-    @Scheduled(cron = "0 0 17 * * *")
+    @Scheduled(cron = "0 45 15,15 22 * * *")
     public void takeDailySnapshotsForAllUsers() {
         List<Nutzer> userList = nutzerRepository.findAll();
         for (Nutzer user : userList) {
             int kontoID = user.getKontoID();
             int depotID = user.getDepotID();
             double currentValue = calculateCurrentPortfolioValueForUser(kontoID, depotID);
-            PortfolioSnapshot snapshot = new PortfolioSnapshot(LocalDateTime.now(), currentValue);
+            PortfolioSnapshot snapshot = new PortfolioSnapshot(LocalDateTime.now(), currentValue, depotID);
             portfolioSnapshotRepository.save(snapshot);
             System.out.println("Snapshot für " + user.getUsername()+ " gespeichert: " + snapshot.getSnapshotTime()+ " - " + snapshot.getPortfolioValue());
         }

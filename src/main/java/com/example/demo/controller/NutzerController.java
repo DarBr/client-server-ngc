@@ -1,14 +1,17 @@
 package com.example.demo.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.example.demo.config.JwtUtil;
 import com.example.demo.model.Nutzer;
+import com.example.demo.repository.NutzerRepository;
 import com.example.demo.service.NutzerService;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/nutzer")
@@ -20,11 +23,23 @@ public class NutzerController {
 
     @Autowired
     private JwtUtil jwtUtil;
+
+    @Autowired
+    private NutzerRepository nutzerRepository;
     
     // Nutzer hinzufügen
     @PostMapping("/add")
     public Nutzer erstelleNutzer(@RequestParam String username, @RequestParam String password, @RequestParam double startBudget) {
         return nutzerService.saveNutzer(username, password, startBudget);
+    }
+
+    @GetMapping("/depotId/{nutzername}")
+    public ResponseEntity<Integer> getDepotIdByNutzername(@PathVariable String nutzername) {
+        Optional<Nutzer> nutzerOpt = nutzerRepository.findByUsername(nutzername);
+        if (nutzerOpt.isPresent()) {
+            return new ResponseEntity<>(nutzerOpt.get().getDepotID(), HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
     //Alle Nutzer abrufen

@@ -6,6 +6,7 @@ import { AuthGuard } from './AuthGuard';
 import { AktieKaufenComponent } from './aktie-kaufen/aktie-kaufen.component';
 import { VerrechnungskontoComponent } from './verrechnungskonto/verrechnungskonto.component';
 import { NewstabComponent } from './newstab/newstab.component';
+import { PortfolioHistoryComponent } from './historische-portfolioperformance/portfolio-history.component';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent, canActivate: [AuthGuard]},
@@ -13,5 +14,6 @@ export const routes: Routes = [
   { path: 'login', component: LoginComponent},
   { path: 'kaufen', component: AktieKaufenComponent, canActivate: [AuthGuard]},
   { path: 'verrechnungskonto', component: VerrechnungskontoComponent, canActivate: [AuthGuard]},
-  { path: 'news', component: NewstabComponent, canActivate: [AuthGuard]}
+  { path: 'news', component: NewstabComponent, canActivate: [AuthGuard]},
+  { path: 'portfolio-history', component: PortfolioHistoryComponent, canActivate: [AuthGuard] }
 ];
