@@ -6,6 +6,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from './AuthService';
 import { MatDialogModule } from '@angular/material/dialog';
+import { NavigationEnd, Router } from '@angular/router';
 
 
 @Component({
@@ -16,10 +17,17 @@ import { MatDialogModule } from '@angular/material/dialog';
   imports: [RouterOutlet, RouterLink, RouterLinkActive, TransaktionListeComponent, HttpClientModule, CommonModule, FormsModule, MatDialogModule]
 })
 export class AppComponent {
+  isLoginPage: boolean = false;
   title = 'ngc-frontend';
   username: string | null = null;
 
-  constructor(private authService: AuthService) {}
+  constructor(private authService: AuthService, private router: Router) {
+    this.router.events.subscribe(event => {
+      if (event instanceof NavigationEnd) {
+        this.isLoginPage = event.url === '/login'; // Prüft, ob die aktuelle Route "/login" ist
+      }
+    });
+  }
 
   async ngOnInit() {
     const token = this.authService.getToken();

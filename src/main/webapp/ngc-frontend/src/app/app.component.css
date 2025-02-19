@@ -118,7 +118,8 @@ nav ul li a {
 }
 
 /*MAIN*/
-main {
+.content {
+    position: relative;
     z-index: 0;
     margin-top: 18vh; /* Abstand nach oben */
     margin-left: 3.5vh;
@@ -144,4 +145,17 @@ footer p {
     justify-content: center;
     margin: 0;
     font-size: 1.5vh;
+}
+
+.background-container {
+    position: fixed; /* Damit es immer im Hintergrund bleibt */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh; /* Volle Bildschirmhöhe */
+    background-image: url("/assets/background-login.jpg"); /* Bildpfad */
+    background-size: cover; /* Skaliert das Bild */
+    background-position: center; /* Zentriert das Bild */
+    background-repeat: no-repeat; /* Verhindert Wiederholung */
+    z-index: -1; /* Damit Inhalte darüber liegen */
 }

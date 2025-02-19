@@ -38,8 +38,10 @@
   </nav>
 </header>
 <main>
-  
-  <router-outlet></router-outlet>
+  <div class="background-container" *ngIf="isLoginPage"></div>
+  <div class="content">
+    <router-outlet></router-outlet>
+  </div>
 </main>
 <footer>
   <p>Next-Gen-Capital</p>
