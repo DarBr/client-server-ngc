@@ -66,9 +66,6 @@ export class LoginComponent {
     this.formSubmitted = true;
     if(this.strength<2){
       this.errorMessage = 'Das Passwort ist zu schwach.';
-      this.password = '';
-      this.confirmpassword = '';
-      this.startBudget = 0;
       return;
     }
     if (this.startBudget<1) {
