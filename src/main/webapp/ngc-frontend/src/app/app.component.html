@@ -14,8 +14,9 @@
       </a>
     </div>
   </div>
-  <nav>
-    <ul>
+  <nav class="navbar">
+    <button class="menu-toggle" (click)="toggleMenu()"><i class="fas fa-bars"></i></button>
+    <ul [class.open]="menuOpen">
       <li>
         <a routerLink="/" routerLinkActive="active-link" [routerLinkActiveOptions]="{exact: true}">Home</a>
       </li>
@@ -32,7 +33,7 @@
         <a routerLink="/news" routerLinkActive="active-link" [routerLinkActiveOptions]="{exact: true}">News</a>
       </li>
       <li>
-        <a routerLink="/portfolio-history" routerLinkActive="active-link">Portfolio Verlauf</a>
+        <a routerLink="/portfolio-history" routerLinkActive="active-link" [routerLinkActiveOptions]="{exact: true}">Portfolio Verlauf</a>
       </li>
     </ul>
   </nav>

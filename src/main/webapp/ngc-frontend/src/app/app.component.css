@@ -14,6 +14,7 @@ header {
     top: 0;
     left: 0;
     width: 100%;
+    height: 15vh;
 }
 
 .first-lane {
@@ -90,7 +91,7 @@ nav {
     padding-top: 0.5vh;
     padding-bottom: 0.5vh;
     padding-left: 0;
-    height: 4vh;
+    height: 5vh;
     display: flex;
     align-items: center;
 }
@@ -113,6 +114,10 @@ nav ul li a {
     text-decoration: none;
 }
 
+nav button{
+    display: none;
+}
+
 .active-link {
     font-weight:bold;
 }
@@ -122,8 +127,10 @@ nav ul li a {
     position: relative;
     z-index: 0;
     margin-top: 18vh; /* Abstand nach oben */
-    margin-left: 3.5vh;
     margin-bottom: 10vh; /* Abstand nach unten */
+    width: 98%; /* Breite des Inhalts */
+    margin-left: auto;
+    margin-right: auto;
 }
 
 /*FOOTER*/
@@ -157,5 +164,85 @@ footer p {
     background-size: cover; /* Skaliert das Bild */
     background-position: center; /* Zentriert das Bild */
     background-repeat: no-repeat; /* Verhindert Wiederholung */
-    z-index: -1; /* Damit Inhalte darüber liegen */
+    z-index: -2; /* Damit Inhalte darüber liegen */
+}
+
+/* Styling für das mobile Menü */
+@media (max-width: 878px) {
+    .headline{
+        display: none;
+    }
+
+    .first-lane{
+        justify-content: space-between;
+    }
+
+    .first-lane-right{
+        justify-content: flex-end;
+        width: 10vh;
+    }
+
+    .navbar ul {
+        z-index: -1;
+        display: none; /* Standardmäßig verstecken */
+        width: 100vw;
+        flex-direction: column;
+        text-align: center;
+        position: absolute; /* Das Menü wird absolut positioniert */
+        transform: translateX(-50%); /* Zentrieren des Menüs */
+        background-color: #333; /* Hintergrundfarbe für das Menü */
+        padding: 0;
+        margin: 0;
+        border-radius: 5px;
+        right: 0;
+        left: 50%; /* Zentrieren des Menüs */
+    }
+  
+    .navbar ul.open {
+        display: block;
+        background-color: #244467;
+    }
+    
+    .navbar .menu-toggle {
+        display: block;
+        height: 100%;
+    }
+
+    .menu-toggle i {
+        font-size: 2.5vh;
+        margin: 0; /* Entfernt alle Margen */
+        padding: 0; /* Entfernt jegliches Padding */
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .menu-toggle {
+        align-items: center;
+        display: flex; /* Setzt den Button als Flex-Container */
+        justify-content: center; /* Zentriert das Icon horizontal */
+        align-items: center; /* Zentriert das Icon vertikal */
+        border: none; /* Entfernt den Rand */
+        background-color: #244467; /* Hintergrundfarbe des Buttons */
+        color: white; /* Farbe des Icons */
+    }
+
+    .navbar{
+        position: relative;
+        text-align: center;
+        margin: 0 auto;
+        display: block;
+    }
+
+    .navbar ul li {
+        margin: 0; /* Abstand zwischen den Listenelementen */
+        border-bottom: 1px solid #555; /* Linie zwischen den Elementen */
+        padding: 1vh 0 1vh 0;
+    }
+
+    
+    .navbar ul li:last-child {
+        border-bottom: none;
+        padding-bottom: 1vh;
+    }
 }

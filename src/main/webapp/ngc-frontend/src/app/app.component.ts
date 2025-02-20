@@ -18,6 +18,7 @@ import { NavigationEnd, Router } from '@angular/router';
 })
 export class AppComponent {
   isLoginPage: boolean = false;
+  menuOpen: boolean = false;
   title = 'ngc-frontend';
   username: string | null = null;
 
@@ -26,6 +27,7 @@ export class AppComponent {
       if (event instanceof NavigationEnd) {
         this.isLoginPage = event.url === '/login'; // Prüft, ob die aktuelle Route "/login" ist
       }
+      this.menuOpen = false;
     });
   }
 
@@ -36,6 +38,10 @@ export class AppComponent {
     }else {
       this.username = 'Login';
     }
+  }
+
+  toggleMenu() {
+    this.menuOpen = !this.menuOpen;
   }
 
 }

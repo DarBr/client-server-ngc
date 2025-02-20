@@ -2,11 +2,13 @@
 
 
 .market-status-box {
-  padding: 20px;
+  padding: 2vh;
   background-color: #f8f8f8;
-  border-radius: 5px;
+  border-radius: 0.5vh;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  margin-bottom: 20px;
+  margin-bottom: 2vh;
+  margin-right: 2vh;
+  margin-left: 2vh;
   text-align: center;
 }
 
@@ -77,49 +79,6 @@
 .table-transaktionen tr:last-child {
   font-weight: bold;
 }
-
-
-
-/* Responsive Table */
-@media screen and (max-width: 600px) {
-  .table-transaktionen thead {
-    display: none;
-  }
-
-  .table-transaktionen,
-  .table-transaktionen tbody,
-  .table-transaktionen tr,
-  .table-transaktionen td {
-    display: block;
-    width: 100%;
-  }
-
-  .table-transaktionen tr {
-    margin-bottom: 15px;
-  }
-
-  .table-transaktionen td {
-    text-align: right;
-    padding-left: 50%;
-    text-align: right;
-    position: relative;
-  }
-
-  .table-transaktionen td::before {
-    content: attr(data-label);
-    position: absolute;
-    left: 0;
-    width: 50%;
-    padding-left: 15px;
-    font-weight: bold;
-    text-align: left;
-  }
-
-
-
-
-}
-
 
 .change-cell {
   display: flex;
@@ -197,8 +156,9 @@ tfoot td:last-child {
   padding: 20px;
   border-radius: 5px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  margin-bottom: 20px;
-  margin-right: 20px;
+  margin-bottom: 2vh;
+  margin-right: 2vh;
+  margin-left: 2vh;
 }
 
 .broker-container h2 {
