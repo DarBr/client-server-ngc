@@ -13,11 +13,14 @@ import com.example.demo.model.Zahlung;
 import com.example.demo.repository.DepotRepository;
 import com.example.demo.repository.KontoRepository;
 import com.example.demo.repository.NutzerRepository;
+import com.example.demo.repository.PortfolioSnapshotRepository;
 import com.example.demo.repository.TransaktionRepository;
 import com.example.demo.repository.ZahlungRepository;
 
 import java.util.List;
 import java.util.Optional;
+
+import javax.sound.sampled.Port;
 
 @Service
 public class NutzerService {
@@ -31,6 +34,8 @@ public class NutzerService {
     private TransaktionRepository transaktionRepository;
     @Autowired
     private DepotRepository depotRepository;
+    @Autowired
+    private PortfolioSnapshotRepository portfolioSnapshotRepository;
     @Autowired
     private JwtUtil jwtUtil;
 
@@ -88,14 +93,17 @@ public class NutzerService {
                 zahlungRepository.deleteByKontoID(konto.getKontoID());
                 kontoRepository.delete(konto);
             }
-
+            // Transaktionen löschen
             transaktionRepository.deleteByDepotID(nutzer.getDepotID());
 
-            // // Löschen des Depots und aller damit verbundenen Transaktionen und Depotpositionen
+            // // Löschen des Depots und aller damit verbundenen Depotpositionen
             depotRepository.deleteDepotsByDepotID(nutzer.getDepotID());
+
+            portfolioSnapshotRepository.deleteSnapshotsForUser(nutzer.getDepotID());
 
             // Löschen des Nutzers
             nutzerRepository.delete(nutzer);
+
         }
     }
 

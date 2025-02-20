@@ -30,7 +30,7 @@
                         <i class="fa" [ngClass]="passwordVisible ? 'fa-eye' : 'fa-eye-slash'" (click)="togglePasswordVisibility()"></i>
                     </div>
                     <div class="password-inputs">
-                        <input [type]="confirmpasswordVisible ? 'text' : 'password'" name="confirmpassword" [(ngModel)]="confirmpassword" (input)="clearError()" placeholder="Confirmm Password" required>
+                        <input [type]="confirmpasswordVisible ? 'text' : 'password'" name="confirmpassword" [(ngModel)]="confirmpassword" (input)="clearError()" placeholder="Confirm Password" required>
                         <i class="fa" [ngClass]="confirmpasswordVisible ? 'fa-eye' : 'fa-eye-slash'" (click)="toggleConfirmPasswordVisibility()"></i>
                     </div>
                     <div class="password-strength-container">

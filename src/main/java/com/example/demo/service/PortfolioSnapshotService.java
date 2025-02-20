@@ -76,4 +76,21 @@ public class PortfolioSnapshotService {
             System.out.println("Snapshot für " + user.getUsername()+ " gespeichert: " + snapshot.getSnapshotTime()+ " - " + snapshot.getPortfolioValue());
         }
     }
+
+    public List<PortfolioSnapshot> getSnapshotsForUser(int depotID) {
+        return portfolioSnapshotRepository.findByDepotId(depotID);
+    }
+
+    public void deleteAllSnapshots() {
+        portfolioSnapshotRepository.deleteAll();
+    }
+
+    public void deleteSnapshot(long id) {
+        portfolioSnapshotRepository.deleteById(id);
+    }
+
+    public void deleteSnapshotsForUser(int depotID) {
+        List<PortfolioSnapshot> snapshots = portfolioSnapshotRepository.findByDepotId(depotID);
+        portfolioSnapshotRepository.deleteAll(snapshots);
+    }
 }
