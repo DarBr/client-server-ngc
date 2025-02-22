@@ -11,5 +11,6 @@ public interface PortfolioSnapshotRepository extends JpaRepository<PortfolioSnap
     
     // NEU: Methode zum Abrufen von Snapshots für eine bestimmte Depot-ID
     List<PortfolioSnapshot> findByDepotId(int depotId);
-    void deleteSnapshotsForUser(int depotId);
+    void deleteByDepotId(int depotId);
+    
 }

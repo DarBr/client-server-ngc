@@ -35,8 +35,6 @@ public class NutzerService {
     @Autowired
     private DepotRepository depotRepository;
     @Autowired
-    private PortfolioSnapshotRepository portfolioSnapshotRepository;
-    @Autowired
     private JwtUtil jwtUtil;
 
     private BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
@@ -99,7 +97,7 @@ public class NutzerService {
             // // Löschen des Depots und aller damit verbundenen Depotpositionen
             depotRepository.deleteDepotsByDepotID(nutzer.getDepotID());
 
-            portfolioSnapshotRepository.deleteSnapshotsForUser(nutzer.getDepotID());
+            //portfolioSnapshotRepository.deleteSnapshotsForUser(nutzer.getDepotID());
 
             // Löschen des Nutzers
             nutzerRepository.delete(nutzer);
