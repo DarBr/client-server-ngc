@@ -4,45 +4,54 @@
       <img src="assets/ngc-logo.jpg" alt="Next-Gen-Capital-Logo">
     </div>
     <div class="headline">
-      <h1>NGC&nbsp;</h1> 
+      <h1>NGC&nbsp;</h1>
       <h1 id="headline-small"> | Next-Gen-Capital</h1>
     </div>
     <div class="first-lane-right">
       <a routerLink="/login" routerLinkActive="active-link" [routerLinkActiveOptions]="{exact: true}">
-        <p>{{username}}</p>
+        <p>{{ username }}</p>
         <img src="assets/user-icon.png" alt="user-icon">
       </a>
     </div>
   </div>
-  <nav>
-    <ul>
-      <li>
-        <a routerLink="/" routerLinkActive="active-link" [routerLinkActiveOptions]="{exact: true}">Home</a>
-      </li>
-      <li>
-        <a routerLink="/kaufen" routerLinkActive="active-link" [routerLinkActiveOptions]="{exact: true}">Kaufen</a>
-      </li>
-      <li>
-        <a routerLink="/transaktion-liste" routerLinkActive="active-link" [routerLinkActiveOptions]="{exact: true}">Transaktionen</a>
-      </li>
-      <li>
-        <a routerLink="/verrechnungskonto" routerLinkActive="active-link" [routerLinkActiveOptions]="{exact: true}">Verrechnungskonto</a>
-      </li>
-      <li>
-        <a routerLink="/news" routerLinkActive="active-link" [routerLinkActiveOptions]="{exact: true}">News</a>
-      </li>
-      <li>
-        <a routerLink="/portfolio-history" routerLinkActive="active-link">Portfolio Verlauf</a>
-      </li>
-    </ul>
-  </nav>
+  
+  <!-- Wenn Admin, dann Admin-Navigation; sonst normale Navigation -->
+  <ng-container *ngIf="isAdmin; else normalNav">
+    <app-admin-navbar></app-admin-navbar>
+  </ng-container>
+  <ng-template #normalNav>
+    <nav>
+      <ul>
+        <li>
+          <a routerLink="/" routerLinkActive="active-link" [routerLinkActiveOptions]="{exact: true}">Home</a>
+        </li>
+        <li>
+          <a routerLink="/kaufen" routerLinkActive="active-link" [routerLinkActiveOptions]="{exact: true}">Kaufen</a>
+        </li>
+        <li>
+          <a routerLink="/transaktion-liste" routerLinkActive="active-link" [routerLinkActiveOptions]="{exact: true}">Transaktionen</a>
+        </li>
+        <li>
+          <a routerLink="/verrechnungskonto" routerLinkActive="active-link" [routerLinkActiveOptions]="{exact: true}">Verrechnungskonto</a>
+        </li>
+        <li>
+          <a routerLink="/news" routerLinkActive="active-link" [routerLinkActiveOptions]="{exact: true}">News</a>
+        </li>
+        <li>
+          <a routerLink="/portfolio-history" routerLinkActive="active-link">Portfolio Verlauf</a>
+        </li>
+      </ul>
+    </nav>
+  </ng-template>
 </header>
+
 <main>
   <div class="background-container" *ngIf="isLoginPage"></div>
   <div class="content">
     <router-outlet></router-outlet>
   </div>
 </main>
+
 <footer>
   <p>Next-Gen-Capital</p>
   <p>&copy; 2025</p>

@@ -1,0 +1,28 @@
+<div class="admin-dashboard">
+  <!-- Admin-Navigationsleiste -->
+  <app-admin-navbar></app-admin-navbar>
+
+  <h2>Admin Dashboard</h2>
+
+  <div *ngIf="errorMessage" class="error-message">{{ errorMessage }}</div>
+  <div *ngIf="successMessage" class="success-message">{{ successMessage }}</div>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Nutzername</th>
+        <th>Depot ID</th>
+        <th>Aktionen</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let user of users">
+        <td>{{ user.username }}</td>
+        <td>{{ user.depotID }}</td>
+        <td>
+          <button (click)="deleteUser(user)">Nutzer löschen</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

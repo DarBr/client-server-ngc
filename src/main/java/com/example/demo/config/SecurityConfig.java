@@ -1,6 +1,5 @@
 package com.example.demo.config;
 
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -12,19 +11,22 @@ import org.springframework.security.web.authentication.www.BasicAuthenticationFi
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
-        
+
     @Autowired
-    private JwtAuthenticationFilter jwtAuthenticationFilter;        
+    private JwtAuthenticationFilter jwtAuthenticationFilter;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
             .authorizeHttpRequests(requests -> requests
-                .requestMatchers("/nutzer/add", "/nutzer/login", "/nutzer/validateToken", "/nutzer/depotidfromtoken", "/nutzer/kontoidfromtoken", "/nutzer/useridfromtoken", "/nutzer/usernamefromtoken", "/portfolio/**")
+                .requestMatchers("/nutzer/add", "/nutzer/login", "/nutzer/validateToken", 
+                                 "/nutzer/depotidfromtoken", "/nutzer/kontoidfromtoken", 
+                                 "/nutzer/useridfromtoken", "/nutzer/usernamefromtoken", "/portfolio/**")
                 .permitAll()
+                .requestMatchers("/admin/**").hasAuthority("ADMIN")
                 .anyRequest().authenticated())
             .addFilterBefore(jwtAuthenticationFilter, BasicAuthenticationFilter.class)
-            .csrf().disable(); // CSRF-Schutz deaktivieren
+            .csrf().disable();
         return http.build();
     }
 }
