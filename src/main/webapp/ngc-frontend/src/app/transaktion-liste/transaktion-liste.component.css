@@ -3,7 +3,7 @@
   border-collapse: collapse;
   margin: 20px 0;
   font-size: 0.9em;
-  min-width: 400px;
+  min-width: 200px;
   border-radius: 5px 5px 0 0;
   overflow: hidden;
   box-shadow: 0 0 20px rgba(0,0,0,0.15);
@@ -11,7 +11,7 @@
 
 .table-transaktionen th,
 .table-transaktionen td {
-  padding: 12px 15px;
+  padding: 1.2vh 1.5vh;
 }
 
 .table-transaktionen th {
@@ -31,39 +31,6 @@
 .table-transaktionen tr:hover {
   background-color: #ddd;
   cursor: pointer;
-}
-
-/* Responsive Table */
-@media screen and (max-width: 600px) {
-  .table-transaktionen thead {
-    display: none;
-  }
-
-  .table-transaktionen, .table-transaktionen tbody, .table-transaktionen tr, .table-transaktionen td {
-    display: block;
-    width: 100%;
-  }
-
-  .table-transaktionen tr {
-    margin-bottom: 15px;
-  }
-
-  .table-transaktionen td {
-    text-align: right;
-    padding-left: 50%;
-    text-align: right;
-    position: relative;
-  }
-
-  .table-transaktionen td::before {
-    content: attr(data-label);
-    position: absolute;
-    left: 0;
-    width: 50%;
-    padding-left: 15px;
-    font-weight: bold;
-    text-align: left;
-  }
 }
 
 /* HEADER */
@@ -281,3 +248,79 @@ footer p {
 }
 
 
+/* Responsive Design */
+@media (max-width: 768px) {
+  .table-transaktionen {
+    font-size: 0.8em;
+    margin-right: 1vh;
+  }
+
+  .table-transaktionen th,
+  .table-transaktionen td {
+    padding: 10px 8px;
+  }
+
+  header {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .first-lane {
+    flex-direction: column;
+    height: auto;
+  }
+
+  .first-lane-left,
+  .first-lane-right {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .first-lane-left img,
+  .first-lane-right img {
+    margin: 10px 0;
+  }
+
+  nav ul {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  nav ul li {
+    margin: 10px 0;
+  }
+
+  main {
+    margin-top: 20vh;
+    margin-left: 2vh;
+    margin-right: 2vh;
+  }
+
+  footer {
+    height: auto;
+    padding: 1vh;
+  }
+
+  .broker-container {
+    margin: 10px 0;
+    padding: 15px;
+  }
+
+  .broker-container h2 {
+    font-size: 1.5em;
+  }
+
+  .broker-container p {
+    font-size: 1em;
+  }
+
+  .broker-container button {
+    padding: 8px 15px;
+    font-size: 1em;
+  }
+
+  .loading-spinner {
+    height: 80px;
+    font-size: 30px;
+  }
+}
