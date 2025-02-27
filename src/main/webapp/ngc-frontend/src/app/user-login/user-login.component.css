@@ -1,3 +1,5 @@
+@import "@fortawesome/fontawesome-free/css/all.css";
+
 .login-container {
     margin: 0 auto;
     width: 35vh;
@@ -208,7 +210,7 @@
     width: 100%;
 }
 
-.fa {
+.password-inputs .fa {
     right: 10px;
     margin-bottom: 1.5vh;
     cursor: pointer;
@@ -217,6 +219,17 @@
     position: absolute;
 }
   
-.fa:hover {
+.password-inputs .fa:hover {
     color: #000;
 }
+
+.loading-spinner {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100px;
+    /* Passende Höhe für den Ladeindikator */
+    font-size: 40px;
+    /* Ändere die Größe des Icons */
+    color: #244467;
+  }

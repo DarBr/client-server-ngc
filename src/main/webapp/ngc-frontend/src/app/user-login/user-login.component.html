@@ -16,6 +16,9 @@
                         <input [type]="loginpasswordVisible ? 'text' : 'password'" name="password" [(ngModel)]="password" placeholder="Password" (input)="clearError()" required>
                         <i class="fa" [ngClass]="loginpasswordVisible ? 'fa-eye' : 'fa-eye-slash'" (click)="toggleloginPasswordVisibility()"></i>
                     </div>
+                    <div *ngIf="isLoading" class="loading-spinner">
+                        <i class="fa fa-spinner fa-spin"></i>
+                    </div>
                     <button type="submit" (click)="onLogin()">Login</button>
                 </form>
                 <p *ngIf="(!username || !password) && formSubmitted" class="error-message">Bitte füllen Sie beide Felder aus.</p>
@@ -58,6 +61,9 @@
                       </div>                      
                     <p>Wie viel Startguthaben möchten Sie einzahlen? (min. 1$)</p>
                     <input type="number" name="startBudget" [(ngModel)]="startBudget" min="1" step="1" (input)="clearError()" placeholder="Geben Sie die Anzahl ein" pattern="[0-9]*" required>
+                    <div *ngIf="isLoading" class="loading-spinner">
+                        <i class="fa fa-spinner fa-spin"></i>
+                    </div>
                     <button type="submit" (click)="onRegister()">Registrieren</button>
                 </form>
                 <p *ngIf="(!username || !password || startBudget<1) && formSubmitted" class="error-message">Bitte füllen Sie alle Felder korrekt aus.</p>

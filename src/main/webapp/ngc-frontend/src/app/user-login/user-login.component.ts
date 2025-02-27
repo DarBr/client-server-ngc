@@ -23,6 +23,7 @@ export class LoginComponent {
   private apiUrl = environment.apiPath;
 
   isLoggedIn: boolean = false;
+  isLoading: boolean = false;
   username: string = '';
   password: string = '';
   confirmpassword: string = '';
@@ -64,16 +65,20 @@ export class LoginComponent {
 
   onRegister() {
     this.formSubmitted = true;
+    this.isLoading = true;
     if(this.strength<2){
+      this.isLoading = false;
       this.errorMessage = 'Das Passwort ist zu schwach.';
       return;
     }
     if (this.startBudget<1) {
+      this.isLoading = false;
       this.errorMessage = 'Das Startbudget muss mindestens 1 betragen.';
       this.startBudget = 0;
       return;
     }
     if (!this.username || !this.password || !this.confirmpassword || this.startBudget<1) {
+      this.isLoading = false;
       this.username = '';
        this.password = '';
        this.confirmpassword = '';
@@ -81,6 +86,7 @@ export class LoginComponent {
       return;
     }
     if (this.password !== this.confirmpassword) {
+      this.isLoading = false;
       this.errorMessage = 'Die Passwörter stimmen nicht überein.';
       this.password = '';
       this.confirmpassword = '';
@@ -96,15 +102,19 @@ export class LoginComponent {
 
       this.http.post(url, params).subscribe(response => {
         if (response === null) {
+          this.isLoading = false;
           this.errorMessage = 'Der Benutzername ist bereits vergeben.';
           this.username = '';
           this.password = '';
           this.confirmpassword = '';
           this.startBudget = 0;
         } else {
+          this.isLoading = false;
+          this.errorMessage = '';
           this.successMessage = 'Benutzer wurde erfolgreich angelegt. Sie können sich jetzt einloggen.';
           this.username = '';
           this.password = '';
+          this.confirmpassword = '';
           this.startBudget = 0;
           this.formSubmitted = false;
         }
@@ -117,6 +127,7 @@ export class LoginComponent {
     if (!this.username || !this.password) {
       return;
     }
+    this.isLoading = true;
     const url = `${this.apiUrl}/nutzer/login`;
     const params = new HttpParams()
       .set('username', this.username)
@@ -124,12 +135,13 @@ export class LoginComponent {
 
     this.http.get(url, {params, responseType: 'text'}).subscribe(response => {
       if (response ==="Login fehlgeschlagen") {
+        this.isLoading = false;
         this.errorMessage = response.toString();
         console.log(response);
       } else {
+        this.isLoading = false;
         const token = response.toString();
         this.authService.saveToken(token);
-        this.successMessage = 'Erfolgreich eingeloggt.';
         this.username = '';
         this.password = '';
         this.router.navigate(['/']);
