@@ -79,10 +79,6 @@ export class LoginComponent {
     }
     if (!this.username || !this.password || !this.confirmpassword || this.startBudget<1) {
       this.isLoading = false;
-      this.username = '';
-       this.password = '';
-       this.confirmpassword = '';
-      this.startBudget = 0;
       return;
     }
     if (this.password !== this.confirmpassword) {
@@ -90,7 +86,6 @@ export class LoginComponent {
       this.errorMessage = 'Die Passwörter stimmen nicht überein.';
       this.password = '';
       this.confirmpassword = '';
-      this.startBudget = 0;
     }else{
       this.errorMessage = '';
       this.successMessage = '';
@@ -115,6 +110,7 @@ export class LoginComponent {
           this.username = '';
           this.password = '';
           this.confirmpassword = '';
+          this.strength = 0;
           this.startBudget = 0;
           this.formSubmitted = false;
         }
