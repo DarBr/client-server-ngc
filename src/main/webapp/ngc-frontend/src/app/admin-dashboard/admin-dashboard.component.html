@@ -1,17 +1,16 @@
 <div class="admin-dashboard">
-  <!-- Admin-Navigationsleiste -->
-  <app-admin-navbar></app-admin-navbar>
-
   <h2>Admin Dashboard</h2>
 
   <div *ngIf="errorMessage" class="error-message">{{ errorMessage }}</div>
   <div *ngIf="successMessage" class="success-message">{{ successMessage }}</div>
 
-  <table>
+  <!-- Tabelle mit Nutzerinformationen -->
+  <table class="table-transaktionen">
     <thead>
       <tr>
         <th>Nutzername</th>
         <th>Depot ID</th>
+        <th>Portfoliowert</th>
         <th>Aktionen</th>
       </tr>
     </thead>
@@ -19,10 +18,35 @@
       <tr *ngFor="let user of users">
         <td>{{ user.username }}</td>
         <td>{{ user.depotID }}</td>
+        <td>{{ user.portfolioValue | number:'1.2-2' }} $</td>
         <td>
           <button (click)="deleteUser(user)">Nutzer löschen</button>
         </td>
       </tr>
     </tbody>
   </table>
+
+  <!-- Hier kommt der Container für das Diagramm mit Hintergrund (z.B. .broker-container) -->
+  <div class="broker-container" style="margin-top: 20px;">
+    <h3>Anmeldungen</h3>
+    <p>
+      In diesem Diagramm sehen Sie die Anzahl der Logins pro Tag, Woche oder Monat. 
+      Wählen Sie dazu im Dropdown den gewünschten Zeitraum aus.
+    </p>
+
+    <!-- Dropdown zur Auswahl des Zeitraums -->
+    <div class="signup-filter" style="margin-bottom: 20px;">
+      <label for="periodSelect">Zeitraum:</label>
+      <select id="periodSelect" [(ngModel)]="selectedPeriod" (change)="onPeriodChange()">
+        <option value="day">Tag</option>
+        <option value="week">Woche</option>
+        <option value="month">Monat</option>
+      </select>
+    </div>
+
+    <!-- Container für das Balkendiagramm -->
+    <div class="chart-container">
+      <canvas #signupBarChart></canvas>
+    </div>
+  </div>
 </div>

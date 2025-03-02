@@ -5,6 +5,7 @@ public class AdminUserDto {
     private String username;
     private int depotID;
     private double portfolioValue;
+    private int kontoID;
 
     public AdminUserDto(int id, String username, int depotID, double portfolioValue) {
         this.id = id;
@@ -37,5 +38,11 @@ public class AdminUserDto {
     }
     public void setPortfolioValue(double portfolioValue) {
         this.portfolioValue = portfolioValue;
+    }
+    public int getKontoID() {
+        return kontoID;
+    }
+    public void setKontoID(int kontoID) {
+        this.kontoID = kontoID;
     }
 }

@@ -1,15 +1,14 @@
-import { Component, OnInit, AfterViewInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import moment from 'moment-timezone';
 import 'moment/locale/de';
 moment.locale('de');
-import { Observable, catchError, forkJoin, map, tap, throwError } from 'rxjs';
+import { Observable, catchError, forkJoin, map, throwError } from 'rxjs';
 import {
   Chart,
   ChartConfiguration,
   ChartData,
-  ChartTypeRegistry,
   PieController,
   ArcElement,
   Tooltip,
@@ -20,6 +19,7 @@ import { AuthService } from '../AuthService';
 import { MatDialog } from '@angular/material/dialog';
 import { VerkaufenDialogComponent } from '../verkaufen-dialog/verkaufen-dialog.component';
 import { environment } from '../../environments/environment';
+import { Router } from '@angular/router';
 
 // Register the components for the pie chart
 Chart.register(PieController, ArcElement, Tooltip, Legend);
@@ -29,12 +29,11 @@ Chart.register(PieController, ArcElement, Tooltip, Legend);
   standalone: true,
   imports: [CommonModule],
   templateUrl: './home.component.html',
-  styleUrl: './home.component.css'
+  styleUrls: ['./home.component.css']
 })
-
 export class HomeComponent implements OnInit {
 
-  private apiUrl = environment.apiPath
+  private apiUrl = environment.apiPath;
 
   marketStatus: string = '';
   nextOpenTime: string = '';
@@ -51,11 +50,25 @@ export class HomeComponent implements OnInit {
   industryDistributionChart: Chart<'pie', number[], string> | null = null;
   activeTab = 'portfolioDistributionChart';
 
+  constructor(
+    private http: HttpClient, 
+    private authService: AuthService, 
+    private dialog: MatDialog,
+    private router: Router
+  ) { }
 
-  constructor(private http: HttpClient, private authService: AuthService, private dialog: MatDialog) { }
-
-  ngOnInit() {
-
+  async ngOnInit() {
+    // Prüfe, ob der eingeloggte Nutzer Admin ist:
+    const token = this.authService.getToken();
+if (token !== null && token !== '') {
+  const username = await this.authService.getUsernameFromToken(token);
+  // Null-Check: Nur wenn username nicht null/undefined ist, rufen wir toLowerCase() auf
+  if (username && username.toLowerCase() === 'admin') {
+    this.router.navigate(['/admin/dashboard']);
+    return;
+  }
+}
+    // Falls nicht Admin, lade die normalen Inhalte:
     this.loadUserIDs(() => {
       this.loadKontostand(() => {
         this.loadDepotData(() => {
@@ -64,19 +77,11 @@ export class HomeComponent implements OnInit {
             this.createPortfolioDistributionChart();
             this.createIndustryDistributionChart();
             this.checkMarketStatus();
-          }
-
-          );
+          });
         });
       });
-
     });
-
-
   }
-
-
-
 
   loadUserIDs(callback: () => void) {
     const token = this.authService.getToken();
@@ -95,20 +100,17 @@ export class HomeComponent implements OnInit {
         if (kontoID !== 0 && kontoID !== null) {
           this.kontoID = kontoID;
         }
-
         callback();
       });
     }
-  };
+  }
 
   loadDepotData(callback: () => void) {
     this.depots = [];
     this.isLoading = true;
-
     this.http.get<any[]>(`${this.apiUrl}/depot/${this.depotID}`).pipe(
       catchError((error: HttpErrorResponse) => {
         this.isLoading = false;
-
         if (error.status === 404) {
           this.keineDepots = true;
         }
@@ -117,11 +119,10 @@ export class HomeComponent implements OnInit {
       })
     ).subscribe((data) => {
       const depots = data;
-
       const observables = depots.map(depot => {
         return forkJoin([
           this.getAktienPreise(depot.isin),
-          this.getStockProfile(depot.isin) // Hinzugefügt, um Stockprofile zu erhalten
+          this.getStockProfile(depot.isin)
         ]).pipe(
           map(([aktienDetails, stockProfile]) => {
             depot.currentPrice = Math.round(aktienDetails.c * 100) / 100;
@@ -133,9 +134,6 @@ export class HomeComponent implements OnInit {
             depot.l = Math.round(aktienDetails.l * 100) / 100;
             depot.d = Math.round(aktienDetails.d * 100) / 100;
             depot.dp = Math.round(aktienDetails.dp * 100) / 100;
-
-
-            // Aktualisieren der Depotdetails mit Stockprofile-Informationen
             depot.country = stockProfile.country;
             depot.currency = stockProfile.currency;
             depot.estimateCurrency = stockProfile.estimateCurrency;
@@ -148,18 +146,15 @@ export class HomeComponent implements OnInit {
             depot.shareOutstanding = stockProfile.shareOutstanding;
             depot.ticker = stockProfile.ticker;
             depot.weburl = stockProfile.weburl;
-
             return depot;
           })
         );
       });
-
       forkJoin(observables).subscribe((updatedDepots) => {
         this.depots = updatedDepots;
         this.isLoading = false;
         if (this.depots.length === 0) {
           this.keineDepots = true;
-
         }
         callback();
       });
@@ -174,23 +169,21 @@ export class HomeComponent implements OnInit {
         const nowEST = moment().tz('America/New_York');
         const openEST = moment().tz('America/New_York').set({ hour: 9, minute: 30, second: 0 });
         const closeEST = moment().tz('America/New_York').set({ hour: 16, minute: 0, second: 0 });
-
         if (response.isOpen) {
           this.marketStatus = 'Die Börse ist aktuell geöffnet.';
           this.nextOpenTime = closeEST.clone().tz('Europe/Berlin').format('dddd, D. MMMM YYYY, HH:mm:ss [Uhr]');
         } else {
           this.marketStatus = 'Die Börse ist geschlossen.';
           if (nowEST.isAfter(closeEST)) {
-            // Überprüfen, ob heute Freitag oder Wochenende ist
             const currentDay = nowEST.day();
-            if (currentDay === 5) { // Freitag
-              openEST.add(3, 'days'); // Springe zu Montag
-            } else if (currentDay === 6) { // Samstag
-              openEST.add(2, 'days'); // Springe zu Montag
-            } else if (currentDay === 0) { // Sonntag
-              openEST.add(1, 'day'); // Springe zu Montag
+            if (currentDay === 5) {
+              openEST.add(3, 'days');
+            } else if (currentDay === 6) {
+              openEST.add(2, 'days');
+            } else if (currentDay === 0) {
+              openEST.add(1, 'day');
             } else {
-              openEST.add(1, 'day'); // Nächster Tag, falls nicht Wochenende
+              openEST.add(1, 'day');
             }
           }
           this.nextOpenTime = openEST.clone().tz('Europe/Berlin').format('dddd, D. MMMM YYYY, HH:mm:ss [Uhr]');
@@ -207,23 +200,18 @@ export class HomeComponent implements OnInit {
     this.activeTab = tabId;
   }
 
-
-
   getAktienPreise(isin: string): Observable<any> {
     const apiKey = "cp0edihr01qnigejvsigcp0edihr01qnigejvsj0";
     const apiUrl = `https://finnhub.io/api/v1/quote?symbol=${isin}&token=${apiKey}`;
-
     return this.http.get<any>(apiUrl);
   }
 
   getStockProfile(symbol: string): Observable<any> {
     const apiKey = "cp0eejhr01qnigejvvagcp0eejhr01qnigejvvb0";
     const url = `https://finnhub.io/api/v1/stock/profile2?symbol=${symbol}&token=${apiKey}`;
-
     return this.http.get<any>(url).pipe(
       map(response => {
         if (response) {
-          // Extrahiere die relevanten Informationen aus der API-Antwort
           const profile = {
             country: response.country,
             currency: response.currency,
@@ -247,11 +235,6 @@ export class HomeComponent implements OnInit {
     );
   }
 
-
-
-
-
-
   toggleDetails(item: any): void {
     item.showDetails = !item.showDetails;
   }
@@ -264,16 +247,13 @@ export class HomeComponent implements OnInit {
     });
   }
 
-
   calculateChangeTotal(item: any): number {
-    // Berechne die Wertänderung als Differenz zwischen dem aktuellen Wert und dem Einstandspreis
     const originalInvestment = item.einstandspreis * item.anzahl;
     const currentValue = item.currentPrice * item.anzahl;
     return Math.round((currentValue - originalInvestment) * 100) / 100;
   }
 
   calculateChangeProzent(item: any): number {
-    // Berechne die prozentuale Wertänderung als Differenz zwischen dem aktuellen Wert und dem Einstandspreis
     const originalInvestment = item.einstandspreis * item.anzahl;
     const currentValue = item.currentPrice * item.anzahl;
     const prozent = Math.round((currentValue / originalInvestment) * 10000) / 100;
@@ -295,7 +275,6 @@ export class HomeComponent implements OnInit {
   calculatePortfolioValue(): number {
     let totalValue = 0;
     this.depots.forEach(depot => {
-      // Wenn der Aktienkurs und die Anzahl der Aktien vorhanden sind, berechne den Wert des Depots
       if (depot.currentPrice && depot.anzahl) {
         totalValue += depot.currentPrice * depot.anzahl;
       }
@@ -303,18 +282,13 @@ export class HomeComponent implements OnInit {
     return Math.round(totalValue * 100) / 100;
   }
 
-
-
-
   sortTable(column: string): void {
     if (this.sortColumn === column) {
       this.sortAscending = !this.sortAscending;
     } else {
       this.sortAscending = true;
     }
-
     this.sortColumn = column;
-
     this.depots.sort((a, b) => {
       let comparison = 0;
       if (a[column] > b[column]) {
@@ -324,8 +298,6 @@ export class HomeComponent implements OnInit {
       }
       return this.sortAscending ? comparison : comparison * -1;
     });
-
-    // Move CASH to the last position
     const cashIndex = this.depots.findIndex(depot => depot.isin === 'CASH');
     if (cashIndex !== -1) {
       const cashDepot = this.depots.splice(cashIndex, 1)[0];
@@ -333,10 +305,8 @@ export class HomeComponent implements OnInit {
     }
   }
 
-
   addCashToDepot(callback: () => void) {
     this.loadKontostand(() => {
-      // Dummy-Objekt für CASH erstellen
       const cashData = {
         isin: 'CASH',
         currentPrice: this.kontostand,
@@ -347,25 +317,17 @@ export class HomeComponent implements OnInit {
         changeProzent: 0,
         finnhubIndustry: 'CASH'
       };
-
-      // Hinzufügen von CASH zu den Portfolio-Daten
       this.depots.push(cashData);
-
-      // Aufruf der Callback-Funktion, um anzuzeigen, dass das CASH erfolgreich hinzugefügt wurde
       callback();
     });
   }
 
-
   createPortfolioDistributionChart() {
-
-
     if (!this.isLoading && this.depots.length && !this.keineDepots) {
       const labels = this.depots.map(depot => depot.isin);
       const data = this.depots.map(depot => Math.round((depot.currentPrice || 0) * (depot.anzahl || 0) * 100) / 100);
       const backgroundColors = this.generateBackgroundColors(data.length);
       const borderColors = this.generateBorderColors(data.length);
-
       const chartData: ChartData<'pie', number[], string> = {
         labels: labels,
         datasets: [{
@@ -376,7 +338,6 @@ export class HomeComponent implements OnInit {
           borderWidth: 1
         }]
       };
-
       const config: ChartConfiguration<'pie', number[], string> = {
         type: 'pie',
         data: chartData,
@@ -398,17 +359,14 @@ export class HomeComponent implements OnInit {
           }
         },
       };
-
       if (this.portfolioDistributionChart) {
         this.portfolioDistributionChart.destroy();
       }
-
       this.portfolioDistributionChart = new Chart<'pie', number[], string>(
         document.getElementById('portfolioDistributionChart') as HTMLCanvasElement,
         config
       );
     }
-
   }
 
   createIndustryDistributionChart() {
@@ -418,13 +376,10 @@ export class HomeComponent implements OnInit {
       acc[industry] = (acc[industry] || 0) + value;
       return acc;
     }, {});
-  
     const labels = Object.keys(industryData);
     const data = Object.values(industryData);
-  
     const backgroundColors = this.generateBackgroundColors(data.length);
     const borderColors = this.generateBorderColors(data.length);
-  
     const chartData: ChartData<'pie', number[], string> = {
       labels: labels,
       datasets: [{
@@ -434,7 +389,6 @@ export class HomeComponent implements OnInit {
         borderWidth: 1
       }]
     };
-  
     const config: ChartConfiguration<'pie', number[], string> = {
       type: 'pie',
       data: chartData,
@@ -446,9 +400,9 @@ export class HomeComponent implements OnInit {
             callbacks: {
               label: function (context: TooltipItem<'pie'>) {
                 const label = context.label;
-                const value = (context.parsed as number).toFixed(2); // Runden der absoluten Werte
+                const value = (context.parsed as number).toFixed(2);
                 const total = context.dataset.data.reduce((acc, val) => acc + val, 0);
-                const percentage = ((parseFloat(value) / total) * 100).toFixed(2) + '%'; // Runden der Prozentzahlen
+                const percentage = ((parseFloat(value) / total) * 100).toFixed(2) + '%';
                 return `${label}: ${value} (${percentage})`;
               }
             }
@@ -456,68 +410,37 @@ export class HomeComponent implements OnInit {
         }
       }
     };
-  
     if (this.industryDistributionChart) {
       this.industryDistributionChart.destroy();
     }
-  
     this.industryDistributionChart = new Chart(
       document.getElementById('industryDistributionChart') as HTMLCanvasElement,
       config
     );
   }
 
-
-  // Helper method to generate background colors
   generateBackgroundColors(count: number): string[] {
     const palette = [
-      'rgba(52, 152, 219, 0.8)', // Soft Blue
-      'rgba(231, 76, 60, 0.8)', // Soft Red
-      'rgba(46, 204, 113, 0.8)', // Mint Green
-      'rgba(155, 89, 182, 0.8)', // Lavender
-      'rgba(241, 196, 15, 0.8)', // Mustard Yellow
-      'rgba(230, 126, 34, 0.8)', // Peach
-      'rgba(236, 240, 241, 0.8)', // Light Gray
-      'rgba(149, 165, 166, 0.8)', // Slate
-      'rgba(26, 188, 156, 0.8)', // Sea Green
-      'rgba(52, 73, 94, 0.8)', // Dark Slate
-      'rgba(255, 0, 0, 0.5)', // Transparent Red
-      'rgba(0, 255, 0, 0.5)', // Transparent Green
-      'rgba(0, 0, 255, 0.5)', // Transparent Blue
-      'rgba(255, 255, 0, 0.5)', // Transparent Yellow
-      'rgba(255, 0, 255, 0.5)', // Transparent Magenta
-      'rgba(0, 255, 255, 0.5)', // Transparent Cyan
-      'rgba(128, 0, 0, 0.5)', // Transparent Maroon
-      'rgba(0, 128, 0, 0.5)', // Transparent Green
-      'rgba(0, 0, 128, 0.5)', // Transparent Navy
-      'rgba(128, 128, 0, 0.5)' // Transparent Olive
+      'rgba(52, 152, 219, 0.8)', 'rgba(231, 76, 60, 0.8)', 'rgba(46, 204, 113, 0.8)',
+      'rgba(155, 89, 182, 0.8)', 'rgba(241, 196, 15, 0.8)', 'rgba(230, 126, 34, 0.8)',
+      'rgba(236, 240, 241, 0.8)', 'rgba(149, 165, 166, 0.8)', 'rgba(26, 188, 156, 0.8)',
+      'rgba(52, 73, 94, 0.8)', 'rgba(255, 0, 0, 0.5)', 'rgba(0, 255, 0, 0.5)',
+      'rgba(0, 0, 255, 0.5)', 'rgba(255, 255, 0, 0.5)', 'rgba(255, 0, 255, 0.5)',
+      'rgba(0, 255, 255, 0.5)', 'rgba(128, 0, 0, 0.5)', 'rgba(0, 128, 0, 0.5)',
+      'rgba(0, 0, 128, 0.5)', 'rgba(128, 128, 0, 0.5)'
     ];
     return Array.from({ length: count }, (_, i) => palette[i % palette.length]);
   }
 
-  // Helper method to generate border colors
   generateBorderColors(count: number): string[] {
     const palette = [
-      'rgba(52, 152, 219, 0.8)', // Soft Blue
-      'rgba(231, 76, 60, 0.8)', // Soft Red
-      'rgba(46, 204, 113, 0.8)', // Mint Green
-      'rgba(155, 89, 182, 0.8)', // Lavender
-      'rgba(241, 196, 15, 0.8)', // Mustard Yellow
-      'rgba(230, 126, 34, 0.8)', // Peach
-      'rgba(236, 240, 241, 0.8)', // Light Gray
-      'rgba(149, 165, 166, 0.8)', // Slate
-      'rgba(26, 188, 156, 0.8)', // Sea Green
-      'rgba(52, 73, 94, 0.8)', // Dark Slate
-      'rgba(255, 0, 0, 0.5)', // Transparent Red
-      'rgba(0, 255, 0, 0.5)', // Transparent Green
-      'rgba(0, 0, 255, 0.5)', // Transparent Blue
-      'rgba(255, 255, 0, 0.5)', // Transparent Yellow
-      'rgba(255, 0, 255, 0.5)', // Transparent Magenta
-      'rgba(0, 255, 255, 0.5)', // Transparent Cyan
-      'rgba(128, 0, 0, 0.5)', // Transparent Maroon
-      'rgba(0, 128, 0, 0.5)', // Transparent Green
-      'rgba(0, 0, 128, 0.5)', // Transparent Navy
-      'rgba(128, 128, 0, 0.5)' // Transparent Olive
+      'rgba(52, 152, 219, 0.8)', 'rgba(231, 76, 60, 0.8)', 'rgba(46, 204, 113, 0.8)',
+      'rgba(155, 89, 182, 0.8)', 'rgba(241, 196, 15, 0.8)', 'rgba(230, 126, 34, 0.8)',
+      'rgba(236, 240, 241, 0.8)', 'rgba(149, 165, 166, 0.8)', 'rgba(26, 188, 156, 0.8)',
+      'rgba(52, 73, 94, 0.8)', 'rgba(255, 0, 0, 0.5)', 'rgba(0, 255, 0, 0.5)',
+      'rgba(0, 0, 255, 0.5)', 'rgba(255, 255, 0, 0.5)', 'rgba(255, 0, 255, 0.5)',
+      'rgba(0, 255, 255, 0.5)', 'rgba(128, 0, 0, 0.5)', 'rgba(0, 128, 0, 0.5)',
+      'rgba(0, 0, 128, 0.5)', 'rgba(128, 128, 0, 0.5)'
     ];
     return Array.from({ length: count }, (_, i) => palette[i % palette.length]);
   }
@@ -530,7 +453,6 @@ export class HomeComponent implements OnInit {
         depotID: this.depotID
       }
     });
-
     dialogRef.afterClosed().subscribe(result => {
       console.log(result);
       if (result != null && result === 'Aktie erfolgreich verkauft!') {
@@ -542,21 +464,13 @@ export class HomeComponent implements OnInit {
                 this.createPortfolioDistributionChart();
                 this.createIndustryDistributionChart();
                 this.checkMarketStatus();
-              }
-
-              );
+              });
             });
           });
-
         });
       } else {
         console.log(result);
       }
     });
   }
-
-
-
 }
-
-

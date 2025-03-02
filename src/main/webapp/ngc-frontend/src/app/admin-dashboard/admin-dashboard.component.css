@@ -1,3 +1,5 @@
+@import "@fortawesome/fontawesome-free/css/all.css";
+
 .admin-dashboard {
   margin: 20px;
 }
@@ -6,23 +8,45 @@
   margin-bottom: 20px;
 }
 
-table {
+/* Tabelle anlehnend an .table-transaktionen */
+.admin-dashboard table {
   width: 100%;
   border-collapse: collapse;
+  margin: 20px 0;
+  font-size: 0.9em;
+  min-width: 400px;
+  border-radius: 5px 5px 0 0;
+  overflow: hidden;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+  text-align: left;
 }
 
-thead th {
+.admin-dashboard table th,
+.admin-dashboard table td {
+  padding: 12px 15px;
+}
+
+.admin-dashboard table th {
   background-color: #009879;
-  color: #fff;
-  padding: 10px;
+  color: #ffffff;
+  text-align: left;
 }
 
-tbody td {
-  padding: 10px;
-  border-bottom: 1px solid #ddd;
+.admin-dashboard table tr:nth-child(even) {
+  background-color: #f3f3f3;
 }
 
-button {
+.admin-dashboard table tr:nth-child(odd) {
+  background-color: #ffffff;
+}
+
+.admin-dashboard table tr:hover {
+  background-color: #ddd;
+  cursor: pointer;
+}
+
+/* Button-Styles */
+.admin-dashboard button {
   padding: 5px 10px;
   background-color: #d9534f;
   color: #fff;
@@ -31,16 +55,62 @@ button {
   cursor: pointer;
 }
 
-button:hover {
+.admin-dashboard button:hover {
   background-color: #c9302c;
 }
 
-.error-message {
+/* Fehlermeldungen */
+.admin-dashboard .error-message {
   color: red;
   margin-bottom: 10px;
 }
 
-.success-message {
+/* Erfolgsmeldungen */
+.admin-dashboard .success-message {
   color: green;
   margin-bottom: 10px;
+}
+
+/* Container für das Balkendiagramm:
+   - 45% Breite
+   - Mindesthöhe für ausreichend hohe Darstellung
+   - inline-block, damit Du ggf. daneben ein zweites Diagramm platzieren kannst
+*/
+.chart-container {
+  width: 45%;
+  min-height: 400px;
+  margin: 20px 0;
+  display: inline-block;
+  position: relative;
+}
+
+/* OPTIONAL: .broker-container - 
+   Wenn Du sie an anderen Stellen bereits benutzt, 
+   kannst Du hier den gleichen Stil übernehmen. 
+   Beispiel:
+*/
+.broker-container {
+  background-color: #f8f8f8; 
+  padding: 20px;
+  border-radius: 5px;
+  margin-bottom: 20px;
+  margin-right: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Responsive Overrides */
+@media screen and (max-width: 600px) {
+  .admin-dashboard table thead {
+    display: table-header-group !important;
+  }
+  .admin-dashboard table tbody,
+  .admin-dashboard table tr,
+  .admin-dashboard table td {
+    display: table-row !important;
+    width: auto !important;
+  }
+  .chart-container {
+    width: 100%;
+    min-height: 300px;
+  }
 }

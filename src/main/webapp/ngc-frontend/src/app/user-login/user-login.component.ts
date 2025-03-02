@@ -122,13 +122,14 @@ export class LoginComponent {
       .set('username', this.username)
       .set('password', this.password);
 
-    this.http.get(url, {params, responseType: 'text'}).subscribe(response => {
-      if (response ==="Login fehlgeschlagen") {
-        this.errorMessage = response.toString();
-        console.log(response);
-      } else {
-        const token = response.toString();
-        this.authService.saveToken(token);
+      this.http.get(url, {params, responseType: 'text'}).subscribe(response => {
+        console.log("Login Response:", response); // <-- Debug-Ausgabe
+        if (response === "Login fehlgeschlagen") {
+          this.errorMessage = response.toString();
+        } else {
+          const token = response.toString();
+          console.log("Token from server:", token); // <-- Debug-Ausgabe
+          this.authService.saveToken(token);
         this.successMessage = 'Erfolgreich eingeloggt.';
         this.username = '';
         this.password = '';
