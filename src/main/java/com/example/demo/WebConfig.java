@@ -13,7 +13,7 @@ public class WebConfig {
         return new WebMvcConfigurer() {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
-                registry.addMapping("/**").allowedOrigins("http://localhost:4200", "http://3.142.199.164", "https://3.142.199.164", "http://next-gen-capital.de", "http://www.next-gen-capital.de", "https://next-gen-capital.de", "https://www.next-gen-capital.de");
+                registry.addMapping("/**").allowedOrigins("http://localhost:4200", "http://13.60.244.59", "https://13.60.244.59", "http://next-gen-capital.de", "http://www.next-gen-capital.de", "https://next-gen-capital.de", "https://www.next-gen-capital.de");
             }
         };
     }
