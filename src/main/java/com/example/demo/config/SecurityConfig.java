@@ -29,7 +29,9 @@ public class SecurityConfig {
                 .anyRequest().authenticated()
             )
             .addFilterBefore(jwtAuthenticationFilter, BasicAuthenticationFilter.class)
-            .csrf(csrf -> csrf.disable());
+            .csrf().disable(); // CSRF-Schutz deaktivieren
         return http.build();
     }
 }
+
+
