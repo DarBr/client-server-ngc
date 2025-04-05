@@ -13,7 +13,9 @@ public class DemoApplication {
 	//startet den Spring Boot Server
 
 	public static void main(String[] args) {
-		SpringApplication.run(DemoApplication.class, args);
+		SpringApplication app = new SpringApplication(DemoApplication.class);
+		app.setAdditionalProfiles("dev");
+		app.run(args);
 	}
 
 }
