@@ -27,20 +27,31 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
   @Autowired
   private NutzerService nutzerService;
 
+  //Filtert jede eingehende Anfrage, um JWT-Authentifizierung durchzuführen
   @Override
   protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+    
+    // Holt den Wert des "Authorization"-Headers aus der Anfrage
+    String bearerToken = request.getHeader("Authorization");
 
-      String bearerToken = request.getHeader("Authorization");
-      if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ")) {
-          String token = bearerToken.substring(7);
-          if (jwtUtil.validateToken(token)) {
-              // Token ist gültig, setzen Sie den authentifizierten Benutzer in den SecurityContext
-              String nutzername = jwtUtil.getUsernameFromToken(token);
-              Nutzer nutzer = nutzerService.getNutzerByUsername(nutzername);
-              SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(nutzer, null, new ArrayList<>()));
-          }
-      }
+    // Überprüft, ob der Header nicht null ist und mit "Bearer " beginnt
+    if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ")) {
+        
+        // Extrahiert den Token-Teil des Headers (ohne "Bearer ")
+        String token = bearerToken.substring(7);
+        
+        // Überprüft, ob das Token gültig ist
+        if (jwtUtil.validateToken(token)) {
+            // Falls gültig, extrahiert den Benutzernamen aus dem Token
+            String nutzername = jwtUtil.getUsernameFromToken(token);
 
-      filterChain.doFilter(request, response);
+            // Holt den Nutzer aus der Datenbank anhand des Benutzernamens
+            Nutzer nutzer = nutzerService.getNutzerByUsername(nutzername);
+
+            // Setzt den authentifizierten Benutzer im SecurityContext
+            SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(nutzer, null, new ArrayList<>()));
+        }
+    }
+    filterChain.doFilter(request, response); // Leitet die Anfrage an die nächste Filterinstanz weiter
   }
 }
